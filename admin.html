@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>말씀함께 · 관리자 v0.97</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== v0.95 디자인 토큰 — 탈교회화 화이트+미색, sage/terra/plum ===== */
+:root{
+  --bg:#FAF7F0; --bg-card:#FFFFFF; --bg-soft:#F5F3EE; --bg-cream:#F2EAD8; --bg-cream-soft:#FBF7EE;
+  --ink:#1A1F1D; --ink-2:#4A524E; --ink-3:#8B8E89; --ink-4:#B8BAB6;
+  --sage:#B89A6B; --sage-mid:#CDB994; --sage-soft:#E6DAC1; --sage-pale:#F4EEE1; --sage-dark:#8C7350; --sage-deep:#6E5A3C;
+  --terra:#C97757; --terra-soft:#F5E5D8; --plum:#7A4D72; --plum-soft:#F0E3ED;
+  --sky:#5E81A8; --sky-soft:#E4ECF4;
+  --ok:#5A9286; --ok-soft:#E3F0EC; --warn:#B07A2E; --warn-soft:#FBF0E2; --bad:#B0432E; --bad-soft:#F6DED7;
+  --line:#ECECE8; --line-soft:#F4F3EF;
+  --serif:'Noto Serif KR',serif;
+  --sans:'Pretendard','Apple SD Gothic Neo',-apple-system,BlinkMacSystemFont,sans-serif;
+  --en:'Inter','Pretendard',-apple-system,sans-serif;
+  --shadow-sm:0 1px 2px rgba(26,31,29,.04); --shadow-md:0 4px 18px rgba(26,31,29,.06); --shadow-lg:0 14px 40px rgba(26,31,29,.10);
+  --radius:16px; --radius-sm:10px; --radius-lg:24px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;font-size:14px;line-height:1.5}
+.en{font-family:var(--en)}
+button{font-family:inherit}
+a{color:inherit}
+::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-thumb{background:#e0ddd5;border-radius:9px}::-webkit-scrollbar-track{background:transparent}
+
+/* ===== 레이아웃 ===== */
+.layout{display:flex;min-height:100vh}
+.sidebar{width:236px;flex-shrink:0;background:var(--bg-card);border-right:1px solid var(--line);display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.side-brand{display:flex;align-items:center;gap:11px;padding:20px 18px 16px}
+.side-mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(145deg,var(--sage-mid),var(--sage-dark));color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:19px;box-shadow:var(--shadow-sm)}
+.side-brand-text{font-family:var(--serif);font-weight:700;font-size:16px;letter-spacing:-.3px}
+.side-brand-sub{font-family:var(--en);font-size:10px;font-weight:600;color:var(--ink-3);letter-spacing:.4px;margin-top:1px}
+.side-nav{flex:1;overflow-y:auto;padding:6px 12px 12px}
+.side-group-label{font-size:10.5px;font-weight:700;color:var(--ink-4);letter-spacing:.6px;padding:14px 10px 7px;text-transform:uppercase;font-family:var(--en)}
+.side-item{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:10px;cursor:pointer;color:var(--ink-2);font-size:13.5px;font-weight:600;letter-spacing:-.2px;transition:background .14s,color .14s;position:relative}
+.side-item svg{width:18px;height:18px;flex-shrink:0;color:var(--ink-3);transition:color .14s}
+.side-item:hover{background:var(--bg-soft)}
+.side-item.active{background:var(--sage-pale);color:var(--sage-deep)}
+.side-item.active svg{color:var(--sage-dark)}
+.side-badge{margin-left:auto;background:var(--terra);color:#fff;font-family:var(--en);font-size:10px;font-weight:700;min-width:18px;height:18px;padding:0 5px;border-radius:99px;display:flex;align-items:center;justify-content:center}
+.side-bottom{padding:12px;border-top:1px solid var(--line)}
+.side-user{display:flex;align-items:center;gap:10px;padding:7px 6px}
+.side-user-av{width:32px;height:32px;border-radius:50%;background:var(--sage-soft);color:var(--sage-deep);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.side-user-name{font-size:13px;font-weight:700}
+.side-user-role{font-size:11px;color:var(--ink-3)}
+
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 28px;border-bottom:1px solid var(--line);background:rgba(252,250,245,.85);backdrop-filter:saturate(1.1) blur(8px);position:sticky;top:0;z-index:20}
+.topbar-title{font-family:var(--serif);font-size:21px;font-weight:700;letter-spacing:-.4px}
+.topbar-title small{font-family:var(--en);font-size:12px;font-weight:500;color:var(--ink-3);margin-left:8px;letter-spacing:0}
+.topbar-right{display:flex;align-items:center;gap:9px}
+.demo-chip{font-family:var(--en);font-size:10.5px;font-weight:700;color:var(--sage-deep);background:var(--sage-pale);border:1px solid var(--sage-soft);padding:4px 9px;border-radius:99px;letter-spacing:.5px}
+.content{flex:1;padding:26px 28px 60px;max-width:1080px;width:100%}
+.view{display:none}.view.active{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ===== 공용 컴포넌트 ===== */
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--bg-card);color:var(--ink);font-size:13px;font-weight:600;padding:8px 14px;border-radius:10px;cursor:pointer;transition:all .14s;letter-spacing:-.2px}
+.btn:hover{background:var(--bg-soft)}
+.btn svg{width:15px;height:15px}
+.btn-primary{background:var(--sage-dark);border-color:var(--sage-dark);color:#fff}
+.btn-primary:hover{background:var(--sage-deep)}
+.btn-ok{background:var(--ok);border-color:var(--ok);color:#fff}.btn-ok:hover{filter:brightness(.96)}
+.btn-bad{background:var(--bg-card);border-color:var(--bad-soft);color:var(--bad)}.btn-bad:hover{background:var(--bad-soft)}
+.btn-ghost{background:transparent}
+.btn-sm{padding:6px 11px;font-size:12px}
+.card{background:var(--bg-card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm)}
+.section-title{font-family:var(--serif);font-size:16px;font-weight:700;margin:26px 0 12px;letter-spacing:-.3px;display:flex;align-items:center;gap:8px}
+.section-title:first-child{margin-top:0}
+.muted{color:var(--ink-3)}
+.hint{font-size:12.5px;color:var(--ink-3);line-height:1.65}
+
+/* stat grid */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+.stat{background:var(--bg-card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow-sm)}
+.stat-ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:11px}
+.stat-ic svg{width:18px;height:18px}
+.stat-num{font-family:var(--en);font-size:26px;font-weight:700;letter-spacing:-1px;line-height:1}
+.stat-num small{font-size:13px;color:var(--ink-3);font-weight:600;margin-left:3px}
+.stat-label{font-size:12.5px;color:var(--ink-3);font-weight:600;margin-top:5px}
+.ic-sage{background:var(--sage-pale);color:var(--sage-dark)}.ic-terra{background:var(--terra-soft);color:var(--terra)}
+.ic-plum{background:var(--plum-soft);color:var(--plum)}.ic-sky{background:var(--sky-soft);color:var(--sky)}
+.ic-ok{background:var(--ok-soft);color:var(--ok)}.ic-warn{background:var(--warn-soft);color:var(--warn)}
+
+/* tabs */
+.tabs{display:flex;gap:6px;margin-bottom:18px;border-bottom:1px solid var(--line)}
+.tab{padding:9px 14px;font-size:13px;font-weight:600;color:var(--ink-3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .14s;display:flex;align-items:center;gap:7px}
+.tab:hover{color:var(--ink-2)}
+.tab.active{color:var(--sage-deep);border-bottom-color:var(--sage-dark)}
+.tab-count{background:var(--bg-soft);color:var(--ink-3);font-family:var(--en);font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:99px}
+.tab.active .tab-count{background:var(--sage-pale);color:var(--sage-dark)}
+
+/* list rows / review cards */
+.rev-card{border:1px solid var(--line);border-radius:14px;padding:15px 16px;margin-bottom:12px;background:var(--bg-card);box-shadow:var(--shadow-sm)}
+.rev-card.rejected{background:#FCF7F5;border-color:var(--bad-soft)}
+.rev-top{display:flex;align-items:center;gap:9px;margin-bottom:9px;flex-wrap:wrap}
+.badge{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:99px;letter-spacing:-.2px}
+.badge.review{background:var(--warn-soft);color:var(--warn)}
+.badge.rejected{background:var(--bad-soft);color:var(--bad)}
+.badge.published{background:var(--ok-soft);color:var(--ok)}
+.badge.cat{background:var(--bg-soft);color:var(--ink-3);font-weight:600}
+.rev-meta{font-size:11.5px;color:var(--ink-3)}
+.rev-title{font-family:var(--serif);font-size:16px;font-weight:700;letter-spacing:-.3px;margin:2px 0 6px}
+.rev-body{font-size:13px;color:var(--ink-2);line-height:1.7;max-height:4.8em;overflow:hidden;position:relative}
+.rev-body.open{max-height:none}
+.rev-reason{margin-top:10px;font-size:12.5px;color:var(--bad);background:var(--bad-soft);padding:8px 11px;border-radius:9px}
+.rev-actions{display:flex;gap:8px;margin-top:13px;flex-wrap:wrap}
+.empty{text-align:center;padding:50px 20px;color:var(--ink-4)}
+.empty svg{width:40px;height:40px;margin-bottom:12px;opacity:.5}
+.empty-title{font-size:14px;font-weight:600;color:var(--ink-3)}
+
+/* generic list */
+.lrow{display:flex;align-items:center;gap:13px;padding:14px 16px;border:1px solid var(--line);border-radius:13px;margin-bottom:10px;background:var(--bg-card);box-shadow:var(--shadow-sm)}
+.lrow-av{width:38px;height:38px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;background:var(--sage-soft);color:var(--sage-deep)}
+.lrow-main{flex:1;min-width:0}
+.lrow-title{font-size:13.5px;font-weight:700;letter-spacing:-.2px}
+.lrow-sub{font-size:12px;color:var(--ink-3);margin-top:2px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.lrow-actions{display:flex;gap:7px;flex-shrink:0}
+.scope-pill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--bg-soft);color:var(--ink-3)}
+.scope-pill.church{background:var(--sage-pale);color:var(--sage-dark)}
+.scope-pill.urgent{background:var(--bad-soft);color:var(--bad)}
+.scope-pill.committee{background:var(--plum-soft);color:var(--plum)}
+.is-hidden{opacity:.5}
+
+/* preset / policy */
+.preset-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.preset{border:1.5px solid var(--line);border-radius:14px;padding:15px;cursor:pointer;transition:all .14s;background:var(--bg-card)}
+.preset:hover{border-color:var(--sage-mid)}
+.preset.on{border-color:var(--sage-dark);background:var(--sage-pale)}
+.preset-name{font-size:13.5px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.preset-check{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--ink-4);display:flex;align-items:center;justify-content:center}
+.preset.on .preset-check{background:var(--sage-dark);border-color:var(--sage-dark)}
+.preset.on .preset-check svg{width:11px;height:11px;color:#fff;display:block}
+.preset-check svg{display:none}
+.tier-flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.tier-chip{font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:8px;background:var(--bg-soft);color:var(--ink-2)}
+.tier-arrow{color:var(--ink-4);font-size:11px}
+.tier-edit-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.tier-edit-row .idx{width:26px;height:26px;border-radius:8px;background:var(--sage-pale);color:var(--sage-dark);font-family:var(--en);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* seg */
+.seg{display:inline-flex;gap:4px;background:var(--bg-soft);padding:4px;border-radius:11px}
+.seg-btn{border:none;background:transparent;cursor:pointer;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:600;color:var(--ink-3);transition:all .14s}
+.seg-btn.on{background:var(--bg-card);color:var(--sage-deep);box-shadow:0 1px 3px rgba(110,90,60,.14)}
+
+/* method cards */
+.method-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.method-card{border:1.5px solid var(--line);border-radius:16px;padding:18px;cursor:pointer;transition:all .14s}
+.method-card.on{border-color:var(--sage-dark);background:var(--sage-pale)}
+.method-card h4{font-family:var(--serif);font-size:15px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.method-en{font-family:var(--en);font-size:11px;color:var(--ink-3);font-weight:600}
+.method-steps{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.method-step{display:flex;gap:8px;font-size:12.5px;color:var(--ink-2)}
+.method-step .n{font-family:var(--en);font-weight:700;color:var(--sage-dark)}
+
+/* fields */
+.field{margin-bottom:15px}
+.field label{display:block;font-size:12.5px;font-weight:700;color:var(--ink-2);margin-bottom:6px}
+.field .sub{font-weight:500;color:var(--ink-3);font-size:11.5px;margin-left:5px}
+.input,.textarea,.select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.5px;font-family:inherit;color:var(--ink);background:var(--bg-card);transition:border .14s}
+.input:focus,.textarea:focus,.select:focus{outline:none;border-color:var(--sage-mid)}
+.textarea{resize:vertical;min-height:110px;line-height:1.7}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.switch{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border:1px solid var(--line);border-radius:13px;background:var(--bg-card);margin-bottom:10px}
+.switch-info h4{font-size:13.5px;font-weight:700}
+.switch-info p{font-size:12px;color:var(--ink-3);margin-top:3px}
+.toggle{width:46px;height:27px;border-radius:99px;background:var(--ink-4);position:relative;cursor:pointer;transition:background .18s;flex-shrink:0;border:none}
+.toggle.on{background:var(--sage-dark)}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:#fff;transition:transform .18s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle.on::after{transform:translateX(19px)}
+.note{background:var(--sage-pale);border:1px solid var(--sage-soft);border-radius:12px;padding:14px 16px;font-size:12.5px;color:var(--sage-deep);line-height:1.7}
+.note b{color:var(--sage-deep)}
+
+/* modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,31,29,.42);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal-overlay.open{display:flex;animation:fade .18s ease}
+.modal{background:var(--bg-card);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);width:100%;max-width:540px;max-height:88vh;overflow-y:auto}
+.modal-head{padding:20px 24px 0;display:flex;align-items:center;justify-content:space-between}
+.modal-head h3{font-family:var(--serif);font-size:18px;font-weight:700}
+.modal-x{border:none;background:var(--bg-soft);width:30px;height:30px;border-radius:50%;cursor:pointer;color:var(--ink-3);font-size:18px;line-height:1}
+.modal-body{padding:18px 24px}
+.modal-foot{padding:0 24px 22px;display:flex;gap:9px;justify-content:flex-end}
+
+/* toast */
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 20px;border-radius:99px;font-size:13px;font-weight:600;opacity:0;transition:all .25s;z-index:200;box-shadow:var(--shadow-lg);pointer-events:none}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-width:860px){
+  .sidebar{width:64px}.side-brand-text,.side-brand-sub,.side-item span:not(.side-badge),.side-group-label,.side-user-info{display:none}
+  .side-item{justify-content:center}.method-grid{grid-template-columns:1fr}.row2{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="side-brand">
+      <div class="side-mark">함</div>
+      <div>
+        <div class="side-brand-text">말씀함께</div>
+        <div class="side-brand-sub en">ADMIN · v0.97</div>
+      </div>
+    </div>
+    <nav class="side-nav" id="sideNav"></nav>
+    <div class="side-bottom">
+      <div class="side-user">
+        <div class="side-user-av">관</div>
+        <div class="side-user-info">
+          <div class="side-user-name">관리자</div>
+          <div class="side-user-role" id="sideChurch">우리 교회</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <h1 class="topbar-title" id="pageTitle">대시보드 <small class="en">Dashboard</small></h1>
+      <div class="topbar-right">
+        <span class="demo-chip en">DEMO</span>
+        <button class="btn btn-sm" onclick="openUserApp()">
+          <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          사용자 앱
+        </button>
+      </div>
+    </div>
+    <div class="content">
+      <div class="view active" id="view-dashboard"></div>
+      <div class="view" id="view-column"></div>
+      <div class="view" id="view-tiers"></div>
+      <div class="view" id="view-method"></div>
+      <div class="view" id="view-subscription"></div>
+      <div class="view" id="view-devotional"></div>
+      <div class="view" id="view-pdf"></div>
+      <div class="view" id="view-prayer"></div>
+      <div class="view" id="view-rooms"></div>
+      <div class="view" id="view-settings"></div>
+    </div>
+  </main>
+</div>
+
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modalBox"></div>
+</div>
+<div id="toast"></div>
+
+<script>
+/* ====================================================================
+   말씀함께 관리자 v0.97 — 사용자 앱과 동일한 localStorage 키 공유
+   ==================================================================== */
+const STORAGE_KEYS = {
+  user:'mh_v05_user', prefs:'mh_v05_prefs',
+  columnState:'mh_v05_column_state', columnsCustom:'mh_v05_columns_custom',
+  prayers:'mh_v05_prayers', prayersHidden:'mh_v05_prayers_hidden', prayersSeedVersion:'mh_v05_prayers_seed_version',
+  devotionalsCustom:'mh_v05_devotionals_custom',
+  familyWorship:'mh_v05_family_worship',
+  rooms:'mh_v06_rooms', roomPosts:'mh_v06_room_posts', roomPostsHidden:'mh_v06_room_posts_hidden',
+};
+function _read(k,f){ try{ const r=localStorage.getItem(k); return r?JSON.parse(r):(f!==undefined?f:null);}catch(e){return f!==undefined?f:null;} }
+function _write(k,v){ localStorage.setItem(k,JSON.stringify(v)); }
+function getPrefs(){ return Object.assign({fontSize:'m',notifications:true,churchName:'우리 교회',medMethod:'lectio',lang:'ko',groupPreset:'shepherd'}, _read(STORAGE_KEYS.prefs,{})); }
+function setPrefs(patch){ _write(STORAGE_KEYS.prefs, Object.assign({}, getPrefs(), patch)); }
+function getChurchName(){ const n=(getPrefs().churchName||'').trim(); return n||'우리 교회'; }
+function getUser(){ return Object.assign({name:'성도님',subscribed:false}, _read(STORAGE_KEYS.user,{})); }
+function setUser(patch){ _write(STORAGE_KEYS.user, Object.assign({}, getUser(), patch)); }
+
+/* ===== 모임 단계 (앱과 동일 로직) ===== */
+const GROUP_PRESETS = {
+  shepherd:{label:'선한목자교회형', desc:'교구 · 초원 · 목장', tiers:['교구','초원','목장']},
+  large:   {label:'대형교회형',     desc:'교구 · 지역 · 초원 · 목장', tiers:['교구','지역','초원','목장']},
+  parish:  {label:'구역 · 속회형',  desc:'교구 · 구역 · 속회', tiers:['교구','구역','속회']},
+  cell2:   {label:'셀교회형',       desc:'교구 · 셀', tiers:['교구','셀']},
+  simple1: {label:'소형교회형',     desc:'목장 단일 단계', tiers:['목장']},
+};
+const TIER_KEYS=['zone','grove','cell','team'];
+function getGroupTiers(){
+  const p=getPrefs();
+  let names=Array.isArray(p.groupTiers)&&p.groupTiers.length?p.groupTiers:(GROUP_PRESETS[p.groupPreset]?GROUP_PRESETS[p.groupPreset].tiers:GROUP_PRESETS.shepherd.tiers);
+  names=names.slice(0,4).map(n=>(n||'').trim()).filter(Boolean);
+  if(!names.length) names=GROUP_PRESETS.shepherd.tiers.slice();
+  return names.map((n,i)=>({key:TIER_KEYS[i],name:n}));
+}
+
+/* ===== 시드 (사용자 앱과 동일) ===== */
+const COLUMNS_SEED = [
+  {id:1, category:'목양 칼럼', cover:'sage', title:'우리는 어떤 교회로 부름받았는가', pastor:'담임목사', role:'담임목사', date:'2026.5.18', status:'published',
+   excerpt:'우리의 부르심은 단지 모이는 공동체가 아니라, 그리스도 안에 깊이 거하며 세상으로 흘러가는 공동체입니다.',
+   body:'사랑하는 성도 여러분,\n\n지난 한 해 우리 교회는 \'함께\'라는 말을 자주 사용했습니다. 함께 예배하고, 함께 기도하고, 함께 말씀을 읽었습니다.\n\n요한복음 15장에서 주님은 \'내 안에 거하라\'고 말씀하십니다. 같은 본문 앞에 함께 머무는 시간을 통해 우리 교회가 더 깊은 곳으로 부름받기를 소망합니다.', likes:128, reads:892},
+  {id:2, category:'한 시간 기도', cover:'plum', title:'기도는 마침내 우리를 바꿉니다', pastor:'담임목사', role:'담임목사', date:'2026.5.11', status:'published',
+   excerpt:'기도할 때 가장 먼저 바뀌는 것은 우리의 형편이 아니라 우리 자신입니다.',
+   body:'기도는 응답을 얻기 위한 수단이 아닙니다. 기도는 응답하시는 하나님과의 만남입니다.\n\n한 시간 기도의 본질은 \'말\'이 아니라 \'머무름\'입니다.', likes:96, reads:654},
+  {id:3, category:'문서 사역', cover:'cream', title:'책 한 권의 묵상이 한 시대를 바꿉니다', pastor:'담임목사', role:'담임목사', date:'2026.5.4', status:'published',
+   excerpt:'한 본문을 함께 묵상하는 일은 작아 보이지만, 그 묵상이 모여 교회의 영적 체질을 바꿉니다.',
+   body:'말씀함께는 인쇄된 책자로 시작했고, 이제 앱으로도 여러분을 만날 준비를 하고 있습니다.\n\n무엇으로 읽든 우리는 같은 본문 앞에 있을 것입니다.', likes:72, reads:512},
+];
+const COLUMN_SUBMISSIONS_SEED = {
+  1002:{id:1002, category:'간증 칼럼', cover:'sky', title:'광야 같던 한 해, 그러나 함께였습니다', pastor:'김안나', role:'부목사', church:'선한목자교회',
+    excerpt:'올 한 해는 제게 광야와 같았습니다. 그러나 목장 식구들의 중보 속에서 저는 혼자가 아니었습니다.',
+    body:'올 한 해는 제게 광야와 같았습니다. 예상치 못한 일들이 연이어 찾아왔고, 기도의 자리에 앉는 것조차 버거운 날이 많았습니다.\n\n그러나 목장 식구들이 매일 같은 본문을 함께 묵상하며 저를 위해 중보해 주셨습니다. 같은 말씀 앞에 함께 머무는 공동체가 있다는 것이 얼마나 큰 위로인지 깨달았습니다.', likes:0, reads:0, comments:[], draft:true, status:'review', submittedAt:Date.now()-3600000*5},
+  1003:{id:1003, category:'협력 칼럼', cover:'plum', title:'이웃 교회와 함께 드리는 기도', pastor:'박요한', role:'협력·타교회 목사', church:'은혜교회',
+    excerpt:'한 도시 안의 교회들이 같은 본문을 묵상한다면 어떤 일이 일어날까요.',
+    body:'한 도시 안의 여러 교회가 같은 본문을 함께 묵상한다면 어떤 일이 일어날까요. 경쟁이 아니라 연합의 영성이 자라날 것입니다.', likes:0, reads:0, comments:[], draft:true, status:'review', submittedAt:Date.now()-3600000*26},
+};
+const PRAYERS_SEED = [
+  {id:1, scope:'church', who:'담임목사님', avatar:'담', district:null, grove:null, cell:null, committee:null, time:Date.now()-3600000*4, body:'주일예배를 통해 온 성도들에게 부어지는 은혜와, 다음 세대 부흥을 위한 한 시간 기도 운동이 모든 가정에 뿌리내리도록.', count:142, urgent:false},
+  {id:2, scope:'church', who:'선교부', avatar:'선', district:null, grove:null, cell:null, committee:'선교위원회', time:Date.now()-3600000*5, body:'동남아시아 단기선교 출발 1주일 전입니다. 24명 모든 팀원의 건강과 비자, 영적 무장을 위해 함께 기도합니다.', count:89, urgent:false},
+  {id:8, scope:'church', who:'다음세대국', avatar:'다', district:null, grove:null, cell:null, committee:'다음세대위원회', time:Date.now()-3600000*44, body:'여름성경학교 준비 모임이 시작됩니다. 교사들의 헌신과 아이들에게 부어질 은혜를 미리 구합니다.', count:56, urgent:false},
+  {id:3, scope:'zone', who:'송파교구 김초원', avatar:'김', district:'송파교구', grove:'생명초원', cell:null, committee:null, time:Date.now()-3600000*6, body:'다음 주 초원 모임을 새로 등록하신 두 가정과 함께 갖게 됩니다. 자연스럽게 정착하실 수 있도록.', count:34, urgent:false},
+  {id:4, scope:'zone', who:'송파교구 박초원', avatar:'박', district:'송파교구', grove:'평강초원', cell:null, committee:null, time:Date.now()-3600000*30, body:'우리 초원 권사님 자녀의 수능 100일 앞두고 영적·정신적 건강을 위해 함께 기도해 주세요.', count:28, urgent:false},
+  {id:5, scope:'cell', who:'생명목장 박목자', avatar:'박', district:'송파교구', grove:'생명초원', cell:'생명목장', committee:null, time:Date.now()-3600000*7, body:'이번 주 목장 모임에서 새가족 환영회를 합니다. 새가족 가정의 마음이 활짝 열리게 하소서.', count:18, urgent:false},
+  {id:6, scope:'urgent', who:'은혜목장 김집사', avatar:'김', district:'송파교구', grove:'생명초원', cell:'은혜목장', committee:null, time:Date.now()-3600000*3, body:'아버님께서 새벽에 응급실로 가셨습니다. 의식은 있으시지만 검사 결과를 기다리는 중입니다. 함께 기도 부탁드립니다.', count:67, urgent:true},
+  {id:7, scope:'cell', who:'사랑목장 이목자', avatar:'이', district:'경기남교구', grove:'사랑초원', cell:'사랑목장', committee:null, time:Date.now()-3600000*36, body:'우리 목장 자매님이 새 직장 면접을 앞두고 있습니다. 좋은 결과보다 하나님의 뜻 가운데 평안하길.', count:22, urgent:false},
+  {id:9, scope:'committee', who:'중보기도위원회 간사', avatar:'중', district:null, grove:null, cell:null, committee:'중보기도위원회', time:Date.now()-3600000*8, body:'매월 첫째 주 중보기도 모임에 위원 모두가 한 마음으로 참여할 수 있도록.', count:14, urgent:false},
+  {id:10, scope:'committee', who:'새가족위원회 위원장', avatar:'새', district:null, grove:null, cell:null, committee:'새가족위원회', time:Date.now()-3600000*48, body:'이번 달 새가족 등록자 12명이 안정적으로 양육 단계로 진입할 수 있도록 바나바와의 연결을 위해 기도해 주세요.', count:11, urgent:false},
+];
+const SCOPE_LABEL={church:'교회 전체',zone:'교구',grove:'초원',cell:'목장',committee:'위원회',urgent:'긴급'};
+const DEVOTIONALS_SEED = {
+  '2026-07-01':{book:'시편', range:'시편 94편 1~23절', subtitle:'‘억울함’ 끝에서 만나는 하나님', theme:'공의의 재판장이신 하나님', hymn:'찬송 413장 · 내 평생에 가는 길', question:'세상의 불의와 악인의 형통함 앞에서 하나님을 원망하거나 낙심했던 때가 있습니까?'},
+  '2026-07-02':{book:'시편', range:'시편 95편 1~11절', subtitle:'완악함을 넘어 순종으로', theme:'찬양에서 순종으로', hymn:'찬송 528장 · 예수가 우리를 부르는 소리', question:'주님의 세밀한 음성을 외면한 채 마음을 완악하게 하고 있는 일은 없는지 돌아봅시다.'},
+  '2026-07-03':{book:'시편', range:'시편 96편 1~13절', subtitle:'하나님만이 만왕의 왕이십니다', theme:'온 땅의 왕이신 여호와', hymn:'찬송 95장 · 나의 기쁨 나의 소망 되시며', question:'지금 내 삶에서 하나님보다 더 의지하거나 두려워하고 있는 헛된 우상은 무엇입니까?'},
+  '2026-07-04':{book:'시편', range:'시편 97편 1~12절', subtitle:'내 영혼에 뿌려진 빛의 씨앗', theme:'빛과 기쁨의 씨앗', hymn:'찬송 21장 · 다 찬양하여라', question:'주님이 나의 일상에 뿌려 주신 빛과 기쁨의 씨앗은 무엇입니까?'},
+  '2026-07-05':{book:'주일', range:'주일 말씀 기록', subtitle:'예배에서 받은 한 말씀을 기록합니다', theme:'주일 예배', hymn:'찬송 28장 · 복의 근원 강림하사', question:''},
+  '2026-07-06':{book:'시편', range:'시편 98편 1~9절', subtitle:'새 노래를 부를 이유', theme:'새 노래로 찬양하라', hymn:'찬송 19장 · 찬송하는 소리 있어', question:'내가 하나님께 올려드릴 새 노래는 무엇입니까?'},
+  '2026-07-07':{book:'시편', range:'시편 99편 1~9절', subtitle:'징계 가운데 용서하시는 하나님', theme:'공의와 자비의 하나님', hymn:'찬송 8장 · 거룩 거룩 거룩 전능하신 주님', question:'하나님의 거룩 앞에서 내가 아직 내려놓지 못한 죄의 영역은 무엇입니까?'},
+};
+
+
+/* ===== 온 세대 가정예배 (7월호 시드 — 앱과 동일) ===== */
+const FAMILY_WORSHIP_SEED = {
+  '2026-07':[
+    { week:'첫째 주', dayLabel:'1일 말씀', title:'‘억울함’ 끝에서 만나는 하나님', hymn:'나의 영혼이 잠잠히(오직 주만이)',
+      call:'사랑하는 하나님, 말씀 앞에 모인 우리를 기뻐하시는 하나님의 마음을 깨닫고 묵상하는 시간이 되게 해 주세요.',
+      reading:'시편 94편 1~23절', amsung:'시 94:22',
+      share:'전능하신 하나님이 우리와 함께하신다는 것을 분명히 믿는데도 억울함을 느끼거나 고통스러운 이유는 무엇일까요? 본문 속 시인은 "여호와는 나의 요새이시요 … 내가 피할 반석이시라"라고 고백합니다. 모든 것을 아시는 전능하신 하나님 앞에 신실하게 반응해야 합니다.',
+      question:'하나님을 신뢰하기 어려울 만큼 힘든 일이 있었나요? 그 상황에서 전능하신 하나님이 나를 보호하신다는 믿음을 어떻게 회복할 수 있었나요?',
+      bless:'전능하신 하나님, 하나님이 언제 어디서든 우리와 함께하시며 피난처가 되어 주신다는 사실을 깨닫고 고백하는 우리 가정이 되도록 축복해 주세요.',
+      mission:'전능하신 하나님이 고통받는 사람들에게 피난처가 되어 주시기를 바라며, 한 주 동안 그들을 위해 기도해 보세요.' },
+    { week:'둘째 주', dayLabel:'9일 말씀', title:'완전한 마음으로 주님 앞에 서리이다', hymn:'마음이 상한 자를',
+      call:'사랑하는 하나님, 우리 가정이 말씀의 능력을 경험하길 원합니다. 하나님 말씀으로 새롭게 되는 시간이 되게 해 주세요.',
+      reading:'시편 101편 1~8절', amsung:'시 101:2',
+      share:'본문에서 다윗은 ‘완전한 길’, ‘완전한 마음’에 관해 말합니다. 완전함은 완전하신 하나님과 함께할 때 경험되는 것입니다. 다윗처럼 완전하신 하나님과 함께하며 완전한 마음으로 행하기를 고백하는 우리가 되길 원합니다.',
+      question:'하나님의 함께하심을 느끼며 마음이 완전해졌음을 경험한 적이 있나요?',
+      bless:'사랑하는 하나님, 완전하신 하나님이 늘 우리와 함께 계심을 고백하며 살아가는 우리 가정이 되도록 축복해 주세요.',
+      mission:'내가 완전하지 못하다고 느끼는 순간은 언제인지 점검해 보세요. 그리고 완전하신 하나님을 구하는 기도를 드려 보세요.' },
+    { week:'셋째 주', dayLabel:'16일 말씀', title:'죄의 깊이보다 깊은 하나님의 사랑', hymn:'정결한 맘 주시옵소서',
+      call:'사랑하는 하나님, 주님을 예배하기 위해 모인 우리 가정에 은혜 베풀어 주시길 원합니다. 말씀을 함께 나누며 기쁨을 경험하는 시간이 되게 해 주세요.',
+      reading:'시편 106편 24~48절', amsung:'시 106:44~45',
+      share:'이스라엘 백성은 큰 구원을 경험하고도 하나님께 불순종했습니다. 그러나 하나님은 백성이 부르짖을 때 그들을 외면하지 않고 심판의 뜻을 여러 차례 돌이키셨습니다. 그분의 사랑은 우리의 죄와 허물보다 큽니다.',
+      question:'이스라엘 백성이 하나님의 구원을 경험하고도 불순종했던 이유는 무엇일까요?',
+      bless:'구원의 하나님, 우리 가정이 하나님의 구원 은혜를 잊지 않고 늘 주님의 은혜 속에 머무는 가정이 되도록 축복해 주세요.',
+      mission:'하나님이 나를 구원하셨음을 기억하며 매일매일 하루를 감사 기도로 시작하고 마쳐 보세요.' },
+    { week:'넷째 주', dayLabel:'23일 말씀', title:'하나님이 구하시는 한 가지', hymn:'나 주님의 기쁨 되기 원하네',
+      call:'사랑하는 하나님, 우리 가정이 함께 하나님의 말씀을 묵상합니다. 우리에게 하시는 주님의 말씀을 잘 분별하고 마음에 새기는 시간이 되게 해 주세요.',
+      reading:'미가 6장 1~16절', amsung:'미 6:8',
+      share:'하나님이 기뻐하시는 것은 화려한 종교 활동이 아닌 일상에서 하나님과 함께하는 교제입니다. "내 백성아 내가 무엇을 네게 행하였으며"(3절)라는 물음은 이스라엘을 향한 하나님의 아픈 마음을 드러냅니다.',
+      question:'나는 일상에서 어떻게 하나님과 동행하고 있나요? 하나님이 나에게 원하시는 것은 무엇일지 생각해 보세요.',
+      bless:'사랑하는 하나님, 매일 주님과 동행하고 어떤 상황에서도 주님께 집중할 수 있도록 우리 가정을 축복해 주세요.',
+      mission:'한 주간 나의 생각과 행동을 관찰하며, 나는 무엇을 기준으로 삼아 생활하는지 살펴보세요.' }
+  ]
+};
+function getFwMonth(key){ const c=_read(STORAGE_KEYS.familyWorship,{})||{}; return (c[key]&&c[key].length)?c[key]:(FAMILY_WORSHIP_SEED[key]||[]); }
+function saveFwMonth(key,list){ const c=_read(STORAGE_KEYS.familyWorship,{})||{}; c[key]=list; _write(STORAGE_KEYS.familyWorship,c); }
+
+/* ===== 칼럼 데이터 헬퍼 ===== */
+function ensureSubmissionSeed(){
+  const all=_read(STORAGE_KEYS.columnsCustom,null);
+  if(all===null){ _write(STORAGE_KEYS.columnsCustom, JSON.parse(JSON.stringify(COLUMN_SUBMISSIONS_SEED))); }
+}
+function allColumns(){ return _read(STORAGE_KEYS.columnsCustom,{}); }
+function listSubmissions(){
+  const all=allColumns();
+  return Object.keys(all).map(k=>all[k]).filter(c=>c&&!c._deleted&&(c.status==='review'||c.status==='rejected')).sort((a,b)=>(b.submittedAt||0)-(a.submittedAt||0));
+}
+function listPublished(){
+  const custom=allColumns(); const merged=[];
+  COLUMNS_SEED.forEach(c=>{ const o=custom[c.id]; if(o&&o._deleted)return; merged.push(o?Object.assign({},c,o):c); });
+  Object.keys(custom).forEach(id=>{ const c=custom[id]; if(c&&!c._deleted&&parseInt(id,10)>1000&&c.status==='published') merged.push(c); });
+  return merged.filter(c=>!c.draft&&c.status!=='review'&&c.status!=='rejected');
+}
+function approveColumn(id){ const all=allColumns(); if(all[id]){all[id].status='published';all[id].draft=false;delete all[id].rejectReason;all[id].date=new Date().toLocaleDateString('ko-KR');_write(STORAGE_KEYS.columnsCustom,all);} }
+function rejectColumn(id,reason){ const all=allColumns(); if(all[id]){all[id].status='rejected';all[id].draft=true;all[id].rejectReason=reason||'';_write(STORAGE_KEYS.columnsCustom,all);} }
+function deleteSubmission(id){ const all=allColumns(); if(all[id]){all[id]._deleted=true;_write(STORAGE_KEYS.columnsCustom,all);} }
+function addColumn(data){ const all=allColumns(); let id=1001; while(all[id])id++; all[id]=Object.assign({id,likes:0,reads:0,comments:[],draft:false,status:'published',date:new Date().toLocaleDateString('ko-KR'),pastor:'담임목사',role:'담임목사',church:getChurchName()},data); _write(STORAGE_KEYS.columnsCustom,all); }
+
+/* ===== 중보기도 (앱과 동일한 mh_v05_prayers 저장소 사용) ===== */
+function ensurePrayerSeed(){ if(_read(STORAGE_KEYS.prayers,null)===null){ _write(STORAGE_KEYS.prayers, JSON.parse(JSON.stringify(PRAYERS_SEED))); } }
+function rawPrayers(){ ensurePrayerSeed(); return _read(STORAGE_KEYS.prayers, PRAYERS_SEED)||[]; }
+function listPrayers(){
+  return rawPrayers().slice().sort((a,b)=>{ if(a.urgent&&!b.urgent)return -1; if(!a.urgent&&b.urgent)return 1; return (b.time||0)-(a.time||0); });
+}
+function hiddenPrayers(){ return _read(STORAGE_KEYS.prayersHidden,[]); }
+function togglePrayerHidden(id){ let h=hiddenPrayers(); h=h.includes(id)?h.filter(x=>x!==id):h.concat(id); _write(STORAGE_KEYS.prayersHidden,h); }
+function togglePrayerUrgent(id){ const all=rawPrayers(); const p=all.find(x=>x.id===id); if(p){ p.urgent=!p.urgent; p._origScope=p._origScope||p.scope; p.scope=p.urgent?'urgent':(p._origScope&&p._origScope!=='urgent'?p._origScope:'church'); _write(STORAGE_KEYS.prayers,all); } }
+function addPrayer({who,scope,body,urgent,committee}){
+  const all=rawPrayers(); const newId=Math.max(0,...all.map(p=>p.id||0))+1;
+  all.unshift({ id:newId, scope:urgent?'urgent':(scope||'church'), _origScope:scope||'church', who:who||'관리자', avatar:(who||'관').charAt(0), time:Date.now(), body:body||'', count:0, urgent:!!urgent, district:null, grove:null, cell:null, committee:committee||null });
+  _write(STORAGE_KEYS.prayers,all);
+}
+function urgentCount(){ return rawPrayers().filter(p=>p.urgent).length; }
+
+/* ===== 목장방 ===== */
+function listRooms(){ return _read(STORAGE_KEYS.rooms,[])||[]; }
+
+/* ===== UI 헬퍼 ===== */
+function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),1900); }
+function openModal(html){ document.getElementById('modalBox').innerHTML=html; document.getElementById('modal').classList.add('open'); }
+function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+function relTime(ts){ const d=Math.floor((Date.now()-ts)/3600000); if(d<1)return'방금'; if(d<24)return d+'시간 전'; return Math.floor(d/24)+'일 전'; }
+
+/* ===== 네비게이션 ===== */
+const NAV=[
+  {group:'운영'},
+  {id:'dashboard', name:'대시보드', en:'Dashboard', icon:'<rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>'},
+  {id:'column', name:'칼럼 검수', en:'Columns', badge:()=>listSubmissions().filter(c=>c.status==='review').length, icon:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/>'},
+  {id:'devotional', name:'묵상 본문', en:'Devotionals', icon:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>'},
+  {id:'pdf', name:'책자 PDF 업로드', en:'PDF Import', icon:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6M9 15l3 3 3-3"/>'},
+  {id:'prayer', name:'중보기도', en:'Prayers', icon:'<path d="M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="2.2"/>'},
+  {id:'rooms', name:'목장방', en:'Rooms', icon:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>'},
+  {group:'정책'},
+  {id:'tiers', name:'모임 단계', en:'Group Tiers', icon:'<path d="M3 3v18h18"/><rect x="7" y="13" width="3" height="5"/><rect x="12" y="9" width="3" height="9"/><rect x="17" y="5" width="3" height="13"/>'},
+  {id:'method', name:'묵상 방식', en:'Method', icon:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'},
+  {id:'subscription', name:'구독 · PRO', en:'Subscription', icon:'<path d="M12 2l2.4 6.9H22l-6 4.5 2.3 7L12 16.9 5.7 20.4 8 13.4l-6-4.5h7.6z"/>'},
+  {group:'계정'},
+  {id:'settings', name:'설정', en:'Settings', icon:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>'},
+];
+function buildNav(){
+  const el=document.getElementById('sideNav'); let h='';
+  NAV.forEach(n=>{
+    if(n.group){ h+=`<div class="side-group-label en">${n.group}</div>`; return; }
+    const b=n.badge?n.badge():0;
+    h+=`<div class="side-item" data-view="${n.id}" onclick="go('${n.id}')">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">${n.icon}</svg>
+      <span>${n.name}</span>${b>0?`<span class="side-badge en">${b}</span>`:''}</div>`;
+  });
+  el.innerHTML=h;
+}
+const RENDERERS={};
+let current='dashboard';
+function go(id){
+  current=id;
+  document.querySelectorAll('.side-item').forEach(e=>e.classList.toggle('active',e.dataset.view===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  const n=NAV.find(x=>x.id===id);
+  document.getElementById('pageTitle').innerHTML=`${n.name} <small class="en">${n.en}</small>`;
+  if(RENDERERS[id]) RENDERERS[id]();
+  buildNav(); document.querySelectorAll('.side-item').forEach(e=>e.classList.toggle('active',e.dataset.view===id));
+}
+function openUserApp(){ window.open('말씀함께_데모_v0.97.html','_blank'); }
+
+/* ====================== 뷰: 대시보드 ====================== */
+RENDERERS.dashboard=function(){
+  const subs=listSubmissions(); const pendCnt=subs.filter(c=>c.status==='review').length;
+  const rejCnt=subs.filter(c=>c.status==='rejected').length;
+  const pubCnt=listPublished().length;
+  const prayCnt=listPrayers().length-hiddenPrayers().length;
+  const roomCnt=listRooms().length;
+  const u=getUser(); const p=getPrefs();
+  const tiers=getGroupTiers().map(t=>t.name).join(' · ');
+  const method=p.medMethod==='simple'?'심플 묵상':'렉시오 디비나';
+  document.getElementById('view-dashboard').innerHTML=`
+    <div class="stat-grid">
+      ${statCard('warn','검수 대기 칼럼',pendCnt,'건','M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6')}
+      ${statCard('plum','게시 중 칼럼',pubCnt,'건','M4 19.5A2.5 2.5 0 0 1 6.5 17H20 M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z')}
+      ${statCard('terra','노출 중 중보기도',prayCnt,'건','M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z')}
+      ${statCard('sky','목장방',roomCnt,'개','M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2 M9 7a4 4 0 1 0 0 0')}
+    </div>
+    <div class="section-title">검수 대기 현황</div>
+    ${pendCnt===0? emptyBox('검수 대기 중인 칼럼이 없습니다.') : subs.filter(c=>c.status==='review').slice(0,3).map(c=>`
+      <div class="lrow">
+        <div class="lrow-av" style="background:var(--warn-soft);color:var(--warn)">검</div>
+        <div class="lrow-main"><div class="lrow-title">${esc(c.title)}</div>
+          <div class="lrow-sub">${esc(c.pastor)} · ${esc(c.role||'')} · ${esc(c.church||'')} · ${relTime(c.submittedAt||Date.now())}</div></div>
+        <div class="lrow-actions"><button class="btn btn-sm btn-primary" onclick="go('column')">검수하기</button></div>
+      </div>`).join('')}
+    <div class="section-title">현재 적용 정책</div>
+    <div class="card" style="padding:6px 0">
+      ${policyRow('모임 단계',tiers,'tiers')}
+      ${policyRow('묵상 방식',method,'method')}
+      ${policyRow('구독 정책','책자 구독자 무료 · PRO 자동 적용 · 데모 사용자 '+(u.subscribed?'구독 중':'미구독'),'subscription')}
+      ${policyRow('교회 이름',getChurchName(),'settings')}
+    </div>`;
+};
+function statCard(c,label,num,unit,path){
+  return `<div class="stat"><div class="stat-ic ic-${c}"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="${path}"/></svg></div>
+    <div class="stat-num en">${num}<small>${unit}</small></div><div class="stat-label">${label}</div></div>`;
+}
+function policyRow(label,val,view){
+  return `<div style="display:flex;align-items:center;gap:12px;padding:13px 18px;border-bottom:1px solid var(--line-soft)">
+    <div style="font-size:12.5px;font-weight:700;color:var(--ink-3);width:90px;flex-shrink:0">${label}</div>
+    <div style="flex:1;font-size:13.5px;font-weight:600;color:var(--ink)">${esc(val)}</div>
+    <button class="btn btn-sm btn-ghost" onclick="go('${view}')">관리 →</button></div>`;
+}
+function emptyBox(msg){ return `<div class="empty"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><div class="empty-title">${msg}</div></div>`; }
+
+/* ====================== 뷰: 칼럼 검수 ====================== */
+let colTab='review';
+RENDERERS.column=function(){
+  const subs=listSubmissions(); const pend=subs.filter(c=>c.status==='review'); const rej=subs.filter(c=>c.status==='rejected'); const pub=listPublished();
+  let list = colTab==='review'?pend : colTab==='rejected'?rej : pub;
+  document.getElementById('view-column').innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <p class="hint">검수위원이 승인하면 전체 게시됩니다. <b>담임목사 칼럼은 승인 전에도 소속 교회 성도에게 공개</b>됩니다.</p>
+      <button class="btn btn-primary btn-sm" onclick="openColumnForm()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>직접 작성</button>
+    </div>
+    <div class="tabs">
+      ${colTabBtn('review','검수 대기',pend.length)}
+      ${colTabBtn('rejected','반려됨',rej.length)}
+      ${colTabBtn('published','게시 중',pub.length)}
+    </div>
+    <div id="colList">${
+      list.length===0 ? emptyBox(colTab==='review'?'검수 대기 중인 칼럼이 없습니다.':colTab==='rejected'?'반려된 칼럼이 없습니다.':'게시 중인 칼럼이 없습니다.')
+      : list.map(c=>colCard(c,colTab)).join('')
+    }</div>`;
+};
+function colTabBtn(id,label,n){ return `<div class="tab ${colTab===id?'active':''}" onclick="colTab='${id}';RENDERERS.column()">${label}<span class="tab-count en">${n}</span></div>`; }
+function colCard(c,tab){
+  const isPub=tab==='published';
+  return `<div class="rev-card ${c.status==='rejected'?'rejected':''}">
+    <div class="rev-top">
+      <span class="badge ${c.status}">${c.status==='review'?'검수 대기':c.status==='rejected'?'반려됨':'게시 중'}</span>${c.churchVisible&&c.status==='review'?'<span class="badge cat" style="background:rgba(200,140,50,.13);color:#A06B1E">소속 교회 공개중</span>':''}
+      <span class="badge cat">${esc(c.category||'칼럼')}</span>
+      <span class="rev-meta">${esc(c.pastor||'')}${c.role?' · '+esc(c.role):''}${c.church?' · '+esc(c.church):''}${c.submittedAt?' · '+relTime(c.submittedAt):c.date?' · '+esc(c.date):''}</span>
+    </div>
+    <div class="rev-title">${esc(c.title)}</div>
+    <div class="rev-body" id="rb-${c.id}">${esc(c.body||c.excerpt||'')}</div>
+    <button class="btn btn-sm btn-ghost" style="margin-top:6px;padding:4px 0" onclick="document.getElementById('rb-${c.id}').classList.toggle('open');this.textContent=this.textContent==='더 보기'?'접기':'더 보기'">더 보기</button>
+    ${c.rejectReason?`<div class="rev-reason">반려 사유: ${esc(c.rejectReason)}</div>`:''}
+    <div class="rev-actions">
+      ${tab==='review'?`
+        <button class="btn btn-sm btn-ok" onclick="doApprove(${c.id})"><svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>승인 · 게시</button>
+        <button class="btn btn-sm btn-bad" onclick="openReject(${c.id})">반려</button>
+        <button class="btn btn-sm btn-ghost" onclick="doDeleteSub(${c.id})">삭제</button>`:''}
+      ${tab==='rejected'?`
+        <button class="btn btn-sm btn-ok" onclick="doApprove(${c.id})">재승인 · 게시</button>
+        <button class="btn btn-sm btn-ghost" onclick="doDeleteSub(${c.id})">삭제</button>`:''}
+      ${tab==='published'?`
+        ${c.id>1000?`<button class="btn btn-sm btn-ghost" onclick="doUnpublish(${c.id})">게시 취소</button>`:'<span class="rev-meta">시드 칼럼</span>'}`:''}
+    </div>
+  </div>`;
+}
+function doApprove(id){ approveColumn(id); toast('승인되어 게시되었습니다'); RENDERERS.column(); buildNav(); markActive(); }
+function doDeleteSub(id){ if(confirm('이 기고를 삭제할까요?')){ deleteSubmission(id); toast('삭제되었습니다'); RENDERERS.column(); buildNav(); markActive(); } }
+function doUnpublish(id){ if(confirm('게시를 취소할까요? (검수 대기로 되돌립니다)')){ const all=allColumns(); if(all[id]){all[id].status='review';all[id].draft=true;_write(STORAGE_KEYS.columnsCustom,all);} toast('게시가 취소되었습니다'); RENDERERS.column(); buildNav(); markActive(); } }
+function openReject(id){
+  openModal(`<div class="modal-head"><h3>칼럼 반려</h3><button class="modal-x" onclick="closeModal()">×</button></div>
+    <div class="modal-body"><div class="field"><label>반려 사유 <span class="sub">기고자에게 전달됩니다</span></label>
+      <textarea class="textarea" id="rejReason" placeholder="예) 본문 인용 출처를 보완해 주세요."></textarea></div></div>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal()">취소</button>
+      <button class="btn btn-bad" onclick="submitReject(${id})">반려하기</button></div>`);
+}
+function submitReject(id){ const r=document.getElementById('rejReason').value.trim(); rejectColumn(id,r); closeModal(); toast('반려되었습니다'); RENDERERS.column(); buildNav(); markActive(); }
+function openColumnForm(){
+  openModal(`<div class="modal-head"><h3>칼럼 직접 작성</h3><button class="modal-x" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="field"><label>제목</label><input class="input" id="cf-title" placeholder="칼럼 제목"></div>
+      <div class="row2"><div class="field"><label>카테고리</label><input class="input" id="cf-cat" value="목양 칼럼"></div>
+        <div class="field"><label>작성자</label><input class="input" id="cf-author" value="담임목사"></div></div>
+      <div class="field"><label>본문</label><textarea class="textarea" id="cf-body" placeholder="칼럼 본문을 입력하세요"></textarea></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal()">취소</button>
+      <button class="btn btn-primary" onclick="submitColumnForm()">게시</button></div>`);
+}
+function submitColumnForm(){
+  const t=document.getElementById('cf-title').value.trim(), b=document.getElementById('cf-body').value.trim();
+  if(!t||!b){ toast('제목과 본문을 입력해 주세요'); return; }
+  addColumn({title:t, category:document.getElementById('cf-cat').value.trim()||'칼럼', pastor:document.getElementById('cf-author').value.trim()||'담임목사', cover:'sage', body:b, excerpt:b.replace(/\s+/g,' ').slice(0,70)});
+  closeModal(); toast('게시되었습니다'); colTab='published'; RENDERERS.column();
+}
+function markActive(){ document.querySelectorAll('.side-item').forEach(e=>e.classList.toggle('active',e.dataset.view===current)); }
+
+/* ====================== 뷰: 모임 단계 ====================== */
+RENDERERS.tiers=function(){
+  const p=getPrefs(); const cur=getGroupTiers();
+  document.getElementById('view-tiers').innerHTML=`
+    <p class="hint">교회 규모와 조직에 맞게 모임 단계를 설정합니다. 큰 단위 → 작은 단위 순이며, 사용자 앱의 중보기도 공개 범위와 모임 화면에 그대로 반영됩니다.</p>
+    <div class="section-title">현재 적용</div>
+    <div class="card" style="padding:16px 18px"><div class="tier-flow">${cur.map((t,i)=>`<span class="tier-chip">${esc(t.name)}</span>${i<cur.length-1?'<span class="tier-arrow">›</span>':''}`).join('')}</div></div>
+    <div class="section-title">프리셋 선택</div>
+    <div class="preset-grid">${Object.keys(GROUP_PRESETS).map(k=>{
+      const g=GROUP_PRESETS[k]; const on=(p.groupPreset===k&&!isCustom());
+      return `<div class="preset ${on?'on':''}" onclick="applyPreset('${k}')">
+        <div class="preset-name">${g.label}<span class="preset-check"><svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+        <div class="tier-flow">${g.tiers.map((t,i)=>`<span class="tier-chip">${t}</span>${i<g.tiers.length-1?'<span class="tier-arrow">›</span>':''}`).join('')}</div></div>`;
+    }).join('')}
+      <div class="preset ${isCustom()?'on':''}" onclick="go('tiers')">
+        <div class="preset-name">직접 설정<span class="preset-check"><svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+        <div class="hint">아래에서 단계 이름을 직접 편집</div></div>
+    </div>
+    <div class="section-title">단계 이름 직접 편집</div>
+    <div class="card" style="padding:16px 18px">
+      <div class="field" style="margin-bottom:14px"><label>단계 수</label>
+        <div class="seg">${[1,2,3,4].map(n=>`<button class="seg-btn ${cur.length===n?'on':''}" onclick="setTierCount(${n})">${n}단계</button>`).join('')}</div></div>
+      <div id="tierEdit">${cur.map((t,i)=>`
+        <div class="tier-edit-row"><div class="idx en">${i+1}</div>
+          <input class="input" value="${esc(t.name)}" onchange="setTierName(${i},this.value)" placeholder="단계 이름">
+          <span class="hint" style="white-space:nowrap">${i===0?'최상위':i===cur.length-1?'최하위 모임':''}</span></div>`).join('')}</div>
+    </div>`;
+};
+function isCustom(){ return getPrefs().groupPreset==='custom'; }
+function applyPreset(k){ const t=GROUP_PRESETS[k].tiers.slice(); setPrefs({groupPreset:k,groupTiers:t}); toast(`'${GROUP_PRESETS[k].label}' 적용`); RENDERERS.tiers(); }
+function setTierCount(n){ let cur=getGroupTiers().map(t=>t.name); const def=['교구','초원','목장','순']; while(cur.length<n)cur.push(def[cur.length]||('단계'+(cur.length+1))); cur=cur.slice(0,n); setPrefs({groupPreset:'custom',groupTiers:cur}); RENDERERS.tiers(); }
+function setTierName(i,v){ let cur=getGroupTiers().map(t=>t.name); while(cur.length<=i)cur.push('단계'+(cur.length+1)); cur[i]=(v||'').trim()||cur[i]; setPrefs({groupPreset:'custom',groupTiers:cur}); toast('단계 이름 저장'); RENDERERS.tiers(); }
+
+/* ====================== 뷰: 묵상 방식 ====================== */
+RENDERERS.method=function(){
+  const m=getPrefs().medMethod==='simple'?'simple':'lectio';
+  document.getElementById('view-method').innerHTML=`
+    <p class="hint">교회 기본 묵상 방식을 설정합니다. 사용자 앱의 오늘 묵상 화면이 선택한 방식으로 열립니다. (성도는 개인 설정에서 변경 가능)</p>
+    <div class="method-grid">
+      <div class="method-card ${m==='lectio'?'on':''}" onclick="setMethod('lectio')">
+        <h4>렉시오 디비나 ${m==='lectio'?'<span class="badge published" style="margin-left:auto">적용 중</span>':''}</h4>
+        <div class="method-en">Lectio Divina · 4단계 깊은 묵상</div>
+        <div class="method-steps">
+          <div class="method-step"><span class="n en">1</span> 읽기 (Lectio) — 본문을 천천히 읽기</div>
+          <div class="method-step"><span class="n en">2</span> 묵상 (Meditatio) — 마음에 닿는 구절 새기기</div>
+          <div class="method-step"><span class="n en">3</span> 기도 (Oratio) — 말씀으로 기도하기</div>
+          <div class="method-step"><span class="n en">4</span> 관상 (Contemplatio) — 머무르기 <span class="muted">· PRO</span></div>
+        </div>
+      </div>
+      <div class="method-card ${m==='simple'?'on':''}" onclick="setMethod('simple')">
+        <h4>심플 묵상 ${m==='simple'?'<span class="badge published" style="margin-left:auto">적용 중</span>':''}</h4>
+        <div class="method-en">Simple Guide · 부담 없는 3단계</div>
+        <div class="method-steps">
+          <div class="method-step"><span class="n en">1</span> 본문 읽기</div>
+          <div class="method-step"><span class="n en">2</span> 한 구절 붙잡기</div>
+          <div class="method-step"><span class="n en">3</span> 짧은 적용 기도</div>
+          <div class="method-step muted" style="margin-top:6px">묵상이 처음인 새가족·다음세대에게 권장</div>
+        </div>
+      </div>
+    </div>
+    <div class="note" style="margin-top:18px"><b>정책 안내</b> — 묵상 본문(말씀·해설·기도제목)은 두 방식이 공유합니다. 방식은 \'어떻게 안내하느냐\'의 차이이며, 책자 구독자에게는 관상 단계 등 PRO 깊은 묵상이 함께 열립니다.</div>`;
+};
+function setMethod(m){ setPrefs({medMethod:m==='simple'?'simple':'lectio'}); toast((m==='simple'?'심플 묵상':'렉시오 디비나')+' 적용'); RENDERERS.method(); }
+
+/* ====================== 뷰: 구독 · PRO ====================== */
+RENDERERS.subscription=function(){
+  const u=getUser();
+  document.getElementById('view-subscription').innerHTML=`
+    <p class="hint">말씀함께 책자 구독자는 앱의 모든 기능(PRO)을 무료로 사용합니다. 별도 결제 없이 구독 = PRO 권한입니다.</p>
+    <div class="section-title">구독 정책</div>
+    <div class="card" style="padding:6px 0">
+      ${policyInfo('책자 구독자','말씀함께 인쇄 책자 구독자는 PRO 전 기능 무료')}
+      ${policyInfo('PRO 전용 기능','렉시오 관상(4단계) · 예수동행일기 · 기도 트래킹 심화 · 칼럼 전체 열람')}
+      ${policyInfo('비구독자','오늘 묵상 · 중보기도 · 칼럼 요약 등 기본 기능 무료')}
+    </div>
+    <div class="section-title">데모 사용자 구독 상태</div>
+    <div class="switch">
+      <div class="switch-info"><h4>${esc(u.name||'데모 사용자')} · ${u.subscribed?'구독 중 (PRO)':'미구독'}</h4>
+        <p>${u.subscribed?'책자 구독자로 PRO 기능이 모두 열려 있습니다':'토글을 켜면 책자 구독자(PRO)로 전환됩니다'}</p></div>
+      <button class="toggle ${u.subscribed?'on':''}" onclick="toggleSub()"></button>
+    </div>
+    <div class="note"><b>데모 안내</b> — 실제 결제 연동 없이 구독 상태만 시뮬레이션합니다. 사용자 앱의 \'내 정보\' 화면 구독 카드와 동일한 상태(${STORAGE_KEYS.user})를 공유합니다.</div>`;
+};
+function policyInfo(label,val){ return `<div style="display:flex;gap:12px;padding:13px 18px;border-bottom:1px solid var(--line-soft)">
+  <div style="font-size:12.5px;font-weight:700;color:var(--sage-dark);width:96px;flex-shrink:0">${label}</div>
+  <div style="flex:1;font-size:13px;color:var(--ink-2);line-height:1.6">${esc(val)}</div></div>`; }
+function toggleSub(){ const u=getUser(); const ns=!u.subscribed; setUser(ns?{subscribed:true,subscribeSince:Date.now()}:{subscribed:false}); toast(ns?'구독(PRO) 적용':'구독 해제'); RENDERERS.subscription(); };
+
+/* ====================== 뷰: 묵상 본문 ====================== */
+RENDERERS.devotional=function(){
+  const custom=_read(STORAGE_KEYS.devotionalsCustom,{})||{};
+  const keys=Array.from(new Set(Object.keys(DEVOTIONALS_SEED).concat(Object.keys(custom)))).sort();
+  document.getElementById('view-devotional').innerHTML=`
+    <p class="hint">날짜별 묵상 본문의 제목·주제·해설·기도제목을 편집합니다. 저장하면 사용자 앱의 해당 날짜 묵상에 반영됩니다.</p>
+    <div class="section-title">묵상 본문 목록</div>
+    ${keys.map(k=>{ const d=Object.assign({},DEVOTIONALS_SEED[k]||{},custom[k]||{}); const edited=!!custom[k];
+      return `<div class="lrow">
+        <div class="lrow-av" style="background:var(--sage-pale);color:var(--sage-dark);font-family:var(--en);font-size:11px">${k.slice(5)}</div>
+        <div class="lrow-main"><div class="lrow-title">${esc(d.range||d.book)} ${edited?('<span class="scope-pill church">'+(custom[k]&&custom[k]._source==='pdf'?'PDF 반영':'편집됨')+'</span>'):''}</div>
+          <div class="lrow-sub">${esc(d.theme||'')} · ${esc(d.subtitle||'')}</div></div>
+        <div class="lrow-actions"><button class="btn btn-sm" onclick="openDevForm('${k}')">편집</button></div>
+      </div>`; }).join('')}
+    ${renderFwSection()}`;
+};
+/* ── 온 세대 가정예배 편집 (v0.97) ── */
+let fwMonthKey='2026-07';
+function renderFwSection(){
+  const list=getFwMonth(fwMonthKey);
+  const c=_read(STORAGE_KEYS.familyWorship,{})||{};
+  const edited=!!(c[fwMonthKey]&&c[fwMonthKey].length);
+  return `
+    <div class="section-title" style="margin-top:30px">온 세대 가정예배 <span style="font-size:11px;color:var(--ink-3);font-weight:600">· ${fwMonthKey} ${edited?'(편집됨)':'(시드)'}</span></div>
+    <p class="hint">달력 탭 하단에 노출되는 주 1회 가정예배 순서지입니다. 저장하면 앱에 즉시 반영됩니다.</p>
+    ${list.length? list.map((w,i)=>`
+      <div class="lrow">
+        <div class="lrow-av" style="background:var(--sage-pale,#eef3ee);color:var(--sage-dark,#3c5c4c);font-size:10.5px">${esc(w.week||(i+1)+'주')}</div>
+        <div class="lrow-main"><div class="lrow-title">${esc(w.title||'(제목 없음)')}</div>
+          <div class="lrow-sub">${esc(w.dayLabel||'')} · ${esc(w.reading||'')} · 암송 ${esc(w.amsung||'')}</div></div>
+        <div class="lrow-actions"><button class="btn btn-sm" onclick="openFwForm(${i})">편집</button></div>
+      </div>`).join('') : emptyBox('이 달의 가정예배가 없습니다. PDF 업로드로 가져오거나 직접 추가하세요.')}
+    <button class="btn btn-sm btn-ghost" style="margin-top:8px" onclick="openFwForm(-1)">+ 주차 추가</button>`;
+}
+function openFwForm(i){
+  const list=getFwMonth(fwMonthKey);
+  const w=i>=0?(list[i]||{}):{week:(list.length+1)+'째 주'};
+  const f=(id,label,val,ta)=>`<div class="field"><label>${label}</label>${ta?`<textarea class="textarea" id="fw-${id}" style="min-height:70px">${esc(val||'')}</textarea>`:`<input class="input" id="fw-${id}" value="${esc(val||'')}">`}</div>`;
+  openModal(`<div class="modal-head"><h3>가정예배 ${i>=0?'편집':'추가'} · ${fwMonthKey}</h3><button class="modal-x" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      ${f('week','주차 (예: 첫째 주)',w.week)}${f('day','말씀 날짜 (예: 1일 말씀)',w.dayLabel)}
+      ${f('title','제목',w.title)}${f('hymn','찬양',w.hymn)}
+      ${f('reading','성경 봉독 (예: 시편 94편 1~23절)',w.reading)}${f('amsung','암송 (예: 시 94:22)',w.amsung)}
+      ${f('call','예배로의 부름',w.call,1)}${f('share','말씀 나눔',w.share,1)}
+      ${f('question','나눔 질문',w.question,1)}${f('bless','축복 기도',w.bless,1)}${f('mission','가정 미션',w.mission,1)}
+    </div>
+    <div class="modal-foot">${i>=0?'<button class="btn btn-bad" onclick="deleteFw('+i+')">삭제</button>':''}
+      <button class="btn btn-ghost" onclick="closeModal()">취소</button>
+      <button class="btn btn-primary" onclick="saveFw(${i})">저장</button></div>`);
+}
+function saveFw(i){
+  const list=getFwMonth(fwMonthKey).slice();
+  const v=id=>document.getElementById('fw-'+id).value.trim();
+  const w={week:v('week'),dayLabel:v('day'),title:v('title'),hymn:v('hymn'),reading:v('reading'),amsung:v('amsung'),call:v('call'),share:v('share'),question:v('question'),bless:v('bless'),mission:v('mission')};
+  if(i>=0) list[i]=w; else list.push(w);
+  saveFwMonth(fwMonthKey,list); closeModal(); toast('가정예배가 저장되었습니다 (앱 달력 탭 반영)'); RENDERERS.devotional();
+}
+function deleteFw(i){
+  if(!confirm('이 주차를 삭제할까요?')) return;
+  const list=getFwMonth(fwMonthKey).slice(); list.splice(i,1);
+  saveFwMonth(fwMonthKey,list); closeModal(); toast('삭제되었습니다'); RENDERERS.devotional();
+}
+
+function openDevForm(key){
+  const custom=_read(STORAGE_KEYS.devotionalsCustom,{})||{}; const d=Object.assign({},DEVOTIONALS_SEED[key]||{},custom[key]||{});
+  openModal(`<div class="modal-head"><h3>${key} 묵상 편집</h3><button class="modal-x" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="field"><label>본문 범위</label><input class="input" id="dv-range" value="${esc(d.range||'')}"></div>
+      <div class="field"><label>소제목</label><input class="input" id="dv-sub" value="${esc(d.subtitle||'')}"></div>
+      <div class="field"><label>오늘의 주제</label><input class="input" id="dv-theme" value="${esc(d.theme||'')}"></div>
+      <div class="field"><label>찬송</label><input class="input" id="dv-hymn" value="${esc(d.hymn||'')}"></div>
+      <div class="field"><label>묵상 질문</label><textarea class="textarea" id="dv-q" style="min-height:80px">${esc(d.question||'')}</textarea></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal()">취소</button>
+      <button class="btn btn-primary" onclick="saveDev('${key}')">저장</button></div>`);
+}
+function saveDev(key){
+  const custom=_read(STORAGE_KEYS.devotionalsCustom,{})||{};
+  custom[key]=Object.assign({},custom[key]||{},{range:val('dv-range'),subtitle:val('dv-sub'),theme:val('dv-theme'),hymn:val('dv-hymn'),question:val('dv-q')});
+  _write(STORAGE_KEYS.devotionalsCustom,custom); closeModal(); toast('저장되었습니다'); RENDERERS.devotional();
+}
+function val(id){ return document.getElementById(id).value.trim(); }
+
+/* ====================== 뷰: 중보기도 ====================== */
+RENDERERS.prayer=function(){
+  const hidden=hiddenPrayers(); const list=listPrayers(); const uc=urgentCount();
+  document.getElementById('view-prayer').innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:4px">
+      <p class="hint" style="margin:0">중보기도 제목을 관리합니다. 긴급기도는 사용자 앱 중보기도 탭 <b>상단 전용 섹션</b>에 🔥 표시로 고정 노출됩니다. 부적절한 제목은 숨길 수 있습니다.</p>
+      <button class="btn btn-primary btn-sm" style="flex-shrink:0;background:var(--terra);border-color:var(--terra)" onclick="openPrayerForm()">🔥 긴급기도 등록</button>
+    </div>
+    <div class="stat-grid" style="margin:16px 0 4px">
+      ${statCard('terra','긴급 기도',uc,'건','M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z')}
+      ${statCard('sage','전체 노출',list.length-hidden.length,'건','M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z M12 9a3 3 0 1 0 0 6')}
+      ${statCard('warn','숨김',hidden.length,'건','M17.94 17.94A10 10 0 0 1 12 20C5 20 1 12 1 12a18 18 0 0 1 5.06-5.94 M1 1l22 22')}
+    </div>
+    <div class="section-title">중보기도 목록</div>
+    ${list.map(p=>{ const h=hidden.includes(p.id);
+      return `<div class="lrow ${h?'is-hidden':''}" style="${p.urgent?'border-color:#F0D5C0;background:linear-gradient(135deg,#FDF6F1,var(--bg-card))':''}">
+        <div class="lrow-av" style="${p.urgent?'background:var(--terra-soft);color:#A45A3F':''}">${esc(p.avatar)}</div>
+        <div class="lrow-main">
+          <div style="display:flex;align-items:center;gap:7px">
+            <span class="scope-pill ${p.scope}">${p.urgent?'🔥 긴급':(SCOPE_LABEL[p.scope]||p.scope)}</span>
+            <span class="lrow-title">${esc(p.who)}</span></div>
+          <div class="lrow-sub">${esc(p.body)}</div></div>
+        <div class="lrow-actions">
+          <button class="btn btn-sm ${p.urgent?'btn-bad':'btn-ghost'}" onclick="doToggleUrgent(${p.id})">${p.urgent?'긴급 해제':'긴급 지정'}</button>
+          <button class="btn btn-sm ${h?'btn-primary':'btn-ghost'}" onclick="doToggleP(${p.id})">${h?'숨김 해제':'숨기기'}</button>
+        </div>
+      </div>`; }).join('')}`;
+};
+function doToggleP(id){ togglePrayerHidden(id); toast('변경되었습니다'); RENDERERS.prayer(); }
+function doToggleUrgent(id){ togglePrayerUrgent(id); toast('긴급 상태가 변경되었습니다'); RENDERERS.prayer(); buildNav(); markActive(); }
+function openPrayerForm(){
+  const tiers=getGroupTiers();
+  openModal(`<div class="modal-head"><h3>🔥 긴급기도 등록</h3><button class="modal-x" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="field"><label>작성자 / 대상</label><input class="input" id="pf-who" placeholder="예) 은혜목장 김집사" value="${esc(getChurchName())} 관리자"></div>
+      <div class="field"><label>공개 범위 <span class="sub">긴급은 모든 성도에게 상단 노출됩니다</span></label>
+        <select class="select" id="pf-scope">
+          <option value="church">교회 전체</option>
+          ${tiers.map(t=>`<option value="${t.key}">${esc(t.name)}</option>`).join('')}
+          <option value="committee">위원회</option>
+        </select></div>
+      <div class="field"><label>기도 내용</label><textarea class="textarea" id="pf-body" placeholder="긴급 기도제목을 입력하세요"></textarea></div>
+      <div class="switch" style="margin-bottom:0">
+        <div class="switch-info"><h4>🔥 긴급으로 등록</h4><p>상단 전용 섹션에 고정 노출됩니다</p></div>
+        <button class="toggle on" id="pf-urgent" onclick="this.classList.toggle('on')"></button></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal()">취소</button>
+      <button class="btn btn-primary" onclick="submitPrayerForm()">등록</button></div>`);
+}
+function submitPrayerForm(){
+  const who=val('pf-who'), body=val('pf-body'); const scope=document.getElementById('pf-scope').value;
+  const urgent=document.getElementById('pf-urgent').classList.contains('on');
+  if(!body){ toast('기도 내용을 입력해 주세요'); return; }
+  addPrayer({who, scope, body, urgent}); closeModal(); toast(urgent?'긴급기도가 등록되었습니다 🔥':'기도제목이 등록되었습니다'); RENDERERS.prayer(); buildNav(); markActive();
+}
+
+/* ====================== 뷰: 목장방 ====================== */
+RENDERERS.rooms=function(){
+  const rooms=listRooms();
+  document.getElementById('view-rooms').innerHTML=`
+    <p class="hint">목장·소그룹 방 현황입니다. 방은 사용자 앱에서 생성되며, 부적절한 게시물을 숨길 수 있습니다.</p>
+    <div class="section-title">방 목록</div>
+    ${rooms.length===0? emptyBox('아직 생성된 방이 없습니다. 사용자 앱에서 목장방을 만들어 보세요.') :
+      rooms.map(r=>`<div class="lrow">
+        <div class="lrow-av">${esc(r.emoji||'🌿')}</div>
+        <div class="lrow-main"><div class="lrow-title">${esc(r.name)}</div>
+          <div class="lrow-sub">${r.type==='cell'?'목장 자동 방':'소그룹 방'} · ${esc(r.id)}</div></div>
+        <div class="lrow-actions"><span class="scope-pill">${r.type==='cell'?'목장':'소그룹'}</span></div>
+      </div>`).join('')}`;
+};
+
+/* ====================== 뷰: 설정 ====================== */
+RENDERERS.settings=function(){
+  const p=getPrefs();
+  document.getElementById('view-settings').innerHTML=`
+    <div class="section-title">교회 정보</div>
+    <div class="card" style="padding:18px">
+      <div class="field"><label>교회 이름 <span class="sub">앱 전반에 표시됩니다</span></label>
+        <input class="input" id="set-church" value="${esc(getChurchName())}" onchange="saveChurch(this.value)"></div>
+      <div class="field" style="margin-bottom:0"><label>기본 언어</label>
+        <div class="seg"><button class="seg-btn ${p.lang!=='en'?'on':''}" onclick="setPrefs({lang:'ko'});RENDERERS.settings()">한국어</button>
+          <button class="seg-btn ${p.lang==='en'?'on':''}" onclick="setPrefs({lang:'en'});RENDERERS.settings()">English</button></div></div>
+    </div>
+    <div class="section-title">데이터</div>
+    <div class="card" style="padding:18px">
+      <div class="switch" style="margin-bottom:0;border:none;padding:0">
+        <div class="switch-info"><h4>데모 데이터 초기화</h4><p>관리자·앱이 공유하는 모든 로컬 데이터를 삭제합니다</p></div>
+        <button class="btn btn-bad" onclick="resetAll()">초기화</button></div>
+    </div>
+    <div class="note" style="margin-top:18px"><b>연동 안내</b> — 이 관리자는 사용자 앱(말씀함께_데모_v0.97.html)과 동일한 브라우저 localStorage 키를 공유합니다. 같은 브라우저에서 두 파일을 열면 변경 사항이 즉시 반영됩니다.</div>`;
+};
+function saveChurch(v){ setPrefs({churchName:(v||'').trim()||'우리 교회'}); document.getElementById('sideChurch').textContent=getChurchName(); toast('저장되었습니다'); }
+function resetAll(){ if(confirm('정말 모든 데모 데이터를 초기화할까요?')){ Object.values(STORAGE_KEYS).forEach(k=>localStorage.removeItem(k)); toast('초기화되었습니다'); ensureSubmissionSeed(); init(); } }
+
+
+/* ====================== 뷰: 책자 PDF 업로드 (v0.97) ======================
+   「말씀함께」 책자 내지 PDF를 올리면 매일 묵상(01~31)을 자동 파싱해
+   사용자 앱의 묵상 본문(devotionalsCustom)으로 반영합니다. */
+let _pdfParsed = null;   // {list, year, month, fw}
+let _fwParsed = null;    // 온 세대 가정예배 파싱 결과
+
+RENDERERS.pdf=function(){
+  document.getElementById('view-pdf').innerHTML=`
+    <p class="hint">「말씀함께」 내지 PDF(펼침)를 업로드하면 <b>매일 묵상</b> 페이지를 자동으로 인식해 날짜별 묵상 본문으로 변환합니다. 변환 결과를 확인한 뒤 앱에 반영하세요.</p>
+    <div class="card" style="padding:22px">
+      <div class="section-title" style="margin-top:0">1. 발행 월 선택 & PDF 업로드</div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <input class="input" id="pdf-year" type="number" value="2026" style="width:90px"> 년
+        <input class="input" id="pdf-month" type="number" min="1" max="12" value="7" style="width:70px"> 월호
+        <input type="file" id="pdf-file" accept="application/pdf" style="flex:1;min-width:220px">
+        <button class="btn btn-primary" onclick="parseBookletPdf()">PDF 분석</button>
+      </div>
+      <div class="note" style="margin-top:12px" id="pdf-status">PDF를 선택하고 ‘PDF 분석’을 누르세요. (처리는 브라우저 안에서만 이루어집니다)</div>
+    </div>
+    <div id="pdf-result"></div>`;
+};
+
+function ensurePdfJs(){
+  return new Promise((res,rej)=>{
+    if(window.pdfjsLib) return res();
+    const sc=document.createElement('script');
+    sc.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    sc.onload=()=>{ pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; res(); };
+    sc.onerror=()=>rej(new Error('pdf.js 로드 실패 — 인터넷 연결을 확인하세요'));
+    document.head.appendChild(sc);
+  });
+}
+
+/* 텍스트 아이템을 y좌표로 줄 단위 재구성 */
+function _pageLines(tc){
+  const rows={};
+  tc.items.forEach(it=>{
+    const y=Math.round(it.transform[5]/3)*3;
+    (rows[y]=rows[y]||[]).push({x:it.transform[4], str:it.str});
+  });
+  return Object.keys(rows).map(Number).sort((a,b)=>b-a)
+    .map(y=>rows[y].sort((a,b)=>a.x-b.x).map(i=>i.str).join(' ').replace(/\s+/g,' ').trim())
+    .filter(l=>l);
+}
+
+async function parseBookletPdf(){
+  const f=document.getElementById('pdf-file').files[0];
+  const st=document.getElementById('pdf-status');
+  if(!f){ toast('PDF 파일을 선택하세요'); return; }
+  st.innerHTML='<b>분석 중…</b> pdf.js 로드 및 텍스트 추출';
+  try{
+    await ensurePdfJs();
+    const buf=await f.arrayBuffer();
+    const doc=await pdfjsLib.getDocument({data:buf}).promise;
+    const year=parseInt(document.getElementById('pdf-year').value,10)||2026;
+    const month=parseInt(document.getElementById('pdf-month').value,10)||7;
+    const days={};
+    let lastDay=null;
+    _fwParsed=null;
+    for(let p=1;p<=doc.numPages;p++){
+      st.innerHTML='<b>분석 중…</b> '+p+' / '+doc.numPages+' 페이지';
+      const lines=_pageLines(await (await doc.getPage(p)).getTextContent());
+      const txt=lines.join('\n');
+      // 온 세대 가정예배 페이지 (겹침 글자 허용: 온온 세세대대…)
+      if(/온+\s*세+대+\s*가+정+예+배+/.test(txt) && /성경 봉독/.test(txt)){
+        const g={};
+        const wk=txt.match(/(첫|둘|셋|넷|다섯)째 주/); if(wk) g.week=wk[0];
+        const dl=txt.match(/(\d{1,2})일 말씀/); if(dl) g.dayLabel=dl[0];
+        const rd=txt.match(/성경 봉독\s*&?\s*암?송?\s*([가-힣]+\s?\d+[편장]\s?\d+~\d+절)\s*\(암송\s*([^)]+)\)/);
+        if(rd){ g.reading=rd[1]; g.amsung=rd[2].trim(); }
+        const hy=txt.match(/(?:^|\n)찬양\s+([^\n]+)/); if(hy) g.hymn=hy[1].trim();
+        // 제목: 'NN' 단독 줄 다음 줄에서 끝의 번호 제거
+        for(let li=0; li<lines.length-1; li++){
+          if(/^\d{1,2}$/.test(lines[li]) && /[가-힣]/.test(lines[li+1])){
+            g.title=lines[li+1].replace(/\s*\d{1,2}\s*$/,'').replace(/^\d{1,2}일 말씀\s*/,'').trim(); break;
+          }
+        }
+        const seg=(a,b)=>{
+          const ai=lines.findIndex(l=>a.test(l)); if(ai<0) return '';
+          let out=[lines[ai].replace(a,'').trim()];
+          for(let j=ai+1;j<lines.length;j++){
+            if(b.test(lines[j])) break;
+            const l=lines[j].replace(/^부\s*름\s*/,'').replace(/^&\s*암송\s*/,'');
+            if(/^[가-힣“‘"']/.test(l)) out.push(l);
+          }
+          return out.filter(Boolean).join(' ').trim();
+        };
+        g.call=seg(/^예배로의\s*/, /성경 봉독|말씀 나눔/);
+        g.share=seg(/^말씀 나눔\s*/, /나눔 질문/);
+        g.question=seg(/^나눔 질문\s*/, /축복 기도/);
+        g.bless=seg(/^축복 기도\s*/, /주님이 가르쳐|가+정+\s*미+션+/);
+        g.mission=seg(/^가+정+\s*미+션+\s*/, /^\d+$/);
+        if(g.week||g.title){ (_fwParsed=_fwParsed||[]).push(g); }
+        continue;
+      }
+      // 일기 등 부록 페이지 제외
+      if(/추천 예수동행일기|소그룹 나눔|집필진|활용법/.test(txt) && !/말씀암송/.test(txt)) continue;
+      // 주일 페이지
+      const sun=txt.match(/^\s*(\d{1,2})\s*\n?[\s\S]{0,40}주일 말씀/m) || (/주일 말씀/.test(txt) && txt.match(/(\d{1,2})\s*\n/));
+      if(/주일 말씀/.test(txt) && /내가 받은 한 말씀/.test(txt)){
+        const dn=(txt.match(/(?:^|\n)(\d{1,2})(?:\n|\s)/)||[])[1];
+        if(dn){ const k=_dk(year,month,dn);
+          days[k]={ book:'주일', range:'주일 말씀 기록', subtitle:'예배에서 받은 한 말씀을 기록합니다', theme:'주일 예배', sunday:true, _source:'pdf' };
+        }
+        continue;
+      }
+      // 매일 묵상 도입면 (말씀암송 + 오늘의 찬양 + 맥 잡기)
+      if(/말씀암송/.test(txt) && /오늘의 찬양/.test(txt) && /맥 잡기/.test(txt)){
+        const e={_source:'pdf'};
+        let dayNo=null, title=null;
+        for(const l of lines){
+          const m=l.match(/^(\d{1,2})\s+([‘’“”"']?[가-힣].{2,60})$/);
+          if(m && !/장$|절$|편$/.test(m[2].trim())){ dayNo=m[1]; title=m[2].trim(); break; }
+        }
+        if(!dayNo) continue;
+        const am=txt.match(/말씀암송\s*\|?\s*([가-힣]{1,6}\s?\d+:\d+(?:~\d+)?)/);
+        const hy=txt.match(/오늘의 찬양\s+([^\n]+)/);
+        const mj=txt.match(/맥 잡기\s*\|?\s*([가-힣]+\s?\d+[편장]?\s?\d*~?\d*절?)/);
+        e.subtitle=title; e.theme=title;
+        if(am) e.amsung={ref:am[1].replace(/\s+/,' '), text:''};
+        if(hy) e.hymn=hy[1].trim();
+        if(mj){ e.range=mj[1].trim(); e.book=(mj[1].match(/^[가-힣]+/)||['시편'])[0]; }
+        // 암송 구절 텍스트: 제목 다음 순수 한글 문장 1~2줄
+        const ti=lines.findIndex(l=>l.startsWith(dayNo+' '));
+        if(ti>=0){
+          const cand=lines.slice(ti+1, ti+3).filter(l=>/^[가-힣]/.test(l)&&!/오늘의 찬양|맥 잡기/.test(l));
+          if(cand.length && e.amsung) e.amsung.text=cand.join(' ').trim();
+        }
+        // 맥잡기 본문: '맥 잡기' 줄 이후 한글 서술문
+        const mi=lines.findIndex(l=>/맥 잡기/.test(l));
+        if(mi>=0){
+          const maek=[];
+          for(let i=mi+1;i<lines.length;i++){
+            const l=lines[i];
+            if(/^\d+\s/.test(l)||/[A-Za-z]{4,}/.test(l)||/통독 본문/.test(l)) break;
+            if(/^[가-힣“‘"']/.test(l)) maek.push(l);
+            if(maek.join(' ').length>250) break;
+          }
+          if(maek.length) e.maek=maek.join(' ');
+        }
+        // 본문(개역개정) 후보: 숫자로 시작하는 한글 구절
+        const vs=lines.filter(l=>/^\d{1,2}\s+[가-힣]/.test(l)&&!/^0?\d\s+[‘’“”]/.test(l)).slice(0,14);
+        if(vs.length>=3){
+          e.passage=vs.join(' ').replace(/(?:^|\s)(\d{1,2})\s/g,(mm,n)=>' <span class="verse-num">'+n+'</span>').trim();
+        }
+        const k=_dk(year,month,dayNo);
+        days[k]=Object.assign(days[k]||{}, e);
+        lastDay=k;
+        continue;
+      }
+      // 해설면 (말씀해설 + Q.)
+      if(/말씀해설/.test(txt) && lastDay){
+        const e=days[lastDay]||{};
+        const ei=lines.findIndex(l=>/말씀해설/.test(l));
+        const qi=lines.findIndex(l=>/^Q\s*\./.test(l)||/^Q\./.test(l));
+        if(ei>=0){
+          const end=qi>0?qi:lines.length;
+          const expo=lines.slice(ei+1,end).filter(l=>/^[가-힣“‘"'(]/.test(l)).join(' ');
+          if(expo) e.exposition=expo;
+        }
+        if(qi>=0){
+          const qe=lines.findIndex((l,i)=>i>qi&&/말씀기도/.test(l));
+          e.question=lines.slice(qi,qe>0?qe:qi+3).join(' ').replace(/^Q\s*\.\s*/,'').trim();
+        }
+        // 말씀기도/말씀살기 블록
+        const pr=[]; let cur=null;
+        for(const l of lines){
+          const rm=l.match(/^(\d+(?:~\d+)?절)$/);
+          if(rm){ cur={ref:rm[1], verse:'', body:''}; pr.push(cur); continue; }
+          if(cur){
+            if(/^[“"]/.test(l)) cur.verse+= (cur.verse?' ':'')+l.replace(/[“”"]/g,'');
+            else if(/예수동행기도|말씀기록|www\./.test(l)){ cur=null; }
+            else if(/^[가-힣]/.test(l)&&!/말씀기도|말씀살기/.test(l)) cur.body+=(cur.body?' ':'')+l;
+          }
+        }
+        if(pr.length) e.prayer=pr.filter(x=>x.body).slice(0,2);
+        days[lastDay]=e;
+      }
+    }
+    const list=Object.keys(days).sort().map(k=>({dateKey:k, entry:days[k]}));
+    _pdfParsed={list, year, month, fw:(_fwParsed||[])};
+    st.innerHTML='<b>분석 완료</b> — 매일 묵상 '+list.length+'일 · 가정예배 '+(_fwParsed||[]).length+'주 인식';
+    renderPdfResult();
+  }catch(err){
+    st.innerHTML='<b style="color:var(--bad,#c0392b)">오류:</b> '+esc(err.message);
+  }
+}
+function _dk(y,m,d){ return y+'-'+String(m).padStart(2,'0')+'-'+String(parseInt(d,10)).padStart(2,'0'); }
+
+function renderPdfResult(){
+  const el=document.getElementById('pdf-result');
+  if(!_pdfParsed||!_pdfParsed.list.length){ el.innerHTML=emptyBox('인식된 묵상이 없습니다. 내지(펼침) PDF인지 확인하세요.'); return; }
+  el.innerHTML=`
+    <div class="section-title">2. 인식 결과 확인 (${_pdfParsed.list.length}일)</div>
+    ${_pdfParsed.list.map((d,i)=>{
+      const e=d.entry;
+      const ok=[e.subtitle&&'제목', e.range&&'본문범위', e.hymn&&'찬양', e.amsung&&e.amsung.ref&&'암송', e.maek&&'맥잡기', e.passage&&'본문', e.exposition&&'해설', e.question&&'질문', e.prayer&&e.prayer.length&&'기도', e.sunday&&'주일'].filter(Boolean);
+      return `<div class="lrow">
+        <div class="lrow-av" style="background:var(--sage-pale,#eef3ee);color:var(--sage-dark,#3c5c4c);font-size:11px">${d.dateKey.slice(5)}</div>
+        <div class="lrow-main">
+          <div class="lrow-title">${esc(e.subtitle||'(주일)')}</div>
+          <div class="lrow-sub">${esc(e.range||'')} · 인식된 항목: ${ok.join(', ')||'-'}</div>
+        </div>
+        <div class="lrow-actions"><label style="font-size:12px;display:flex;gap:6px;align-items:center"><input type="checkbox" class="pdf-apply" data-i="${i}" checked> 반영</label></div>
+      </div>`;
+    }).join('')}
+    ${(_pdfParsed.fw&&_pdfParsed.fw.length)?`
+      <div class="section-title">온 세대 가정예배 (${_pdfParsed.fw.length}주 인식)</div>
+      ${_pdfParsed.fw.map((w,i)=>`<div class="lrow">
+        <div class="lrow-av" style="background:var(--sage-pale,#eef3ee);color:var(--sage-dark,#3c5c4c);font-size:10.5px">${esc(w.week||(i+1)+'주')}</div>
+        <div class="lrow-main"><div class="lrow-title">${esc(w.title||'(제목 미인식)')}</div>
+          <div class="lrow-sub">${esc(w.dayLabel||'')} · ${esc(w.reading||'')} · 암송 ${esc(w.amsung||'')}</div></div>
+        <div class="lrow-actions"><label style="font-size:12px;display:flex;gap:6px;align-items:center"><input type="checkbox" class="fw-apply" data-i="${i}" checked> 반영</label></div>
+      </div>`).join('')}`:''}
+    <div style="margin-top:16px;display:flex;gap:10px;align-items:center">
+      <button class="btn btn-primary" onclick="applyPdfToApp()">3. 선택 항목을 앱에 반영</button>
+      <span class="hint" style="margin:0">기존 시드/편집 내용 위에 병합됩니다. ‘묵상 본문’ 메뉴에서 개별 수정할 수 있습니다.</span>
+    </div>`;
+}
+
+function applyPdfToApp(){
+  if(!_pdfParsed) return;
+  const custom=_read(STORAGE_KEYS.devotionalsCustom,{})||{};
+  let n=0;
+  document.querySelectorAll('.pdf-apply:checked').forEach(cb=>{
+    const d=_pdfParsed.list[parseInt(cb.dataset.i,10)];
+    if(!d) return;
+    custom[d.dateKey]=Object.assign({},custom[d.dateKey]||{},d.entry);
+    n++;
+  });
+  _write(STORAGE_KEYS.devotionalsCustom,custom);
+  // 가정예배 반영
+  let fwN=0;
+  const fwSel=[];
+  document.querySelectorAll('.fw-apply:checked').forEach(cb=>{
+    const w=(_pdfParsed.fw||[])[parseInt(cb.dataset.i,10)];
+    if(w){ fwSel.push(w); fwN++; }
+  });
+  if(fwN){
+    const mk=_pdfParsed.year+'-'+String(_pdfParsed.month).padStart(2,'0');
+    saveFwMonth(mk, fwSel);
+  }
+  toast(n+'일 묵상'+(fwN?(' · 가정예배 '+fwN+'주'):'')+'가 앱에 반영되었습니다 ✅');
+  go('devotional');
+}
+
+/* ===== 초기화 ===== */
+function init(){
+  ensureSubmissionSeed();
+  document.getElementById('sideChurch').textContent=getChurchName();
+  buildNav();
+  go(current);
+}
+init();
+</script>
+</body>
+</html>

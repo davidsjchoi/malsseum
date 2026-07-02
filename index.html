@@ -5126,7 +5126,11 @@ function setGroupTierName(i,v){
 
 const state = {
   tab:'today',
-  currentDate:new Date(2026, 6, 1),
+  currentDate:(function(){ /* 실제 기기 날짜 사용 — 7월호 범위(2026-07-01~31) 밖이면 경계로 보정 */
+    const n=new Date(), s=new Date(2026,6,1), e=new Date(2026,6,31);
+    if(n<s) return s; if(n>e) return e;
+    return new Date(n.getFullYear(), n.getMonth(), n.getDate());
+  })(),
   fontSize:'m',
   prayerScope:'all',
   calMonth:new Date(2026, 6, 1),

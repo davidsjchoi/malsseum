@@ -3132,6 +3132,17 @@ svg[data-lucide],.lucide{ width:18px; height:18px; stroke-width:1.8; }
   .view-container > .view.active{ max-width:760px; }
   .appbar{ padding:18px 48px; }
 }
+
+/* ── 모바일(<480px) 뷰포트 고정 — 하단 탭바 상시 표시 ──
+   페이지 전체가 스크롤되면 탭바가 본문과 함께 밀려 내려간다.
+   화면 높이를 뷰포트에 고정하고 .view-container만 내부 스크롤. */
+@media (max-width:479.98px){
+  html, body{ height:100%; height:100dvh; min-height:0; overflow:hidden; }
+  .device-shell{
+    height:100vh; height:100dvh; min-height:0;
+    overflow:hidden;
+  }
+}
 </style>
 </head>
 <body>

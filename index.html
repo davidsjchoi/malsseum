@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="말씀함께">
-<title>말씀함께 · 선한목자교회</title>
+<title>말씀함께 · v0.99</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -83,7 +83,7 @@ tailwind.config = {
   --radius-sm: 10px;
   --radius-lg: 24px;
 
-  --base-font: 16px;
+  --base-font: 1rem;
 }
 @font-face{
   font-family:'Pretendard';
@@ -150,13 +150,13 @@ body{
   width:26px; height:26px; flex-shrink:0;
 }
 .brand-name{
-  font-family:var(--sans); font-weight:700; font-size:14px;
+  font-family:var(--sans); font-weight:700; font-size:0.875rem;
   color:var(--ink); letter-spacing:-0.3px;
 }
 .appbar-right{ display:flex; align-items:center; gap:6px; }
 .sync-pill{
   display:flex; align-items:center; gap:5px;
-  font-family:var(--en); font-size:10.5px; font-weight:500;
+  font-family:var(--en); font-size:0.6562rem; font-weight:500;
   color:var(--ink-3); padding:5px 9px;
   background:var(--bg-soft); border-radius:99px;
   letter-spacing:0.2px;
@@ -231,7 +231,7 @@ body{
 }
 .tab-btn svg{ width:22px; height:22px; transition:transform 0.15s; }
 .tab-btn .tab-label{
-  font-size:10.5px; font-weight:500; letter-spacing:-0.2px;
+  font-size:0.6562rem; font-weight:500; letter-spacing:-0.2px;
   font-family:var(--sans);
 }
 .tab-btn.active{ color:var(--sage-dark); }
@@ -246,16 +246,16 @@ body{
   padding:24px 20px 10px;
 }
 .section-title{
-  font-family:var(--sans); font-size:14px; font-weight:700;
+  font-family:var(--sans); font-size:0.875rem; font-weight:700;
   color:var(--ink); letter-spacing:-0.2px;
   display:flex; align-items:center; gap:8px;
 }
 .section-title .en{
-  font-family:var(--en); font-size:10.5px; font-weight:500;
+  font-family:var(--en); font-size:0.6562rem; font-weight:500;
   color:var(--ink-3); letter-spacing:1px; text-transform:uppercase;
 }
 .section-more{
-  font-family:var(--sans); font-size:12px; font-weight:500;
+  font-family:var(--sans); font-size:0.75rem; font-weight:500;
   color:var(--sage); background:none; border:none; cursor:pointer;
   padding:4px 8px; border-radius:6px;
 }
@@ -272,7 +272,7 @@ body{
 
 .chip{
   display:inline-flex; align-items:center; gap:4px;
-  font-family:var(--sans); font-size:11px; font-weight:600;
+  font-family:var(--sans); font-size:0.6875rem; font-weight:600;
   padding:4px 10px; border-radius:99px;
   background:var(--sage-pale); color:var(--sage-dark);
   letter-spacing:-0.2px;
@@ -283,7 +283,7 @@ body{
 .chip.outline{ background:transparent; border:1px solid var(--line); color:var(--ink-3); }
 
 .btn{
-  font-family:var(--sans); font-size:14px; font-weight:600;
+  font-family:var(--sans); font-size:0.875rem; font-weight:600;
   padding:12px 18px; border-radius:12px; border:none;
   background:var(--sage); color:#fff; cursor:pointer;
   display:inline-flex; align-items:center; justify-content:center; gap:6px;
@@ -301,7 +301,7 @@ body{
   transform:translateX(-50%) translateY(20px);
   background:var(--ink); color:#fff;
   padding:11px 18px; border-radius:99px;
-  font-size:13px; font-weight:500;
+  font-size:0.8125rem; font-weight:500;
   opacity:0; pointer-events:none;
   transition:opacity 0.2s, transform 0.2s;
   z-index:100;
@@ -350,12 +350,12 @@ body{
   padding:8px 20px 0;
 }
 .today-date{
-  font-family:var(--en); font-size:12px; font-weight:500;
+  font-family:var(--en); font-size:0.75rem; font-weight:500;
   color:var(--ink-3); letter-spacing:2px; text-transform:uppercase;
   margin-bottom:4px;
 }
 .today-hello{
-  font-family:var(--serif); font-size:24px; font-weight:600;
+  font-family:var(--serif); font-size:1.5rem; font-weight:600;
   color:var(--ink); letter-spacing:-0.5px; line-height:1.3;
 }
 .today-hello em{ font-style:normal; color:var(--sage); }
@@ -381,31 +381,31 @@ body{
   background:radial-gradient(circle, rgba(184,207,194,0.12) 0%, transparent 70%);
 }
 .hero-issue{
-  font-family:var(--en); font-size:11px; font-weight:500;
+  font-family:var(--en); font-size:0.6875rem; font-weight:500;
   letter-spacing:2.5px; text-transform:uppercase;
   color:var(--sage-soft); margin-bottom:8px;
   position:relative;
 }
 .hero-passage{
-  font-family:var(--serif); font-size:13px; font-weight:500;
+  font-family:var(--serif); font-size:0.8125rem; font-weight:500;
   color:var(--sage-soft); margin-bottom:10px;
   letter-spacing:-0.2px; position:relative;
 }
 .hero-title{
-  font-family:var(--serif); font-size:26px; font-weight:600;
+  font-family:var(--serif); font-size:1.625rem; font-weight:600;
   line-height:1.35; letter-spacing:-0.5px;
   margin-bottom:18px; position:relative;
 }
 .hero-meta{
   display:flex; align-items:center; gap:14px;
-  font-size:11.5px; color:rgba(255,255,255,0.7);
+  font-size:0.7188rem; color:rgba(255,255,255,0.7);
   position:relative;
 }
 .hero-meta .dot{ width:3px; height:3px; background:rgba(255,255,255,0.4); border-radius:50%; }
 .hero-cta{
   position:relative; margin-top:18px;
   display:flex; align-items:center; gap:8px;
-  font-family:var(--sans); font-size:13px; font-weight:600;
+  font-family:var(--sans); font-size:0.8125rem; font-weight:600;
   color:#fff;
 }
 .hero-cta svg{ width:14px; height:14px; }
@@ -423,11 +423,11 @@ body{
   margin-bottom:12px;
 }
 .progress-label{
-  font-size:13px; font-weight:600; color:var(--ink);
+  font-size:0.8125rem; font-weight:600; color:var(--ink);
   display:flex; align-items:center; gap:8px;
 }
 .progress-pct{
-  font-family:var(--en); font-size:13px; font-weight:600; color:var(--sage);
+  font-family:var(--en); font-size:0.8125rem; font-weight:600; color:var(--sage);
 }
 .progress-dots{
   display:flex; gap:8px;
@@ -442,7 +442,7 @@ body{
 .progress-steps{
   display:flex; justify-content:space-between;
   margin-top:8px; padding:0 2px;
-  font-size:10.5px; color:var(--ink-3); font-weight:500;
+  font-size:0.6562rem; color:var(--ink-3); font-weight:500;
 }
 
 /* 빠른 액션 그리드 */
@@ -469,8 +469,8 @@ body{
 .quick-card .ic.plum{ background:var(--plum-soft); color:#5D3856; }
 .quick-card .ic.cream{ background:var(--bg-cream); color:#7D6534; }
 .quick-card .ic svg{ width:20px; height:20px; }
-.quick-card .ttl{ font-size:13.5px; font-weight:700; color:var(--ink); letter-spacing:-0.2px; }
-.quick-card .sub{ font-size:11.5px; color:var(--ink-3); font-weight:500; }
+.quick-card .ttl{ font-size:0.8438rem; font-weight:700; color:var(--ink); letter-spacing:-0.2px; }
+.quick-card .sub{ font-size:0.7188rem; color:var(--ink-3); font-weight:500; }
 
 /* 주간 캘린더 (홈 미니) */
 .week-strip{
@@ -486,11 +486,11 @@ body{
 }
 .week-day:active{ transform:scale(0.96); }
 .week-day .dow{
-  font-size:10px; color:var(--ink-3); font-weight:600;
+  font-size:0.625rem; color:var(--ink-3); font-weight:600;
   text-transform:uppercase; letter-spacing:0.5px;
 }
 .week-day .dnum{
-  font-family:var(--en); font-size:16px; font-weight:600;
+  font-family:var(--en); font-size:1rem; font-weight:600;
   color:var(--ink); margin:3px 0 5px;
 }
 .week-day .dots{
@@ -520,16 +520,16 @@ body{
 }
 .col-mini-cat{
   display:inline-block;
-  font-size:10.5px; font-weight:700; color:var(--plum);
+  font-size:0.6562rem; font-weight:700; color:var(--plum);
   letter-spacing:0.5px; margin-bottom:6px;
 }
 .col-mini-ttl{
-  font-family:var(--serif); font-size:16px; font-weight:600;
+  font-family:var(--serif); font-size:1rem; font-weight:600;
   color:var(--ink); line-height:1.4; letter-spacing:-0.3px;
   margin-bottom:6px;
 }
 .col-mini-meta{
-  font-size:11.5px; color:var(--ink-3); font-weight:500;
+  font-size:0.7188rem; color:var(--ink-3); font-weight:500;
   display:flex; align-items:center; gap:10px;
 }
 
@@ -543,21 +543,21 @@ body{
   display:inline-flex; align-items:center; gap:6px;
   background:var(--bg-soft); border-radius:99px;
   padding:6px 12px; margin-bottom:14px;
-  font-size:12px; color:var(--ink-2); font-weight:600;
+  font-size:0.75rem; color:var(--ink-2); font-weight:600;
   cursor:pointer;
 }
 .word-date-pill svg{ width:13px; height:13px; }
 .word-topic{
-  font-family:var(--en); font-size:11px; font-weight:500;
+  font-family:var(--en); font-size:0.6875rem; font-weight:500;
   color:var(--sage); letter-spacing:2px; text-transform:uppercase;
   margin-bottom:6px;
 }
 .word-passage-ref{
-  font-family:var(--serif); font-size:13.5px; font-weight:500;
+  font-family:var(--serif); font-size:0.8438rem; font-weight:500;
   color:var(--ink-3); margin-bottom:4px;
 }
 .word-title{
-  font-family:var(--serif); font-size:26px; font-weight:600;
+  font-family:var(--serif); font-size:1.625rem; font-weight:600;
   color:var(--ink); line-height:1.35; letter-spacing:-0.5px;
 }
 .word-nav{
@@ -566,7 +566,7 @@ body{
 .word-nav-btn{
   flex:1; padding:8px 12px;
   background:var(--bg-soft); border:none; border-radius:10px;
-  font-family:var(--sans); font-size:12px; font-weight:600;
+  font-family:var(--sans); font-size:0.75rem; font-weight:600;
   color:var(--ink-2); cursor:pointer;
   display:flex; align-items:center; justify-content:center; gap:5px;
 }
@@ -595,7 +595,7 @@ body{
 }
 .w-section-label{
   display:flex; align-items:center; gap:8px;
-  font-family:var(--sans); font-size:13px; font-weight:700;
+  font-family:var(--sans); font-size:0.8125rem; font-weight:700;
   color:var(--ink); letter-spacing:-0.2px;
 }
 .w-section-label::before{
@@ -605,16 +605,16 @@ body{
 .w-section.amsung .w-section-label::before{ background:var(--sage-dark); }
 .w-section.hymn .w-section-label::before{ background:var(--terra); }
 .w-section-en{
-  font-family:var(--en); font-size:9.5px; font-weight:500;
+  font-family:var(--en); font-size:0.5938rem; font-weight:500;
   color:var(--ink-3); letter-spacing:1.2px; text-transform:uppercase;
 }
 
 .maek{
-  font-family:var(--sans); font-size:14.5px; font-weight:400;
+  font-family:var(--sans); font-size:0.9062rem; font-weight:400;
   color:var(--ink-2); line-height:1.85; letter-spacing:-0.2px;
 }
 .exposition{
-  font-family:var(--sans); font-size:15px; font-weight:400;
+  font-family:var(--sans); font-size:0.9375rem; font-weight:400;
   color:var(--ink-2); line-height:1.95; letter-spacing:-0.2px;
 }
 .exposition p{ margin-bottom:14px; }
@@ -623,30 +623,30 @@ body{
 
 /* 본문 — 큰 명조 */
 .passage-text{
-  font-family:var(--serif); font-size:17px; font-weight:400;
+  font-family:var(--serif); font-size:1.0625rem; font-weight:400;
   color:var(--ink); line-height:2.0; letter-spacing:-0.2px;
   white-space:pre-wrap;
 }
 .passage-text .verse-num{
-  font-family:var(--en); font-size:11px; font-weight:600;
+  font-family:var(--en); font-size:0.6875rem; font-weight:600;
   color:var(--sage); vertical-align:super;
   margin-right:3px; margin-left:2px;
 }
 .passage-text .heading{
   display:block;
-  font-family:var(--sans); font-size:12.5px; font-weight:700;
+  font-family:var(--sans); font-size:0.7812rem; font-weight:700;
   color:var(--sage-dark); margin:14px 0 8px;
   letter-spacing:0.5px;
 }
 
 /* 암송구절 */
 .amsung-ref{
-  font-family:var(--en); font-size:11px; font-weight:600;
+  font-family:var(--en); font-size:0.6875rem; font-weight:600;
   color:var(--sage); letter-spacing:1px; text-transform:uppercase;
   margin-bottom:8px;
 }
 .amsung-text{
-  font-family:var(--serif); font-size:18px; font-weight:500;
+  font-family:var(--serif); font-size:1.125rem; font-weight:500;
   color:var(--sage-dark); line-height:1.7; letter-spacing:-0.3px;
 }
 
@@ -661,22 +661,22 @@ body{
 }
 .hymn-info{ flex:1; min-width:0; }
 .hymn-title{
-  font-family:var(--serif); font-size:16px; font-weight:600;
+  font-family:var(--serif); font-size:1rem; font-weight:600;
   color:var(--ink); letter-spacing:-0.3px;
 }
 .hymn-sub{
-  font-size:11.5px; color:var(--ink-3); font-weight:500; margin-top:2px;
+  font-size:0.7188rem; color:var(--ink-3); font-weight:500; margin-top:2px;
 }
 
 /* 적용 질문 */
 .question-text{
-  font-family:var(--serif); font-size:16px; font-weight:500;
+  font-family:var(--serif); font-size:1rem; font-weight:500;
   color:var(--ink); line-height:1.85; letter-spacing:-0.3px;
   padding:14px 0 0;
   border-top:1px dashed var(--line);
 }
 .question-text::before{
-  content:'Q.'; font-family:var(--en); font-size:13px;
+  content:'Q.'; font-family:var(--en); font-size:0.8125rem;
   font-weight:700; color:var(--sage);
   margin-right:6px; vertical-align:baseline;
 }
@@ -685,17 +685,17 @@ body{
 .prayer-block{ margin-bottom:14px; padding-bottom:14px; border-bottom:1px dashed var(--line); }
 .prayer-block:last-child{ margin-bottom:0; padding-bottom:0; border-bottom:none; }
 .prayer-quote{
-  font-family:var(--en); font-size:11px; font-weight:600;
+  font-family:var(--en); font-size:0.6875rem; font-weight:600;
   color:var(--sage); letter-spacing:1px; text-transform:uppercase;
   margin-bottom:4px;
 }
 .prayer-verse{
-  font-family:var(--serif); font-size:14px; font-weight:500;
+  font-family:var(--serif); font-size:0.875rem; font-weight:500;
   color:var(--ink-2); line-height:1.7; font-style:italic;
   letter-spacing:-0.2px; margin-bottom:8px;
 }
 .prayer-body{
-  font-family:var(--sans); font-size:14px; color:var(--ink-2);
+  font-family:var(--sans); font-size:0.875rem; color:var(--ink-2);
   line-height:1.8; letter-spacing:-0.2px;
 }
 
@@ -714,11 +714,11 @@ body{
   color:#fff; padding:18px 22px;
 }
 .lectio-title{
-  font-family:var(--serif); font-size:18px; font-weight:600;
+  font-family:var(--serif); font-size:1.125rem; font-weight:600;
   letter-spacing:-0.3px;
 }
 .lectio-title-en{
-  font-family:var(--en); font-size:10.5px; font-weight:500;
+  font-family:var(--en); font-size:0.6562rem; font-weight:500;
   color:var(--sage-soft); letter-spacing:2px; text-transform:uppercase;
   margin-top:3px;
 }
@@ -745,7 +745,7 @@ body{
   background:var(--bg-soft);
   color:var(--ink-3);
   display:flex; align-items:center; justify-content:center;
-  font-family:var(--en); font-size:13px; font-weight:700;
+  font-family:var(--en); font-size:0.8125rem; font-weight:700;
   flex-shrink:0;
 }
 .lectio-step.done .lectio-num{
@@ -753,12 +753,12 @@ body{
 }
 .lectio-step-name{
   flex:1;
-  font-family:var(--sans); font-size:15px; font-weight:700;
+  font-family:var(--sans); font-size:0.9375rem; font-weight:700;
   color:var(--ink); letter-spacing:-0.3px;
 }
 .lectio-step-name .latin{
   display:block;
-  font-family:var(--en); font-size:10px; font-weight:500;
+  font-family:var(--en); font-size:0.625rem; font-weight:500;
   color:var(--ink-3); letter-spacing:1.5px; text-transform:uppercase;
   margin-top:2px;
 }
@@ -766,7 +766,7 @@ body{
   width:22px; height:22px; border-radius:50%;
   background:var(--sage-pale); color:var(--sage);
   display:none; align-items:center; justify-content:center;
-  font-size:13px; font-weight:700;
+  font-size:0.8125rem; font-weight:700;
 }
 .lectio-step.done .lectio-check{ display:flex; }
 .lectio-step.locked .lectio-num{
@@ -774,7 +774,7 @@ body{
 }
 .lectio-step.locked .lectio-step-name{ color:var(--ink-2); }
 .lectio-lock-badge{
-  font-family:var(--en); font-size:9.5px; font-weight:700;
+  font-family:var(--en); font-size:0.5938rem; font-weight:700;
   padding:3px 8px; border-radius:99px;
   background:var(--sage-pale); color:var(--sage-deep);
   letter-spacing:0.6px; border:1px solid var(--sage-soft);
@@ -786,25 +786,25 @@ body{
   text-align:center;
 }
 .lectio-lock-ic{
-  font-size:24px; margin-bottom:6px;
+  font-size:1.5rem; margin-bottom:6px;
 }
 .lectio-lock-title{
-  font-family:var(--sans); font-size:14px; font-weight:700;
+  font-family:var(--sans); font-size:0.875rem; font-weight:700;
   color:var(--sage-deep); letter-spacing:-0.3px; line-height:1.5;
   margin-bottom:6px;
 }
 .lectio-lock-title em{ font-style:normal; color:var(--sage); font-weight:800; }
 .lectio-lock-desc{
-  font-size:12px; line-height:1.7; color:var(--ink-2);
+  font-size:0.75rem; line-height:1.7; color:var(--ink-2);
 }
-.lectio-lock-desc .muted{ color:var(--ink-3); font-size:11.5px; }
+.lectio-lock-desc .muted{ color:var(--ink-3); font-size:0.7188rem; }
 .lectio-hint{
-  font-size:12.5px; color:var(--ink-3);
+  font-size:0.7812rem; color:var(--ink-3);
   line-height:1.7; letter-spacing:-0.2px;
   padding:8px 0 14px; font-weight:400;
 }
 .lectio-q{
-  font-size:13.5px; font-weight:600; color:var(--ink-2);
+  font-size:0.8438rem; font-weight:600; color:var(--ink-2);
   margin:14px 0 6px; letter-spacing:-0.2px; line-height:1.5;
 }
 .lectio-q .qn{
@@ -813,7 +813,7 @@ body{
 }
 .lectio-input{
   width:100%;
-  font-family:var(--sans); font-size:14px; color:var(--ink);
+  font-family:var(--sans); font-size:0.875rem; color:var(--ink);
   line-height:1.7; letter-spacing:-0.2px;
   background:var(--bg-soft); border:1px solid transparent;
   border-radius:10px; padding:11px 14px;
@@ -826,43 +826,43 @@ body{
 .lectio-input::placeholder{ color:var(--ink-4); }
 /* v0.97 — 1단계 말씀읽기 예/아니오 */
 .lectio-yn{ display:flex; gap:12px; margin-top:10px; }
-.lectio-yn .yn-opt{ display:flex; align-items:center; gap:8px; font-size:14.5px; color:var(--ink-1);
+.lectio-yn .yn-opt{ display:flex; align-items:center; gap:8px; font-size:0.9062rem; color:var(--ink-1);
   cursor:pointer; padding:11px 20px; border:1.5px solid var(--line); border-radius:14px;
   background:var(--bg-card); transition:border-color .18s, background .18s, transform .18s cubic-bezier(.34,1.56,.64,1); }
 .lectio-yn .yn-opt:active{ transform:scale(.96); }
 .lectio-yn .yn-opt:has(input:checked){ border-color:var(--sage); background:rgba(90,125,105,.08); font-weight:700; color:var(--sage); }
 .lectio-yn input{ accent-color:var(--sage); width:16px; height:16px; margin:0; }
-.col-pill-review{ display:inline-block; font-size:10px; font-weight:800; letter-spacing:-.2px;
+.col-pill-review{ display:inline-block; font-size:0.625rem; font-weight:800; letter-spacing:-.2px;
   padding:2px 8px; border-radius:99px; background:rgba(200,140,50,.13); color:#A06B1E; border:1px solid rgba(200,140,50,.25); vertical-align:1px; }
-.maek-range{ font-size:12px; font-weight:700; color:var(--sage); letter-spacing:-.2px; margin-left:6px; }
+.maek-range{ font-size:0.75rem; font-weight:700; color:var(--sage); letter-spacing:-.2px; margin-left:6px; }
 /* v0.97 — 온 세대 가정예배 (달력 탭) */
 .fw-wrap{ margin-top:22px; padding:18px 16px 10px; background:var(--bg-card); border:1px solid var(--line); border-radius:20px; }
 .fw-head{ display:flex; align-items:center; justify-content:space-between; padding:0 4px 12px; }
-.fw-title{ font-family:var(--serif); font-size:16.5px; font-weight:800; color:var(--ink); letter-spacing:-.3px; }
-.fw-sub{ font-size:11.5px; color:var(--ink-3); margin-top:3px; }
+.fw-title{ font-family:var(--serif); font-size:1.0312rem; font-weight:800; color:var(--ink); letter-spacing:-.3px; }
+.fw-sub{ font-size:0.7188rem; color:var(--ink-3); margin-top:3px; }
 .fw-card{ width:100%; display:flex; align-items:center; gap:12px; text-align:left; background:var(--bg-soft);
   border:1px solid var(--line); border-radius:14px; padding:13px 14px; margin-bottom:8px; cursor:pointer;
   color:var(--ink-2); transition:transform .3s cubic-bezier(.34,1.56,.64,1), border-color .2s, background .2s; }
 .fw-card:active{ transform:scale(.97); }
 .fw-card:hover{ border-color:var(--sage); background:var(--bg-card); }
-.fw-week{ flex-shrink:0; font-size:11px; font-weight:800; color:var(--sage); background:rgba(90,125,105,.1);
+.fw-week{ flex-shrink:0; font-size:0.6875rem; font-weight:800; color:var(--sage); background:rgba(90,125,105,.1);
   border-radius:99px; padding:5px 10px; letter-spacing:-.2px; }
 .fw-card-main{ flex:1; min-width:0; }
-.fw-card-title{ font-size:14px; font-weight:700; color:var(--ink); letter-spacing:-.3px;
+.fw-card-title{ font-size:0.875rem; font-weight:700; color:var(--ink); letter-spacing:-.3px;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.fw-card-sub{ font-size:11.5px; color:var(--ink-3); margin-top:2px; }
+.fw-card-sub{ font-size:0.7188rem; color:var(--ink-3); margin-top:2px; }
 .fw-modal{ padding:4px 2px 8px; }
-.fw-modal-badge{ display:inline-block; font-size:11px; font-weight:800; color:var(--sage);
+.fw-modal-badge{ display:inline-block; font-size:0.6875rem; font-weight:800; color:var(--sage);
   background:rgba(90,125,105,.1); border-radius:99px; padding:5px 12px; }
-.fw-modal-title{ font-family:var(--serif); font-size:20px; font-weight:800; color:var(--ink);
+.fw-modal-title{ font-family:var(--serif); font-size:1.25rem; font-weight:800; color:var(--ink);
   letter-spacing:-.4px; margin:12px 0 4px; line-height:1.35; }
-.fw-modal-sub{ font-size:12.5px; color:var(--ink-3); margin-bottom:16px; }
+.fw-modal-sub{ font-size:0.7812rem; color:var(--ink-3); margin-bottom:16px; }
 .fw-part{ padding:13px 0; border-top:1px solid var(--line); }
-.fw-part-label{ font-size:12.5px; font-weight:800; color:var(--sage); letter-spacing:-.2px; margin-bottom:6px; }
-.fw-part-en{ font-size:10px; font-weight:600; color:var(--ink-4); margin-left:6px; letter-spacing:.3px; }
-.fw-part-body{ font-size:14px; line-height:1.75; color:var(--ink-1, var(--ink)); letter-spacing:-.2px; }
+.fw-part-label{ font-size:0.7812rem; font-weight:800; color:var(--sage); letter-spacing:-.2px; margin-bottom:6px; }
+.fw-part-en{ font-size:0.625rem; font-weight:600; color:var(--ink-4); margin-left:6px; letter-spacing:.3px; }
+.fw-part-body{ font-size:0.875rem; line-height:1.75; color:var(--ink-1, var(--ink)); letter-spacing:-.2px; }
 .fw-amsung{ color:var(--sage); font-weight:700; }
-.fw-close-note{ display:inline-block; margin-top:6px; font-size:12px; color:var(--ink-3); }
+.fw-close-note{ display:inline-block; margin-top:6px; font-size:0.75rem; color:var(--ink-3); }
 .thanks-row{
   display:flex; gap:8px; align-items:flex-start;
   margin-bottom:6px;
@@ -870,7 +870,7 @@ body{
 .thanks-num{
   width:24px; height:32px; flex-shrink:0;
   display:flex; align-items:center; justify-content:center;
-  font-family:var(--en); font-size:12px; font-weight:700;
+  font-family:var(--en); font-size:0.75rem; font-weight:700;
   color:var(--sage);
 }
 .thanks-row .lectio-input{ flex:1; min-height:0; }
@@ -880,12 +880,12 @@ body{
   padding:14px;
 }
 .one-thing-label{
-  font-family:var(--en); font-size:10px; font-weight:700;
+  font-family:var(--en); font-size:0.625rem; font-weight:700;
   color:#7D6534; letter-spacing:2px; text-transform:uppercase;
   margin-bottom:4px;
 }
 .one-thing-title{
-  font-family:var(--serif); font-size:14px; font-weight:600;
+  font-family:var(--serif); font-size:0.875rem; font-weight:600;
   color:var(--ink); margin-bottom:10px; letter-spacing:-0.2px;
 }
 .one-thing .lectio-input{ background:#fff; border-color:#EFE6D2; }
@@ -904,25 +904,25 @@ body{
 }
 .diary-head .diary-ic svg{ width:14px; height:14px; }
 .diary-title{
-  font-family:var(--sans); font-size:14px; font-weight:700;
+  font-family:var(--sans); font-size:0.875rem; font-weight:700;
   color:var(--plum); letter-spacing:-0.2px;
 }
 .diary-sub{
-  font-size:11.5px; color:var(--ink-3); line-height:1.5;
+  font-size:0.7188rem; color:var(--ink-3); line-height:1.5;
   margin:2px 0 10px 0;
 }
 .diary-block .lectio-input{ background:#fff; border-color:#E7DCF1; }
 .diary-save-btn{
   width:100%; margin-top:10px; padding:11px;
   background:var(--plum); color:#fff; border:none; border-radius:11px;
-  font-family:var(--sans); font-size:13.5px; font-weight:600; cursor:pointer;
+  font-family:var(--sans); font-size:0.8438rem; font-weight:600; cursor:pointer;
   display:flex; align-items:center; justify-content:center; gap:7px;
   transition:transform 0.12s ease, background 0.15s;
 }
 .diary-save-btn:active{ transform:scale(0.97); background:#5E3A58; }
 .diary-save-btn svg{ width:16px; height:16px; }
 .diary-status{
-  font-size:11.5px; color:var(--plum); font-weight:600;
+  font-size:0.7188rem; color:var(--plum); font-weight:600;
   text-align:center; margin-top:8px; min-height:14px;
 }
 
@@ -932,10 +932,10 @@ body{
 }
 .lectio-save-bar .btn{
   flex:1;
-  font-size:13px; padding:10px 12px;
+  font-size:0.8125rem; padding:10px 12px;
 }
 .lectio-save-bar .saved-info{
-  font-size:11px; color:var(--ink-3); font-weight:500;
+  font-size:0.6875rem; color:var(--ink-3); font-weight:500;
   text-align:center; padding-top:6px;
 }
 
@@ -952,17 +952,17 @@ body{
   border-radius:8px;
 }
 .fs-btn.active{ background:var(--bg-soft); color:var(--ink); }
-.fs-btn.s{ font-size:12px; }
-.fs-btn.m{ font-size:14px; }
-.fs-btn.l{ font-size:17px; }
-.fs-btn.xl{ font-size:20px; }
+.fs-btn.s{ font-size:0.75rem; }
+.fs-btn.m{ font-size:0.875rem; }
+.fs-btn.l{ font-size:1.0625rem; }
+.fs-btn.xl{ font-size:1.25rem; }
 
-.fs-s .maek,.fs-s .exposition,.fs-s .prayer-body{ font-size:13px; }
-.fs-s .passage-text{ font-size:15px; line-height:1.95; }
-.fs-l .maek,.fs-l .exposition,.fs-l .prayer-body{ font-size:16px; line-height:1.95; }
-.fs-l .passage-text{ font-size:19px; line-height:2.05; }
-.fs-xl .maek,.fs-xl .exposition,.fs-xl .prayer-body{ font-size:18px; line-height:2.0; }
-.fs-xl .passage-text{ font-size:22px; line-height:2.1; }
+.fs-s .maek,.fs-s .exposition,.fs-s .prayer-body{ font-size:0.8125rem; }
+.fs-s .passage-text{ font-size:0.9375rem; line-height:1.95; }
+.fs-l .maek,.fs-l .exposition,.fs-l .prayer-body{ font-size:1rem; line-height:1.95; }
+.fs-l .passage-text{ font-size:1.1875rem; line-height:2.05; }
+.fs-xl .maek,.fs-xl .exposition,.fs-xl .prayer-body{ font-size:1.125rem; line-height:2.0; }
+.fs-xl .passage-text{ font-size:1.375rem; line-height:2.1; }
 
 /* ─────────────────────────────────────────────────────────────
    기도 트래킹 패널 (7만시간 / 한시간기도)
@@ -970,13 +970,13 @@ body{
 :root{ --pray-blue:#8C7350; --pray-blue-soft:#F4EEE1; }
 
 .track-greet{ padding:12px 20px 4px; display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
-.track-greet-l .tg-date{ font-size:12.5px; color:var(--ink-3); font-weight:500; }
-.track-greet-l .tg-name{ font-family:var(--serif); font-size:21px; font-weight:600; color:var(--ink); letter-spacing:-0.5px; margin-top:2px; }
+.track-greet-l .tg-date{ font-size:0.7812rem; color:var(--ink-3); font-weight:500; }
+.track-greet-l .tg-name{ font-family:var(--serif); font-size:1.3125rem; font-weight:600; color:var(--ink); letter-spacing:-0.5px; margin-top:2px; }
 .track-greet-r{ display:flex; gap:8px; }
 .tg-btn{
   display:inline-flex; align-items:center; gap:5px; height:34px; padding:0 13px;
   border:1px solid var(--line); background:var(--bg-card); border-radius:999px;
-  font-size:12.5px; font-weight:600; color:var(--ink-2); cursor:pointer;
+  font-size:0.7812rem; font-weight:600; color:var(--ink-2); cursor:pointer;
 }
 .tg-btn svg{ width:14px; height:14px; }
 .tg-btn.icon{ width:36px; padding:0; justify-content:center; }
@@ -995,12 +995,12 @@ body{
 }
 .hour-video .hv-title{
   position:absolute; left:0; right:0; top:38%; text-align:center;
-  font-family:var(--serif); font-size:34px; font-weight:700; color:#fff;
+  font-family:var(--serif); font-size:2.125rem; font-weight:700; color:#fff;
   letter-spacing:2px; text-shadow:0 2px 12px rgba(0,0,0,0.45);
 }
 .hour-video .hv-brand{
   position:absolute; left:18px; bottom:14px; display:flex; align-items:center; gap:7px;
-  color:rgba(255,255,255,0.92); font-size:12px; font-weight:600; letter-spacing:0.3px;
+  color:rgba(255,255,255,0.92); font-size:0.75rem; font-weight:600; letter-spacing:0.3px;
   text-shadow:0 1px 6px rgba(0,0,0,0.5);
 }
 .hour-video .hv-play{
@@ -1015,25 +1015,25 @@ body{
   margin:12px 16px 0; background:var(--bg-card); border:1px solid var(--line);
   border-radius:var(--radius); padding:15px 16px; box-shadow:var(--shadow-sm);
 }
-.tc-eyebrow{ font-size:12px; font-weight:700; color:var(--pray-blue); letter-spacing:0.2px; }
-.tc-title{ font-family:var(--serif); font-size:18px; font-weight:600; color:var(--ink); letter-spacing:-0.4px; margin-top:5px; }
+.tc-eyebrow{ font-size:0.75rem; font-weight:700; color:var(--pray-blue); letter-spacing:0.2px; }
+.tc-title{ font-family:var(--serif); font-size:1.125rem; font-weight:600; color:var(--ink); letter-spacing:-0.4px; margin-top:5px; }
 
 .ics-list{ margin-top:11px; display:flex; flex-direction:column; gap:9px; }
 .ics-item{ display:flex; align-items:flex-start; gap:10px; }
 .ics-num{
   flex:none; width:22px; height:22px; border-radius:50%; background:var(--pray-blue-soft);
-  color:var(--pray-blue); font-size:11.5px; font-weight:700; display:flex; align-items:center; justify-content:center; margin-top:1px;
+  color:var(--pray-blue); font-size:0.7188rem; font-weight:700; display:flex; align-items:center; justify-content:center; margin-top:1px;
 }
-.ics-text{ font-size:14px; line-height:1.55; color:var(--ink-2); }
+.ics-text{ font-size:0.875rem; line-height:1.55; color:var(--ink-2); }
 .ics-more{
   margin-top:11px; width:100%; text-align:right; background:none; border:none;
-  color:var(--pray-blue); font-size:13px; font-weight:600; cursor:pointer; padding:2px 0;
+  color:var(--pray-blue); font-size:0.8125rem; font-weight:600; cursor:pointer; padding:2px 0;
 }
 
 /* 기도했어요 버튼 */
 .pray-now-btn{
   margin:14px 16px 0; width:calc(100% - 32px); height:56px; border:none; border-radius:16px;
-  background:var(--pray-blue); color:#fff; font-size:17px; font-weight:700; letter-spacing:0.3px;
+  background:var(--pray-blue); color:#fff; font-size:1.0625rem; font-weight:700; letter-spacing:0.3px;
   display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer;
   box-shadow:0 8px 20px rgba(79,107,237,0.28); transition:transform .12s, box-shadow .12s;
 }
@@ -1046,9 +1046,9 @@ body{
   background:var(--bg-card); border:1px solid var(--line); border-radius:14px;
   padding:13px 8px; text-align:center;
 }
-.tstat-lbl{ font-size:12px; color:var(--ink-3); font-weight:500; }
-.tstat-num{ font-family:var(--en); font-size:21px; font-weight:700; color:var(--ink); margin-top:5px; }
-.tstat-num em{ font-style:normal; font-size:13px; font-weight:600; color:var(--ink-3); margin-left:1px; }
+.tstat-lbl{ font-size:0.75rem; color:var(--ink-3); font-weight:500; }
+.tstat-num{ font-family:var(--en); font-size:1.3125rem; font-weight:700; color:var(--ink); margin-top:5px; }
+.tstat-num em{ font-style:normal; font-size:0.8125rem; font-weight:600; color:var(--ink-3); margin-left:1px; }
 
 /* 7만시간 — 통합 진행바 (전체 + 내 교구를 한 바에 표시) */
 .movement-card{
@@ -1056,15 +1056,15 @@ body{
   border-radius:var(--radius); padding:18px 16px 16px; box-shadow:var(--shadow-sm);
 }
 .mv-head{ display:flex; align-items:center; justify-content:space-between; }
-.mv-title{ font-size:17px; font-weight:700; color:var(--ink); letter-spacing:-0.3px; }
-.mv-pct{ font-family:var(--en); font-size:19px; font-weight:700; color:var(--pray-blue); }
+.mv-title{ font-size:1.0625rem; font-weight:700; color:var(--ink); letter-spacing:-0.3px; }
+.mv-pct{ font-family:var(--en); font-size:1.1875rem; font-weight:700; color:var(--pray-blue); }
 .mv-bar{ position:relative; height:22px; border-radius:999px; background:var(--bg-soft); margin:14px 0 8px; overflow:hidden; }
 .mv-bar-fill{ position:absolute; inset:0 auto 0 0; border-radius:999px; background:linear-gradient(90deg,#6f86f2,var(--pray-blue)); min-width:6px; transition:width .5s ease; }
 .mv-bar-fill.dist{ background:linear-gradient(90deg,var(--sage-mid),var(--sage)); min-width:4px; z-index:2; }
 /* 바 안에 1~7 (만시간 단위) 흐린 숫자 */
 .mv-bar-num{
   position:absolute; top:50%; transform:translate(-50%,-50%); z-index:3;
-  font-family:var(--en); font-size:11px; font-weight:700;
+  font-family:var(--en); font-size:0.6875rem; font-weight:700;
   color:var(--ink-4); opacity:.45; pointer-events:none; line-height:1;
 }
 /* 바 안 만시간 눈금선 (숫자 사이 경계) */
@@ -1073,28 +1073,28 @@ body{
   background:var(--ink-4); opacity:.22; pointer-events:none;
 }
 .mv-bar-unit{
-  display:block; text-align:right; font-size:11px; font-weight:600;
+  display:block; text-align:right; font-size:0.6875rem; font-weight:600;
   color:var(--ink-4); margin:-2px 2px 6px 0;
 }
 .mv-foot{ display:flex; align-items:center; justify-content:space-between; margin-top:4px; }
-.mv-foot-l{ font-size:13.5px; color:var(--ink-2); font-weight:600; }
-.mv-foot-r{ font-size:13.5px; color:var(--ink-3); font-weight:500; }
+.mv-foot-l{ font-size:0.8438rem; color:var(--ink-2); font-weight:600; }
+.mv-foot-r{ font-size:0.8438rem; color:var(--ink-3); font-weight:500; }
 /* 통합 그래프 아래 — 전체/내 교구 요약 카드 */
 .mv-stats{ display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:14px; }
 .mv-stat{ background:var(--bg-soft); border-radius:12px; padding:12px 13px; min-width:0; }
-.mv-stat-lbl{ display:flex; align-items:center; gap:6px; font-size:13px; font-weight:700; color:var(--ink-2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.mv-stat-num{ font-family:var(--en); font-size:22px; font-weight:700; color:var(--ink); margin-top:6px; letter-spacing:-0.3px; }
-.mv-stat-num em{ font-style:normal; font-size:13.5px; font-weight:600; color:var(--ink-3); margin-left:1px; }
-.mv-stat-sub{ font-size:12.5px; font-weight:600; color:var(--ink-3); margin-top:5px; line-height:1.45; }
+.mv-stat-lbl{ display:flex; align-items:center; gap:6px; font-size:0.8125rem; font-weight:700; color:var(--ink-2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mv-stat-num{ font-family:var(--en); font-size:1.375rem; font-weight:700; color:var(--ink); margin-top:6px; letter-spacing:-0.3px; }
+.mv-stat-num em{ font-style:normal; font-size:0.8438rem; font-weight:600; color:var(--ink-3); margin-left:1px; }
+.mv-stat-sub{ font-size:0.7812rem; font-weight:600; color:var(--ink-3); margin-top:5px; line-height:1.45; }
 .mv-stat-sub.blue{ color:var(--pray-blue); }
 
 /* 기도했어요 하단(안내 + 취소) */
 .pray-now-foot{ margin:7px 16px 0; display:flex; flex-direction:column; align-items:center; gap:7px; }
-.pnf-hint{ font-size:11.5px; color:var(--ink-4); }
+.pnf-hint{ font-size:0.7188rem; color:var(--ink-4); }
 .pray-undo-btn{
   display:inline-flex; align-items:center; gap:5px; padding:6px 13px; border-radius:999px;
   border:1px solid var(--line); background:var(--bg-card); color:var(--ink-3);
-  font-size:12px; font-weight:600; cursor:pointer;
+  font-size:0.75rem; font-weight:600; cursor:pointer;
 }
 .pray-undo-btn:active{ background:var(--bg-soft); }
 .pray-undo-btn svg{ width:13px; height:13px; }
@@ -1105,14 +1105,14 @@ body{
 .mv-nodist{
   margin-top:4px; display:flex; align-items:center; gap:8px; padding:11px 12px;
   background:var(--sage-pale); border-radius:12px; color:var(--sage-dark);
-  font-size:12.5px; line-height:1.45; font-weight:500; cursor:pointer;
+  font-size:0.7812rem; line-height:1.45; font-weight:500; cursor:pointer;
 }
 .mv-nodist svg{ flex:none; }
 .mv-nodist strong{ font-weight:700; }
 
 .track-divider{
   margin:22px 20px 4px; display:flex; align-items:center; gap:10px;
-  font-size:13px; font-weight:700; color:var(--ink-3); letter-spacing:0.2px;
+  font-size:0.8125rem; font-weight:700; color:var(--ink-3); letter-spacing:0.2px;
 }
 .track-divider::before, .track-divider::after{ content:''; flex:1; height:1px; background:var(--line); }
 
@@ -1123,11 +1123,11 @@ body{
   padding:8px 20px 12px;
 }
 .pray-h-title{
-  font-family:var(--serif); font-size:22px; font-weight:600;
+  font-family:var(--serif); font-size:1.375rem; font-weight:600;
   color:var(--ink); letter-spacing:-0.5px;
 }
 .pray-h-sub{
-  font-size:12.5px; color:var(--ink-3); font-weight:500;
+  font-size:0.7812rem; color:var(--ink-3); font-weight:500;
   margin-top:4px;
 }
 .pray-counts{
@@ -1139,11 +1139,11 @@ body{
   text-align:center;
 }
 .pcc-num{
-  font-family:var(--en); font-size:18px; font-weight:700;
+  font-family:var(--en); font-size:1.125rem; font-weight:700;
   color:var(--terra);
 }
 .pcc-lbl{
-  font-size:10.5px; color:var(--ink-3); font-weight:500; margin-top:2px;
+  font-size:0.6562rem; color:var(--ink-3); font-weight:500; margin-top:2px;
   letter-spacing:-0.2px;
 }
 
@@ -1156,7 +1156,7 @@ body{
   flex-shrink:0;
   padding:7px 14px; border-radius:99px;
   background:var(--bg-card); border:1px solid var(--line);
-  font-size:12.5px; font-weight:600; color:var(--ink-2);
+  font-size:0.7812rem; font-weight:600; color:var(--ink-2);
   cursor:pointer; transition:all 0.15s;
   font-family:var(--sans);
 }
@@ -1166,7 +1166,7 @@ body{
 .scope-hint{
   margin:0 16px 14px; padding:9px 12px;
   background:var(--sage-pale); border-radius:10px;
-  font-size:11.5px; line-height:1.55; color:var(--sage-deep);
+  font-size:0.7188rem; line-height:1.55; color:var(--sage-deep);
   display:flex; align-items:flex-start; gap:7px;
   border:1px solid var(--sage-soft);
 }
@@ -1212,8 +1212,8 @@ body{
   box-shadow:var(--shadow-sm);
 }
 .urgent-sec-head{ display:flex; align-items:center; gap:7px; margin:2px 4px 11px; }
-.urgent-sec-title{ font-size:13px; font-weight:800; color:#A45A3F; letter-spacing:-0.3px; }
-.urgent-sec-count{ margin-left:auto; font-family:var(--en); font-size:10.5px; font-weight:700; color:#fff; background:var(--terra); padding:2px 9px; border-radius:99px; }
+.urgent-sec-title{ font-size:0.8125rem; font-weight:800; color:#A45A3F; letter-spacing:-0.3px; }
+.urgent-sec-count{ margin-left:auto; font-family:var(--en); font-size:0.6562rem; font-weight:700; color:#fff; background:var(--terra); padding:2px 9px; border-radius:99px; }
 .urgent-section .prayer-card{ margin:0 0 10px; background:var(--bg-card); border-color:#F2DBCB; }
 .pcard-head{
   display:flex; align-items:center; justify-content:space-between;
@@ -1226,17 +1226,17 @@ body{
   width:32px; height:32px; border-radius:50%;
   background:var(--sage-pale); color:var(--sage-dark);
   display:flex; align-items:center; justify-content:center;
-  font-family:var(--serif); font-size:12px; font-weight:700;
+  font-family:var(--serif); font-size:0.75rem; font-weight:700;
 }
 .pcard-name{
-  font-size:13px; font-weight:700; color:var(--ink); letter-spacing:-0.2px;
+  font-size:0.8125rem; font-weight:700; color:var(--ink); letter-spacing:-0.2px;
 }
 .pcard-time{
-  font-family:var(--en); font-size:10.5px; color:var(--ink-3); font-weight:500;
+  font-family:var(--en); font-size:0.6562rem; color:var(--ink-3); font-weight:500;
   margin-top:1px;
 }
 .pcard-scope{
-  font-size:10.5px; font-weight:700;
+  font-size:0.6562rem; font-weight:700;
   padding:4px 9px; border-radius:99px;
   letter-spacing:-0.2px;
 }
@@ -1247,7 +1247,7 @@ body{
 .pcard-scope.self{ background:var(--plum-soft); color:#5D3856; }
 
 .pcard-body{
-  font-family:var(--serif); font-size:14.5px; font-weight:400;
+  font-family:var(--serif); font-size:0.9062rem; font-weight:400;
   color:var(--ink); line-height:1.75; letter-spacing:-0.2px;
   margin-bottom:14px;
 }
@@ -1256,12 +1256,12 @@ body{
   padding-top:12px; border-top:1px solid var(--line-soft);
 }
 .pcard-meta{
-  font-size:11.5px; color:var(--ink-3); font-weight:500;
+  font-size:0.7188rem; color:var(--ink-3); font-weight:500;
 }
 .pcard-pray-btn{
   padding:7px 14px; border-radius:99px;
   background:var(--bg-soft); border:none; cursor:pointer;
-  font-family:var(--sans); font-size:12px; font-weight:700;
+  font-family:var(--sans); font-size:0.75rem; font-weight:700;
   color:var(--ink-2); letter-spacing:-0.2px;
   display:inline-flex; align-items:center; gap:5px;
   transition:all 0.15s;
@@ -1274,22 +1274,22 @@ body{
 /* 기도 작성 모달 */
 .write-form{ padding:8px 20px 20px; }
 .write-form h3{
-  font-family:var(--serif); font-size:18px; font-weight:600;
+  font-family:var(--serif); font-size:1.125rem; font-weight:600;
   color:var(--ink); letter-spacing:-0.3px; margin-bottom:4px;
 }
 .write-form p.h-sub{
-  font-size:12px; color:var(--ink-3); margin-bottom:18px; font-weight:500;
+  font-size:0.75rem; color:var(--ink-3); margin-bottom:18px; font-weight:500;
 }
 .write-form label{
   display:block;
-  font-size:12px; font-weight:700; color:var(--ink-2);
+  font-size:0.75rem; font-weight:700; color:var(--ink-2);
   margin:14px 0 6px; letter-spacing:-0.2px;
 }
 .write-form textarea, .write-form input[type=text]{
   width:100%;
   background:var(--bg-soft); border:1px solid transparent;
   border-radius:10px; padding:11px 14px;
-  font-family:var(--sans); font-size:14px; color:var(--ink);
+  font-family:var(--sans); font-size:0.875rem; color:var(--ink);
   line-height:1.7;
 }
 .write-form textarea:focus, .write-form input:focus{
@@ -1301,7 +1301,7 @@ body{
 .scope-pick label{
   margin:0; cursor:pointer;
   padding:10px; border:1px solid var(--line); border-radius:10px;
-  text-align:center; font-size:12.5px; font-weight:600;
+  text-align:center; font-size:0.7812rem; font-weight:600;
   color:var(--ink-2);
 }
 .scope-pick input{ display:none; }
@@ -1315,14 +1315,14 @@ body{
   width:100%;
   background:var(--bg-soft); border:1px solid transparent;
   border-radius:10px; padding:11px 14px;
-  font-family:var(--sans); font-size:14px; color:var(--ink);
+  font-family:var(--sans); font-size:0.875rem; color:var(--ink);
 }
 .write-form select:focus{ outline:none; border-color:var(--sage); background:#fff; }
 .affil-banner{
   margin:0 0 14px; padding:10px 12px;
   background:var(--sage-pale); color:var(--sage-deep);
   border:1px solid var(--sage-soft); border-radius:10px;
-  font-size:12px; line-height:1.55;
+  font-size:0.75rem; line-height:1.55;
   display:flex; align-items:flex-start; gap:7px;
 }
 .affil-banner strong{ font-weight:700; color:var(--sage-deep); }
@@ -1337,11 +1337,11 @@ body{
   padding:8px 20px 18px;
 }
 .column-h-title{
-  font-family:var(--serif); font-size:22px; font-weight:600;
+  font-family:var(--serif); font-size:1.375rem; font-weight:600;
   color:var(--ink); letter-spacing:-0.5px;
 }
 .column-h-sub{
-  font-size:12.5px; color:var(--ink-3); font-weight:500;
+  font-size:0.7812rem; color:var(--ink-3); font-weight:500;
   margin-top:4px;
 }
 
@@ -1371,7 +1371,7 @@ body{
 }
 .col-cover-cat{
   position:relative;
-  font-family:var(--sans); font-size:10.5px; font-weight:700;
+  font-family:var(--sans); font-size:0.6562rem; font-weight:700;
   color:rgba(255,255,255,0.85);
   letter-spacing:1.5px; text-transform:uppercase;
   background:rgba(255,255,255,0.18); backdrop-filter:blur(8px);
@@ -1379,12 +1379,12 @@ body{
 }
 .col-body{ padding:16px 18px 18px; }
 .col-ttl{
-  font-family:var(--serif); font-size:18px; font-weight:600;
+  font-family:var(--serif); font-size:1.125rem; font-weight:600;
   color:var(--ink); line-height:1.4; letter-spacing:-0.3px;
   margin-bottom:8px;
 }
 .col-excerpt{
-  font-size:13.5px; color:var(--ink-2); line-height:1.7;
+  font-size:0.8438rem; color:var(--ink-2); line-height:1.7;
   letter-spacing:-0.2px; margin-bottom:14px;
 }
 .col-meta{
@@ -1392,7 +1392,7 @@ body{
   padding-top:12px; border-top:1px solid var(--line-soft);
 }
 .col-meta-left{
-  font-size:11.5px; color:var(--ink-3); font-weight:500;
+  font-size:0.7188rem; color:var(--ink-3); font-weight:500;
   display:flex; align-items:center; gap:8px;
 }
 .col-meta-right{
@@ -1400,7 +1400,7 @@ body{
 }
 .col-stat{
   display:flex; align-items:center; gap:3px;
-  font-size:12px; color:var(--ink-3); font-weight:600;
+  font-size:0.75rem; color:var(--ink-3); font-weight:600;
 }
 .col-stat svg{ width:14px; height:14px; }
 .col-stat.liked{ color:var(--terra); }
@@ -1423,24 +1423,24 @@ body{
   display:flex; align-items:center; justify-content:center;
 }
 .cdetail-cat{
-  font-family:var(--sans); font-size:10.5px; font-weight:700;
+  font-family:var(--sans); font-size:0.6562rem; font-weight:700;
   color:rgba(255,255,255,0.85);
   letter-spacing:1.5px; text-transform:uppercase;
   margin-bottom:8px;
 }
 .cdetail-title{
-  font-family:var(--serif); font-size:24px; font-weight:600;
+  font-family:var(--serif); font-size:1.5rem; font-weight:600;
   color:#fff; line-height:1.35; letter-spacing:-0.5px;
 }
 .cdetail-meta{
   display:flex; align-items:center; gap:10px;
   padding:18px 20px;
   border-bottom:1px solid var(--line);
-  font-size:12px; color:var(--ink-3); font-weight:500;
+  font-size:0.75rem; color:var(--ink-3); font-weight:500;
 }
 .cdetail-body{
   padding:24px 22px;
-  font-family:var(--serif); font-size:16px;
+  font-family:var(--serif); font-size:1rem;
   color:var(--ink); line-height:1.95; letter-spacing:-0.2px;
   white-space:pre-wrap;
 }
@@ -1451,7 +1451,7 @@ body{
   flex:1; padding:12px;
   border:1px solid var(--line); background:var(--bg-card);
   border-radius:12px; cursor:pointer;
-  font-size:13px; font-weight:600; color:var(--ink-2);
+  font-size:0.8125rem; font-weight:600; color:var(--ink-2);
   display:flex; align-items:center; justify-content:center; gap:6px;
 }
 .cd-act-btn.on{ background:var(--terra-soft); color:#A45A3F; border-color:#F0D5C0; }
@@ -1460,7 +1460,7 @@ body{
   padding:0 20px 30px;
 }
 .comments-head{
-  font-size:13px; font-weight:700; color:var(--ink);
+  font-size:0.8125rem; font-weight:700; color:var(--ink);
   margin:18px 0 12px;
 }
 .comment-item{
@@ -1472,7 +1472,7 @@ body{
   width:30px; height:30px; border-radius:50%;
   background:var(--sage-pale); color:var(--sage-dark);
   display:flex; align-items:center; justify-content:center;
-  font-family:var(--serif); font-size:12px; font-weight:700;
+  font-family:var(--serif); font-size:0.75rem; font-weight:700;
   flex-shrink:0;
 }
 .comment-body{ flex:1; min-width:0; }
@@ -1480,10 +1480,10 @@ body{
   display:flex; align-items:center; gap:8px;
   margin-bottom:3px;
 }
-.comment-name{ font-size:12px; font-weight:700; color:var(--ink); }
-.comment-time{ font-family:var(--en); font-size:10.5px; color:var(--ink-3); font-weight:500; }
+.comment-name{ font-size:0.75rem; font-weight:700; color:var(--ink); }
+.comment-time{ font-family:var(--en); font-size:0.6562rem; color:var(--ink-3); font-weight:500; }
 .comment-text{
-  font-size:13px; color:var(--ink-2); line-height:1.6; letter-spacing:-0.2px;
+  font-size:0.8125rem; color:var(--ink-2); line-height:1.6; letter-spacing:-0.2px;
 }
 .comment-form{
   display:flex; gap:8px; align-items:flex-end;
@@ -1493,7 +1493,7 @@ body{
 .comment-form input{
   flex:1; background:var(--bg-soft); border:1px solid transparent;
   border-radius:99px; padding:10px 16px;
-  font-family:var(--sans); font-size:13px; color:var(--ink);
+  font-family:var(--sans); font-size:0.8125rem; color:var(--ink);
 }
 .comment-form input:focus{ outline:none; border-color:var(--sage); background:#fff; }
 .comment-form button{
@@ -1513,11 +1513,11 @@ body{
   margin-bottom:14px;
 }
 .cal-month{
-  font-family:var(--serif); font-size:22px; font-weight:600;
+  font-family:var(--serif); font-size:1.375rem; font-weight:600;
   color:var(--ink); letter-spacing:-0.5px;
 }
 .cal-month-en{
-  font-family:var(--en); font-size:11px; color:var(--ink-3);
+  font-family:var(--en); font-size:0.6875rem; color:var(--ink-3);
   font-weight:500; letter-spacing:2px;
 }
 .cal-nav{
@@ -1536,11 +1536,11 @@ body{
   border-radius:12px; padding:14px;
 }
 .cal-stat-num{
-  font-family:var(--en); font-size:22px; font-weight:700;
+  font-family:var(--en); font-size:1.375rem; font-weight:700;
   color:var(--sage); letter-spacing:-0.5px;
 }
 .cal-stat-lbl{
-  font-size:11.5px; color:var(--ink-3); font-weight:500;
+  font-size:0.7188rem; color:var(--ink-3); font-weight:500;
   margin-top:2px; letter-spacing:-0.2px;
 }
 .cal-grid-wrap{
@@ -1555,7 +1555,7 @@ body{
 }
 .cal-dow{
   text-align:center;
-  font-size:10.5px; font-weight:700; color:var(--ink-3);
+  font-size:0.6562rem; font-weight:700; color:var(--ink-3);
   letter-spacing:0.5px; padding:4px 0;
 }
 .cal-dow.sun{ color:var(--terra); }
@@ -1565,7 +1565,7 @@ body{
 }
 .cal-cell{
   position:relative; border-radius:10px;
-  font-family:var(--en); font-size:13.5px; font-weight:600;
+  font-family:var(--en); font-size:0.8438rem; font-weight:600;
   color:var(--ink-2); cursor:pointer;
   transition:transform 0.1s;
   padding-top:100%; /* aspect-ratio:1 폴백 (구버전 WebView 호환) */
@@ -1608,7 +1608,7 @@ body{
 }
 .cal-leg-item{
   display:flex; align-items:center; gap:5px;
-  font-size:11px; color:var(--ink-3); font-weight:500;
+  font-size:0.6875rem; color:var(--ink-3); font-weight:500;
 }
 .cal-leg-sw{
   width:12px; height:12px; border-radius:4px;
@@ -1636,8 +1636,8 @@ body{
 }
 .more-ic svg{ width:18px; height:18px; }
 .more-text{ flex:1; }
-.more-ttl{ font-size:14px; font-weight:600; color:var(--ink); }
-.more-sub{ font-size:11.5px; color:var(--ink-3); font-weight:500; margin-top:1px; }
+.more-ttl{ font-size:0.875rem; font-weight:600; color:var(--ink); }
+.more-sub{ font-size:0.7188rem; color:var(--ink-3); font-weight:500; margin-top:1px; }
 .more-arrow{ color:var(--ink-4); }
 .more-arrow svg{ width:16px; height:16px; }
 
@@ -1653,19 +1653,19 @@ body{
   width:54px; height:54px; border-radius:50%;
   background:var(--sage-dark); color:#fff;
   display:flex; align-items:center; justify-content:center;
-  font-family:var(--serif); font-size:20px; font-weight:600;
+  font-family:var(--serif); font-size:1.25rem; font-weight:600;
 }
 .more-profile-name{
-  font-family:var(--serif); font-size:18px; font-weight:600;
+  font-family:var(--serif); font-size:1.125rem; font-weight:600;
   color:var(--ink); letter-spacing:-0.3px;
 }
 .more-profile-meta{
-  font-size:11.5px; color:var(--ink-3); font-weight:500;
+  font-size:0.7188rem; color:var(--ink-3); font-weight:500;
   margin-top:2px;
 }
 .demo-badge{
   display:inline-block; margin-left:8px;
-  font-family:var(--en); font-size:9px; font-weight:700;
+  font-family:var(--en); font-size:0.5625rem; font-weight:700;
   color:var(--terra); background:var(--terra-soft);
   padding:2px 6px; border-radius:4px; letter-spacing:0.5px;
 }
@@ -1677,11 +1677,11 @@ body{
   padding:8px 20px 18px;
 }
 .mypage-title{
-  font-family:var(--serif); font-size:22px; font-weight:600;
+  font-family:var(--serif); font-size:1.375rem; font-weight:600;
   color:var(--ink); letter-spacing:-0.5px;
 }
 .mypage-sub{
-  font-size:12.5px; color:var(--ink-3); font-weight:500; margin-top:4px;
+  font-size:0.7812rem; color:var(--ink-3); font-weight:500; margin-top:4px;
 }
 
 .profile-card{
@@ -1704,15 +1704,15 @@ body{
   width:60px; height:60px; border-radius:50%;
   background:#fff; color:var(--sage-dark);
   display:flex; align-items:center; justify-content:center;
-  font-family:var(--serif); font-weight:600; font-size:22px;
+  font-family:var(--serif); font-weight:600; font-size:1.375rem;
   flex-shrink:0;
 }
 .profile-name{
-  font-family:var(--serif); font-size:18px; font-weight:600;
+  font-family:var(--serif); font-size:1.125rem; font-weight:600;
   letter-spacing:-0.3px;
 }
 .profile-meta{
-  font-size:11.5px; color:rgba(255,255,255,0.7); font-weight:500;
+  font-size:0.7188rem; color:rgba(255,255,255,0.7); font-weight:500;
   margin-top:3px;
 }
 .profile-actions{
@@ -1723,7 +1723,7 @@ body{
   background:rgba(255,255,255,0.15); backdrop-filter:blur(8px);
   border:1px solid rgba(255,255,255,0.18); color:#fff; cursor:pointer;
   border-radius:10px;
-  font-family:var(--sans); font-size:12px; font-weight:600;
+  font-family:var(--sans); font-size:0.75rem; font-weight:600;
   display:flex; align-items:center; justify-content:center; gap:5px;
 }
 .profile-action:active{ background:rgba(255,255,255,0.28); }
@@ -1732,12 +1732,12 @@ body{
 
 /* 구독/등급 배지 */
 .badge-pro{
-  font-family:var(--en); font-size:10px; font-weight:700;
+  font-family:var(--en); font-size:0.625rem; font-weight:700;
   margin-left:7px; padding:2px 8px; border-radius:99px;
   background:#fff; color:var(--sage-dark); letter-spacing:0.5px;
 }
 .badge-free{
-  font-family:var(--en); font-size:10px; font-weight:600;
+  font-family:var(--en); font-size:0.625rem; font-weight:600;
   margin-left:7px; padding:2px 8px; border-radius:99px;
   background:rgba(255,255,255,0.18); color:rgba(255,255,255,0.85); letter-spacing:0.5px;
 }
@@ -1757,23 +1757,23 @@ body{
   width:38px; height:38px; flex-shrink:0; border-radius:11px;
   background:#fff; color:var(--sage-dark);
   display:flex; align-items:center; justify-content:center;
-  font-family:var(--serif); font-weight:700; font-size:20px;
+  font-family:var(--serif); font-weight:700; font-size:1.25rem;
   box-shadow:0 2px 8px rgba(0,0,0,0.04);
 }
 .sub-text{ flex:1; min-width:0; }
 .sub-title{
-  font-family:var(--sans); font-size:14px; font-weight:700;
+  font-family:var(--sans); font-size:0.875rem; font-weight:700;
   color:var(--sage-deep); letter-spacing:-0.3px; margin-bottom:4px;
 }
 .sub-desc{
-  font-size:12px; line-height:1.6; color:var(--ink-2);
+  font-size:0.75rem; line-height:1.6; color:var(--ink-2);
 }
 .sub-desc em{ font-style:normal; color:var(--sage-deep); font-weight:600; }
 .sub-toggle{
   margin-top:12px; width:100%; padding:10px;
   background:#fff; border:1px solid var(--sage-mid); color:var(--sage-deep);
   border-radius:10px; cursor:pointer;
-  font-family:var(--sans); font-size:13px; font-weight:600;
+  font-family:var(--sans); font-size:0.8125rem; font-weight:600;
 }
 .sub-card.on .sub-toggle{
   background:transparent; border-color:rgba(60,110,58,0.3); color:var(--sage-deep);
@@ -1781,18 +1781,18 @@ body{
 
 /* 프로필 편집 모달 전용 */
 .profile-editor .lbl-aside{
-  font-weight:500; color:var(--ink-3); font-size:11px; margin-left:6px;
+  font-weight:500; color:var(--ink-3); font-size:0.6875rem; margin-left:6px;
 }
 .profile-editor .form-section-title{
   margin:22px 0 4px; padding-top:14px;
   border-top:1px dashed var(--line);
-  font-size:11.5px; font-weight:700; color:var(--sage-deep);
+  font-size:0.7188rem; font-weight:700; color:var(--sage-deep);
   letter-spacing:-0.2px;
 }
 .profile-editor .form-hint{
   margin-top:10px; padding:9px 12px;
   background:var(--sage-pale); border-radius:10px;
-  font-size:11.5px; line-height:1.55; color:var(--sage-deep);
+  font-size:0.7188rem; line-height:1.55; color:var(--sage-deep);
   display:flex; align-items:flex-start; gap:7px;
   border:1px solid var(--sage-soft);
 }
@@ -1807,7 +1807,7 @@ body{
   cursor:pointer; margin:0 !important; padding:9px 10px !important;
   border:1px solid var(--line); border-radius:10px;
   background:var(--bg-card); color:var(--ink-2);
-  font-size:11.5px !important; font-weight:600 !important; text-align:center;
+  font-size:0.7188rem !important; font-weight:600 !important; text-align:center;
   display:flex; align-items:center; justify-content:center;
   line-height:1.3; transition:all 0.15s;
 }
@@ -1828,11 +1828,11 @@ body{
   text-align:center;
 }
 .my-stat-num{
-  font-family:var(--en); font-size:22px; font-weight:700;
+  font-family:var(--en); font-size:1.375rem; font-weight:700;
   color:var(--sage); letter-spacing:-0.5px;
 }
 .my-stat-lbl{
-  font-size:10.5px; color:var(--ink-3); font-weight:500; margin-top:3px;
+  font-size:0.6562rem; color:var(--ink-3); font-weight:500; margin-top:3px;
   letter-spacing:-0.2px;
 }
 
@@ -1847,7 +1847,7 @@ body{
   margin-bottom:14px;
 }
 .my-cal-title{
-  font-size:13px; font-weight:700; color:var(--ink);
+  font-size:0.8125rem; font-weight:700; color:var(--ink);
   display:flex; align-items:center; gap:6px;
 }
 .my-cal-mini{
@@ -1856,7 +1856,7 @@ body{
 .mc-cell{
   height:30px; border-radius:7px;
   display:flex; align-items:center; justify-content:center;
-  font-family:var(--en); font-size:11px; font-weight:600;
+  font-family:var(--en); font-size:0.6875rem; font-weight:600;
   color:var(--ink-2); cursor:pointer;
   background:var(--bg-soft);
 }
@@ -1890,18 +1890,18 @@ body{
 .menu-ic.terra{ background:var(--terra-soft); color:#A45A3F; }
 .menu-ic.plum{ background:var(--plum-soft); color:#5D3856; }
 .menu-text{ flex:1; }
-.menu-ttl{ font-size:14px; font-weight:600; color:var(--ink); letter-spacing:-0.2px; }
-.menu-sub{ font-size:11.5px; color:var(--ink-3); font-weight:500; margin-top:1px; }
+.menu-ttl{ font-size:0.875rem; font-weight:600; color:var(--ink); letter-spacing:-0.2px; }
+.menu-sub{ font-size:0.7188rem; color:var(--ink-3); font-weight:500; margin-top:1px; }
 .menu-right{
   color:var(--ink-4);
   display:flex; align-items:center; gap:8px;
-  font-size:12px;
+  font-size:0.75rem;
 }
 .menu-right svg{ width:16px; height:16px; }
 .menu-right .badge{
   background:var(--terra); color:#fff;
   padding:2px 7px; border-radius:99px;
-  font-size:10.5px; font-weight:700;
+  font-size:0.6562rem; font-weight:700;
 }
 
 /* 토글 스위치 */
@@ -1933,11 +1933,11 @@ body{
 }
 .back-btn svg{ width:18px; height:18px; }
 .settings-title{
-  font-family:var(--serif); font-size:20px; font-weight:600;
+  font-family:var(--serif); font-size:1.25rem; font-weight:600;
   color:var(--ink); letter-spacing:-0.3px;
 }
 .settings-section-h{
-  font-family:var(--en); font-size:10.5px; font-weight:700;
+  font-family:var(--en); font-size:0.6562rem; font-weight:700;
   color:var(--ink-3); letter-spacing:1.5px; text-transform:uppercase;
   padding:18px 20px 6px;
 }
@@ -1956,22 +1956,22 @@ body{
   box-shadow:0 10px 24px rgba(31,51,40,0.12);
 }
 .login-h{
-  font-family:var(--serif); font-size:22px; font-weight:600;
+  font-family:var(--serif); font-size:1.375rem; font-weight:600;
   color:var(--ink); letter-spacing:-0.5px; margin-bottom:6px;
   text-align:center;
 }
 .login-d{
-  font-size:13px; color:var(--ink-3); text-align:center;
+  font-size:0.8125rem; color:var(--ink-3); text-align:center;
   line-height:1.6; margin-bottom:28px; max-width:280px;
 }
 .login-form{ width:100%; max-width:320px; }
 .login-form label{
-  display:block; font-size:12px; font-weight:700; color:var(--ink-2);
+  display:block; font-size:0.75rem; font-weight:700; color:var(--ink-2);
   margin:14px 0 6px;
 }
 .login-form input, .login-form select{
   width:100%; padding:13px 16px;
-  font-family:var(--sans); font-size:14px;
+  font-family:var(--sans); font-size:0.875rem;
   background:var(--bg-soft); border:1px solid transparent;
   border-radius:12px; color:var(--ink);
 }
@@ -1981,7 +1981,7 @@ body{
 .login-divider{
   display:flex; align-items:center; gap:12px;
   margin:24px 0 12px;
-  color:var(--ink-3); font-size:11px;
+  color:var(--ink-3); font-size:0.6875rem;
 }
 .login-divider::before, .login-divider::after{
   content:''; flex:1; height:1px; background:var(--line);
@@ -1991,7 +1991,7 @@ body{
   padding:12px 14px;
   background:var(--bg-cream-soft); border:1px solid #EFE6D2;
   border-radius:10px;
-  font-size:11.5px; color:#7D6534; line-height:1.7;
+  font-size:0.7188rem; color:#7D6534; line-height:1.7;
   letter-spacing:-0.2px;
 }
 
@@ -2002,7 +2002,7 @@ body{
   display:none;
   background:#FEE500; color:#1A1F1D;
   padding:10px 14px;
-  font-size:12.5px; font-weight:600;
+  font-size:0.7812rem; font-weight:600;
   letter-spacing:-0.2px;
   text-align:center;
   line-height:1.5;
@@ -2016,13 +2016,13 @@ body{
 .kakao-banner button{
   background:#1A1F1D; color:#fff; border:none;
   padding:5px 12px; border-radius:99px;
-  font-size:11.5px; font-weight:600; cursor:pointer;
+  font-size:0.7188rem; font-weight:600; cursor:pointer;
   margin-left:6px;
 }
 .kakao-banner .kb-close{
   background:rgba(0,0,0,0.08); color:#1A1F1D;
   width:22px; height:22px; padding:0; border-radius:50%;
-  font-size:14px; line-height:1; margin-left:8px;
+  font-size:0.875rem; line-height:1; margin-left:8px;
 }
 
 /* iOS 안전영역 보정 */
@@ -2082,7 +2082,7 @@ body{
 }
 .seg-btn{
   flex:1; border:none; background:transparent; cursor:pointer;
-  font-family:var(--sans); font-size:14.5px; font-weight:600;
+  font-family:var(--sans); font-size:0.9062rem; font-weight:600;
   color:var(--ink-3); padding:11px 8px; border-radius:999px;
   display:flex; align-items:center; justify-content:center; gap:7px;
   transition:all .18s ease;
@@ -2099,11 +2099,11 @@ body{
   display:flex; align-items:flex-end; justify-content:space-between; gap:10px;
 }
 .rooms-hello-title{
-  font-family:var(--serif); font-size:22px; font-weight:600;
+  font-family:var(--serif); font-size:1.375rem; font-weight:600;
   color:var(--ink); letter-spacing:-0.5px; line-height:1.35;
 }
 .rooms-hello-title em{ font-style:normal; color:var(--sage); }
-.rooms-hello-sub{ font-size:13px; color:var(--ink-3); margin-top:5px; line-height:1.6; }
+.rooms-hello-sub{ font-size:0.8125rem; color:var(--ink-3); margin-top:5px; line-height:1.6; }
 
 .room-card{
   margin:14px 16px 0; padding:20px;
@@ -2125,40 +2125,40 @@ body{
 .room-emoji{
   width:46px; height:46px; border-radius:16px; flex:0 0 auto;
   display:flex; align-items:center; justify-content:center;
-  font-size:22px; background:var(--bg-card); border:1px solid var(--line-soft);
+  font-size:1.375rem; background:var(--bg-card); border:1px solid var(--line-soft);
   box-shadow:var(--shadow-sm);
 }
 .room-card.cell .room-emoji{ background:#fff; border-color:var(--sage-soft); }
 .room-name{
-  font-family:var(--serif); font-size:17px; font-weight:600; color:var(--ink);
+  font-family:var(--serif); font-size:1.0625rem; font-weight:600; color:var(--ink);
   letter-spacing:-0.3px;
 }
 .room-tag{
   display:inline-block; margin-left:7px; vertical-align:2px;
-  font-size:10px; font-weight:700; letter-spacing:0.5px;
+  font-size:0.625rem; font-weight:700; letter-spacing:0.5px;
   color:var(--sage-deep); background:var(--sage-soft);
   border-radius:999px; padding:3px 9px;
 }
 .room-tag.group{ color:#7A4D72; background:var(--plum-soft); }
-.room-desc{ font-size:12.5px; color:var(--ink-3); margin-top:3px; }
+.room-desc{ font-size:0.7812rem; color:var(--ink-3); margin-top:3px; }
 .room-meta{
   display:flex; align-items:center; gap:14px;
   margin-top:14px; padding-top:13px; border-top:1px dashed var(--line);
-  font-size:12px; color:var(--ink-3);
+  font-size:0.75rem; color:var(--ink-3);
 }
 .room-meta strong{ color:var(--sage-deep); font-weight:700; }
 .room-meta .avatars{ display:flex; }
 .room-meta .avatars span{
   width:24px; height:24px; border-radius:50%; border:2px solid #fff;
   background:var(--sage-soft); color:var(--sage-deep);
-  font-size:10.5px; font-weight:700;
+  font-size:0.6562rem; font-weight:700;
   display:flex; align-items:center; justify-content:center;
   margin-left:-7px;
 }
 .room-meta .avatars span:first-child{ margin-left:0; }
 .room-new-dot{
   position:absolute; right:18px; top:20px;
-  font-size:10.5px; font-weight:700; color:#fff;
+  font-size:0.6562rem; font-weight:700; color:#fff;
   background:var(--terra); border-radius:999px; padding:4px 9px;
 }
 
@@ -2168,7 +2168,7 @@ body{
 .room-action-btn{
   flex:1; padding:15px 10px; border-radius:18px; cursor:pointer;
   border:1.5px dashed var(--sage-soft); background:transparent;
-  color:var(--sage-deep); font-family:var(--sans); font-size:13.5px; font-weight:600;
+  color:var(--sage-deep); font-family:var(--sans); font-size:0.8438rem; font-weight:600;
   display:flex; align-items:center; justify-content:center; gap:7px;
 }
 .room-action-btn svg{ width:15px; height:15px; }
@@ -2179,7 +2179,7 @@ body{
 }
 .room-empty-card .ill{ width:120px; height:90px; margin:0 auto 12px; }
 .room-empty-card .ill svg{ width:100%; height:100%; }
-.room-empty-card p{ font-size:13.5px; color:var(--ink-2); line-height:1.75; }
+.room-empty-card p{ font-size:0.8438rem; color:var(--ink-2); line-height:1.75; }
 
 /* ── 목장방 상세 (피드) ─────────────────────────────────────── */
 .rd-header{
@@ -2190,7 +2190,7 @@ body{
 .rd-back{
   display:inline-flex; align-items:center; gap:6px;
   border:none; background:transparent; cursor:pointer;
-  color:var(--ink-3); font-size:13px; font-weight:600; padding:6px 0;
+  color:var(--ink-3); font-size:0.8125rem; font-weight:600; padding:6px 0;
   font-family:var(--sans);
 }
 .rd-back svg{ width:16px; height:16px; }
@@ -2198,15 +2198,15 @@ body{
 .rd-emoji{
   width:50px; height:50px; border-radius:18px; background:#fff;
   border:1px solid var(--sage-soft); box-shadow:var(--shadow-sm);
-  display:flex; align-items:center; justify-content:center; font-size:25px;
+  display:flex; align-items:center; justify-content:center; font-size:1.5625rem;
 }
-.rd-name{ font-family:var(--serif); font-size:20px; font-weight:600; color:var(--ink); letter-spacing:-0.4px; }
-.rd-sub{ font-size:12.5px; color:var(--ink-3); margin-top:3px; }
+.rd-name{ font-family:var(--serif); font-size:1.25rem; font-weight:600; color:var(--ink); letter-spacing:-0.4px; }
+.rd-sub{ font-size:0.7812rem; color:var(--ink-3); margin-top:3px; }
 .rd-tools{ display:flex; gap:8px; margin-top:14px; }
 .rd-tool{
   flex:1; border:1px solid var(--line); background:var(--bg-card);
   border-radius:14px; padding:10px 8px; cursor:pointer;
-  font-family:var(--sans); font-size:12.5px; font-weight:600; color:var(--ink-2);
+  font-family:var(--sans); font-size:0.7812rem; font-weight:600; color:var(--ink-2);
   display:flex; align-items:center; justify-content:center; gap:6px;
 }
 .rd-tool svg{ width:14px; height:14px; color:var(--sage-dark); }
@@ -2217,17 +2217,17 @@ body{
   margin:16px 16px 0; padding:16px 18px;
   background:var(--bg-card); border:1px solid var(--line); border-radius:18px;
 }
-.rd-week-title{ font-size:12px; font-weight:700; color:var(--ink-3); letter-spacing:0.4px; margin-bottom:10px; }
+.rd-week-title{ font-size:0.75rem; font-weight:700; color:var(--ink-3); letter-spacing:0.4px; margin-bottom:10px; }
 .rd-week-row{ display:flex; justify-content:space-between; }
 .rd-week-member{ text-align:center; flex:1; }
 .rd-week-member .av{
   width:36px; height:36px; border-radius:50%; margin:0 auto 5px;
   background:var(--sage-pale); color:var(--sage-deep);
   display:flex; align-items:center; justify-content:center;
-  font-size:13px; font-weight:700; position:relative;
+  font-size:0.8125rem; font-weight:700; position:relative;
 }
 .rd-week-member.done .av{ background:var(--sage); color:#fff; }
-.rd-week-member .nm{ font-size:10.5px; color:var(--ink-3); }
+.rd-week-member .nm{ font-size:0.6562rem; color:var(--ink-3); }
 .rd-week-member.done .nm{ color:var(--sage-deep); font-weight:600; }
 
 .rpost{
@@ -2240,29 +2240,29 @@ body{
   width:38px; height:38px; border-radius:50%;
   background:var(--sage-pale); color:var(--sage-deep);
   display:flex; align-items:center; justify-content:center;
-  font-size:14px; font-weight:700; flex:0 0 auto;
+  font-size:0.875rem; font-weight:700; flex:0 0 auto;
 }
 .rpost.prayer .rpost-avatar{ background:var(--terra-soft); color:#A45A3F; }
-.rpost-name{ font-size:13.5px; font-weight:700; color:var(--ink); }
-.rpost-time{ font-size:11px; color:var(--ink-4); margin-top:1px; }
+.rpost-name{ font-size:0.8438rem; font-weight:700; color:var(--ink); }
+.rpost-time{ font-size:0.6875rem; color:var(--ink-4); margin-top:1px; }
 .rpost-kind{
-  margin-left:auto; font-size:10.5px; font-weight:700; letter-spacing:0.4px;
+  margin-left:auto; font-size:0.6562rem; font-weight:700; letter-spacing:0.4px;
   border-radius:999px; padding:4px 10px;
   color:var(--sage-deep); background:var(--sage-pale);
 }
 .rpost.prayer .rpost-kind{ color:#A45A3F; background:var(--terra-soft); }
 .rpost-date-ref{
   display:inline-block; margin-top:12px;
-  font-family:var(--en); font-size:10.5px; font-weight:600; letter-spacing:1px;
+  font-family:var(--en); font-size:0.6562rem; font-weight:600; letter-spacing:1px;
   color:var(--sage-dark); text-transform:uppercase;
 }
-.rpost-body{ margin-top:10px; font-size:14px; line-height:1.75; color:var(--ink-2); }
+.rpost-body{ margin-top:10px; font-size:0.875rem; line-height:1.75; color:var(--ink-2); }
 .rpost-part{
   margin-top:10px; padding:13px 15px; border-radius:14px;
-  background:var(--bg-soft); font-size:13.5px; line-height:1.75; color:var(--ink-2);
+  background:var(--bg-soft); font-size:0.8438rem; line-height:1.75; color:var(--ink-2);
 }
 .rpost-part .pp-label{
-  display:block; font-size:10.5px; font-weight:700; letter-spacing:0.5px;
+  display:block; font-size:0.6562rem; font-weight:700; letter-spacing:0.5px;
   color:var(--sage-deep); margin-bottom:5px;
 }
 .rpost-part.grace{ background:var(--sage-pale); font-family:var(--serif); color:var(--ink); }
@@ -2276,16 +2276,16 @@ body{
   display:flex; align-items:center; gap:7px;
   border:1px solid var(--line); background:var(--bg-card);
   border-radius:999px; padding:9px 16px; cursor:pointer;
-  font-family:var(--sans); font-size:13px; font-weight:600; color:var(--ink-2);
+  font-family:var(--sans); font-size:0.8125rem; font-weight:600; color:var(--ink-2);
   transition:all .15s ease;
 }
 .amen-btn svg{ width:15px; height:15px; }
 .amen-btn.on{ background:var(--sage-pale); border-color:var(--sage-soft); color:var(--sage-deep); }
 .rpost.prayer .amen-btn.on{ background:var(--terra-soft); border-color:#EAC9B8; color:#A45A3F; }
-.amen-count{ font-size:12px; color:var(--ink-3); }
+.amen-count{ font-size:0.75rem; color:var(--ink-3); }
 .rpost-comment-btn{
   margin-left:auto; border:none; background:transparent; cursor:pointer;
-  font-size:12.5px; color:var(--ink-3); font-family:var(--sans); font-weight:600;
+  font-size:0.7812rem; color:var(--ink-3); font-family:var(--sans); font-weight:600;
   display:flex; align-items:center; gap:5px;
 }
 .rpost-comment-btn svg{ width:14px; height:14px; }
@@ -2297,17 +2297,17 @@ body{
   width:26px; height:26px; border-radius:50%; flex:0 0 auto;
   background:var(--bg-soft); color:var(--ink-3);
   display:flex; align-items:center; justify-content:center;
-  font-size:11px; font-weight:700;
+  font-size:0.6875rem; font-weight:700;
 }
 .rpost-comment .ctxt{
-  font-size:12.5px; line-height:1.6; color:var(--ink-2);
+  font-size:0.7812rem; line-height:1.6; color:var(--ink-2);
   background:var(--bg-soft); border-radius:4px 14px 14px 14px; padding:8px 12px;
 }
-.rpost-comment .ctxt strong{ font-size:11.5px; color:var(--ink); margin-right:5px; }
+.rpost-comment .ctxt strong{ font-size:0.7188rem; color:var(--ink); margin-right:5px; }
 .rpost-comment-form{ display:flex; gap:8px; margin-top:10px; }
 .rpost-comment-form input{
   flex:1; border:1px solid var(--line); border-radius:999px;
-  padding:9px 15px; font-family:var(--sans); font-size:13px; color:var(--ink);
+  padding:9px 15px; font-family:var(--sans); font-size:0.8125rem; color:var(--ink);
   background:var(--bg-soft); outline:none;
 }
 .rpost-comment-form input:focus{ border-color:var(--sage-mid); background:#fff; }
@@ -2321,7 +2321,7 @@ body{
 .rd-feed-empty{
   margin:20px 16px; padding:34px 20px; text-align:center;
   background:var(--bg-card); border:1px dashed var(--line); border-radius:20px;
-  color:var(--ink-3); font-size:13px; line-height:1.8;
+  color:var(--ink-3); font-size:0.8125rem; line-height:1.8;
 }
 .rd-feed-empty .ill{ width:110px; height:84px; margin:0 auto 10px; }
 .rd-feed-empty .ill svg{ width:100%; height:100%; }
@@ -2336,9 +2336,9 @@ body{
 .share-pick-item.on{ border-color:var(--sage); background:var(--sage-pale); }
 .share-pick-item.empty{ opacity:0.45; cursor:default; }
 .share-pick-item input{ margin-top:3px; accent-color:var(--sage-dark); }
-.share-pick-item .sp-label{ font-size:13px; font-weight:700; color:var(--ink); }
+.share-pick-item .sp-label{ font-size:0.8125rem; font-weight:700; color:var(--ink); }
 .share-pick-item .sp-preview{
-  font-size:12px; color:var(--ink-3); margin-top:3px; line-height:1.6;
+  font-size:0.75rem; color:var(--ink-3); margin-top:3px; line-height:1.6;
   display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
 }
 .invite-code-box{
@@ -2346,10 +2346,10 @@ body{
   background:var(--sage-pale); border:1.5px dashed var(--sage-soft); border-radius:16px;
 }
 .invite-code-box .code{
-  font-family:var(--en); font-size:24px; font-weight:700; letter-spacing:5px;
+  font-family:var(--en); font-size:1.5rem; font-weight:700; letter-spacing:5px;
   color:var(--sage-deep);
 }
-.invite-code-box .hint{ font-size:11.5px; color:var(--ink-3); margin-top:6px; }
+.invite-code-box .hint{ font-size:0.7188rem; color:var(--ink-3); margin-top:6px; }
 
 /* 모바일 소형 화면 미세 조정 */
 @media (max-width:360px){
@@ -2425,7 +2425,7 @@ body{ letter-spacing:-0.01em; }
 .cal-month-en, .one-thing-label, .rpost-date-ref,
 .cdetail-cat, .col-cover-cat, .col-mini-cat{
   font-family:var(--mono);
-  font-size:9px;
+  font-size:0.5625rem;
   font-weight:500;
   letter-spacing:.22em;
   text-transform:uppercase;
@@ -2437,14 +2437,14 @@ body{ letter-spacing:-0.01em; }
   font-family:var(--grotesk), var(--sans);
 }
 /* 헤드라인: 큰 사이즈 · 낮은 굵기 · 타이트 자간 */
-.today-hello{ font-size:29px; font-weight:500; line-height:1.3; letter-spacing:-0.024em; }
-.hero-title{  font-size:30px; font-weight:500; line-height:1.28; letter-spacing:-0.024em; margin-bottom:22px; }
-.word-title{  font-size:29px; font-weight:500; line-height:1.3;  letter-spacing:-0.024em; }
+.today-hello{ font-size:1.8125rem; font-weight:500; line-height:1.3; letter-spacing:-0.024em; }
+.hero-title{  font-size:1.875rem; font-weight:500; line-height:1.28; letter-spacing:-0.024em; margin-bottom:22px; }
+.word-title{  font-size:1.8125rem; font-weight:500; line-height:1.3;  letter-spacing:-0.024em; }
 .pray-h-title,.column-h-title,.mypage-title,.cal-month,
 .settings-title,.rooms-hello-title,.rd-name,.login-h{
   font-weight:500; letter-spacing:-0.022em;
 }
-.pray-h-title,.column-h-title,.mypage-title,.cal-month{ font-size:25px; }
+.pray-h-title,.column-h-title,.mypage-title,.cal-month{ font-size:1.5625rem; }
 /* 본문 호흡 */
 .maek{ line-height:1.95; color:#4A514D; }
 .exposition{ line-height:2.05; color:#4A514D; }
@@ -2457,7 +2457,7 @@ body{ letter-spacing:-0.01em; }
    ───────────────────────────────────────────── */
 /* 잡다한 컬러 칩 → 무채색 베이스, 액센트는 세이지만 */
 .chip.terra,.chip.plum,.chip.cream{ background:var(--line-soft); color:var(--ink-2); }
-.pcard-scope{ font-family:var(--mono); font-size:9.5px; letter-spacing:.06em; }
+.pcard-scope{ font-family:var(--mono); font-size:0.5938rem; letter-spacing:.06em; }
 .pcard-scope.cell,.pcard-scope.self{ background:var(--line-soft); color:var(--ink-2); }
 .pcard-scope.church,.pcard-scope.zone{ background:var(--sage-pale); color:var(--sage-deep); }
 .col-mini-cat{ color:var(--ink-3); }
@@ -2556,8 +2556,8 @@ body{ letter-spacing:-0.01em; }
   backdrop-filter:blur(18px) saturate(1.3);
   -webkit-backdrop-filter:blur(18px) saturate(1.3);
 }
-.brand-name{ font-weight:600; font-size:14.5px; letter-spacing:-0.02em; }
-.sync-pill{ background:transparent; border:1px solid var(--line); font-size:9.5px; letter-spacing:.04em; padding:5px 11px; }
+.brand-name{ font-weight:600; font-size:0.9062rem; letter-spacing:-0.02em; }
+.sync-pill{ background:transparent; border:1px solid var(--line); font-size:0.5938rem; letter-spacing:.04em; padding:5px 11px; }
 .sync-pill .dot{ background:var(--sage-dark); }
 .tabbar{
   background:rgba(255,255,255,.84);
@@ -2570,7 +2570,7 @@ body{ letter-spacing:-0.01em; }
 .tab-btn{ gap:4px; position:relative; transition:color .3s ease; }
 .tab-btn svg{ transition:transform .4s var(--ease-p4); }
 .tab-btn.active svg{ transform:translateY(-1px); }
-.tab-btn .tab-label{ font-size:10px; }
+.tab-btn .tab-label{ font-size:0.625rem; }
 .tab-btn::after{
   content:''; position:absolute; bottom:-1px; left:50%;
   width:4px; height:4px; border-radius:50%;
@@ -2591,8 +2591,8 @@ body{ letter-spacing:-0.01em; }
   width:280px; height:280px; right:-80px; top:-70px;
   background:radial-gradient(circle, rgba(255,255,255,.15) 0%, transparent 65%);
 }
-.hero-passage{ font-size:12.5px; color:rgba(255,255,255,.7); margin-bottom:12px; }
-.hero-cta{ margin-top:22px; font-size:13px; font-weight:600; }
+.hero-passage{ font-size:0.7812rem; color:rgba(255,255,255,.7); margin-bottom:12px; }
+.hero-cta{ margin-top:22px; font-size:0.8125rem; font-weight:600; }
 .card,.w-section,.progress-card,.quick-card,.col-mini,.column-card,
 .prayer-card,.room-card,.track-card,.movement-card,.menu-card,
 .my-cal-card,.cal-grid-wrap,.rd-week,.rpost,.lectio-wrap,
@@ -2608,14 +2608,14 @@ body{ letter-spacing:-0.01em; }
 .progress-card{ border-radius:20px; padding:20px; }
 .progress-dot{ height:5px; }
 .progress-dots{ gap:6px; }
-.progress-steps{ margin-top:10px; font-size:10px; color:var(--ink-4); }
+.progress-steps{ margin-top:10px; font-size:0.625rem; color:var(--ink-4); }
 .quick-grid{ gap:12px; margin-bottom:24px; }
 .quick-card{ border-radius:20px; padding:18px 16px; gap:12px; }
 .quick-card .ic{ width:40px; height:40px; border-radius:13px; }
 .quick-card .ic.terra,.quick-card .ic.plum,.quick-card .ic.cream{
   background:var(--line-soft); color:var(--ink-2);
 }
-.quick-card .ttl{ font-size:13.5px; font-weight:600; }
+.quick-card .ttl{ font-size:0.8438rem; font-weight:600; }
 .quick-card .sub{ color:var(--ink-4); }
 .week-strip{ gap:7px; padding-bottom:24px; }
 .week-day{ border-radius:16px; padding:12px 4px 10px; }
@@ -2626,7 +2626,7 @@ body{ letter-spacing:-0.01em; }
 .col-mini{ border-radius:20px; padding:20px; }
 .col-mini-ttl{ font-weight:500; letter-spacing:-0.015em; }
 .prayer-card{ border-radius:20px; padding:18px 20px; }
-.pcard-body{ font-size:15px; line-height:1.85; }
+.pcard-body{ font-size:0.9375rem; line-height:1.85; }
 .room-card{ border-radius:24px; }
 .rpost{ border-radius:22px; }
 .btn{ border-radius:999px; padding:13px 22px; font-weight:600; box-shadow:0 8px 20px rgba(110,90,60,.18); }
@@ -2666,7 +2666,7 @@ body{ letter-spacing:-0.01em; }
 .toast{
   background:rgba(15,19,17,.92);
   backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
-  font-size:12.5px; padding:12px 22px;
+  font-size:0.7812rem; padding:12px 22px;
   transition:opacity .45s var(--ease-expo), transform .45s var(--ease-expo);
 }
 .profile-card{
@@ -2701,57 +2701,57 @@ body{ letter-spacing:-0.01em; }
 /* ── 홈 인사말: 한 줄 · 22px · 일러스트 제거 ── */
 .greet-illust{ display:none; }
 .today-greeting{ padding:16px 22px 0; align-items:flex-start; }
-.today-hello{ font-size:22px; font-weight:600; line-height:1.4; white-space:nowrap; }
+.today-hello{ font-size:1.375rem; font-weight:600; line-height:1.4; white-space:nowrap; }
 .today-hello br{ display:none; }
-.today-date{ font-size:12px; color:var(--ink-3); letter-spacing:1.5px; }
+.today-date{ font-size:0.75rem; color:var(--ink-3); letter-spacing:1.5px; }
 
 /* ── 인사말-히어로 카드 간격 축소 ── */
 .hero-card{ margin:10px 16px 18px; }
 
 /* ── 히어로 카드: 발행정보 제거 + 보조 텍스트 대비 강화 ── */
 .hero-issue{ display:none; }
-.hero-title{ font-size:22px; font-weight:600; line-height:1.42; margin-bottom:14px; }
-.hero-passage{ font-size:14px; font-weight:600; color:rgba(255,255,255,.95); }
-.hero-meta{ font-size:13px; font-weight:500; color:rgba(255,255,255,.9); }
+.hero-title{ font-size:1.375rem; font-weight:600; line-height:1.42; margin-bottom:14px; }
+.hero-passage{ font-size:0.875rem; font-weight:600; color:rgba(255,255,255,.95); }
+.hero-meta{ font-size:0.8125rem; font-weight:500; color:rgba(255,255,255,.9); }
 .hero-meta .dot{ background:rgba(255,255,255,.6); }
-.hero-cta{ font-size:14px; margin-top:18px; }
+.hero-cta{ font-size:0.875rem; margin-top:18px; }
 
 /* ── 오늘의 묵상 5단계: 라벨 시안성 ── */
-.progress-label{ font-size:14px; }
-.progress-pct{ font-size:14px; }
+.progress-label{ font-size:0.875rem; }
+.progress-pct{ font-size:0.875rem; }
 .progress-dot{ height:7px; }
-.progress-steps{ font-size:12px; font-weight:600; color:var(--ink-2); margin-top:10px; }
+.progress-steps{ font-size:0.75rem; font-weight:600; color:var(--ink-2); margin-top:10px; }
 
 /* ── L1 화면 대표 타이틀: 22px 통일 ── */
 .word-title,.cdetail-title,.rooms-hello-title,.login-h{
-  font-size:22px; font-weight:600; line-height:1.42;
+  font-size:1.375rem; font-weight:600; line-height:1.42;
 }
 
 /* ── L2 페이지 헤더 타이틀: 19px 통일 ── */
 .pray-h-title,.column-h-title,.mypage-title,.cal-month,
 .settings-title,.rd-name,.track-greet-l .tg-name{
-  font-size:19px; font-weight:600;
+  font-size:1.1875rem; font-weight:600;
 }
 
 /* ── L3 카드 타이틀: 16px 통일 ── */
-.col-ttl,.col-mini-ttl{ font-size:16px; font-weight:600; line-height:1.45; }
+.col-ttl,.col-mini-ttl{ font-size:1rem; font-weight:600; line-height:1.45; }
 
 /* ── 섹션 라벨: 14px 통일 ── */
-.section-title,.w-section-label{ font-size:14px; font-weight:700; color:var(--ink); }
+.section-title,.w-section-label{ font-size:0.875rem; font-weight:700; color:var(--ink); }
 
 /* ── 작은/흐린 텍스트 전반 가독성 향상 ── */
 .hero-issue,.word-topic,.section-title .en,
 .w-section-en,.lectio-title-en,.amsung-ref,
 .cal-month-en,.one-thing-label,.rpost-date-ref,
-.cdetail-cat,.col-cover-cat,.col-mini-cat{ font-size:10px; letter-spacing:.18em; }
+.cdetail-cat,.col-cover-cat,.col-mini-cat{ font-size:0.625rem; letter-spacing:.18em; }
 .word-topic,.section-title .en,.w-section-en,.lectio-title-en,
 .amsung-ref,.cal-month-en,.rpost-date-ref,.col-mini-cat{ color:var(--ink-3); }
 /* 어두운 표지 위 흰색 라벨은 흰색 유지 */
 .cdetail-cat,.col-cover-cat{ color:rgba(255,255,255,.9); }
-.quick-card .ttl{ font-size:14px; }
-.quick-card .sub{ font-size:12px; color:var(--ink-3); }
+.quick-card .ttl{ font-size:0.875rem; }
+.quick-card .sub{ font-size:0.75rem; color:var(--ink-3); }
 .one-thing-label{ color:var(--ink-2); }
-.pray-h-sub,.column-h-sub,.mypage-sub,.rooms-hello-sub{ font-size:13px; color:var(--ink-2); }
+.pray-h-sub,.column-h-sub,.mypage-sub,.rooms-hello-sub{ font-size:0.8125rem; color:var(--ink-2); }
 
 /* ── 홈 홍보 배너: 7만시간 기도운동 바로가기 ── */
 .promo-banner{
@@ -2766,8 +2766,8 @@ body{ letter-spacing:-0.01em; }
 .promo-banner:active{ transform:scale(.975); }
 .promo-banner .pb-mark{ width:42px; height:42px; flex:0 0 auto; }
 .promo-banner .pb-body{ flex:1; min-width:0; }
-.promo-banner .pb-ttl{ font-size:14px; font-weight:700; letter-spacing:-0.2px; color:#6E3A26; }
-.promo-banner .pb-sub{ font-size:12px; color:#A4714F; margin-top:2px; }
+.promo-banner .pb-ttl{ font-size:0.875rem; font-weight:700; letter-spacing:-0.2px; color:#6E3A26; }
+.promo-banner .pb-sub{ font-size:0.75rem; color:#A4714F; margin-top:2px; }
 .promo-banner .pb-arrow{ width:18px; height:18px; flex:0 0 auto; opacity:.8; }
 
 /* ── 7만시간 기도운동: 특별 행사 카드(중보기도 최상단) ── */
@@ -2779,7 +2779,7 @@ body{ letter-spacing:-0.01em; }
 }
 .mv-event-badge{
   display:inline-flex; align-items:center; gap:6px;
-  font-size:11px; font-weight:700; letter-spacing:.02em;
+  font-size:0.6875rem; font-weight:700; letter-spacing:.02em;
   color:#fff; background:var(--sage-dark);
   padding:5px 12px; border-radius:999px; margin-bottom:14px;
 }
@@ -2816,10 +2816,10 @@ body{ background:var(--paper-2); }
 .med-switch{ display:flex; align-items:center; justify-content:space-between; gap:10px;
   margin:18px 16px 0; padding:10px 14px; background:var(--bg-card);
   border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow-sm); }
-.med-switch-label{ font-size:11.5px; font-weight:700; color:var(--ink-3); letter-spacing:-0.2px; flex-shrink:0; }
+.med-switch-label{ font-size:0.7188rem; font-weight:700; color:var(--ink-3); letter-spacing:-0.2px; flex-shrink:0; }
 .med-switch-seg{ display:flex; gap:4px; background:var(--bg-soft); padding:3px; border-radius:10px; }
 .mss-btn{ border:none; background:transparent; cursor:pointer; padding:6px 10px; border-radius:8px;
-  font-size:11.5px; font-weight:600; color:var(--ink-3); letter-spacing:-0.2px; transition:all .15s ease; white-space:nowrap; }
+  font-size:0.7188rem; font-weight:600; color:var(--ink-3); letter-spacing:-0.2px; transition:all .15s ease; white-space:nowrap; }
 .mss-btn.on{ background:var(--bg-card); color:var(--sage-deep); box-shadow:0 1px 3px rgba(110,90,60,0.14); }
 .lectio-wrap.simple .lectio-header{ background:linear-gradient(150deg,#CDB994 0%, #8C7350 100%); }
 
@@ -2828,9 +2828,9 @@ body{ background:var(--paper-2); }
 .purpose-row{ display:flex; gap:12px; align-items:flex-start; padding:13px 16px; border-bottom:1px solid var(--line-soft); }
 .purpose-row:last-child{ border-bottom:none; }
 .purpose-ic{ width:24px; height:24px; flex-shrink:0; border-radius:50%; background:var(--sage-pale); color:var(--sage-deep);
-  font-family:var(--en); font-weight:700; font-size:12px; display:flex; align-items:center; justify-content:center; margin-top:1px; }
-.purpose-ttl{ font-size:13.5px; font-weight:700; color:var(--ink); letter-spacing:-0.3px; }
-.purpose-sub{ font-size:12px; color:var(--ink-3); line-height:1.6; margin-top:2px; }
+  font-family:var(--en); font-weight:700; font-size:0.75rem; display:flex; align-items:center; justify-content:center; margin-top:1px; }
+.purpose-ttl{ font-size:0.8438rem; font-weight:700; color:var(--ink); letter-spacing:-0.3px; }
+.purpose-sub{ font-size:0.75rem; color:var(--ink-3); line-height:1.6; margin-top:2px; }
 
 
 
@@ -2957,29 +2957,29 @@ svg[data-lucide],.lucide{ width:18px; height:18px; stroke-width:1.8; }
 /* v0.95 — 칼럼 기고 버튼 + 검수 대기 카드 */
 .col-write-btn{ display:inline-flex; align-items:center; gap:5px; flex-shrink:0;
   background:var(--plum); color:#fff; border:none; cursor:pointer;
-  padding:8px 13px; border-radius:99px; font-size:12.5px; font-weight:700; font-family:var(--sans);
+  padding:8px 13px; border-radius:99px; font-size:0.7812rem; font-weight:700; font-family:var(--sans);
   box-shadow:0 4px 12px rgba(152,134,199,0.32); transition:transform .12s ease, filter .15s ease; }
 .col-write-btn:active{ transform:scale(0.95); filter:brightness(1.05); }
 .review-wrap{ margin:6px 16px 18px; padding:14px; background:var(--bg-card);
   border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow-sm); }
-.review-head{ display:flex; align-items:center; gap:7px; font-size:13px; font-weight:800; color:var(--ink); margin-bottom:12px; }
+.review-head{ display:flex; align-items:center; gap:7px; font-size:0.8125rem; font-weight:800; color:var(--ink); margin-bottom:12px; }
 .review-head svg{ color:var(--sage-dark); }
-.review-count{ background:var(--terra); color:#fff; font-family:var(--en); font-size:11px; font-weight:700;
+.review-count{ background:var(--terra); color:#fff; font-family:var(--en); font-size:0.6875rem; font-weight:700;
   min-width:18px; height:18px; padding:0 5px; border-radius:99px; display:inline-flex; align-items:center; justify-content:center; }
-.review-note{ font-weight:500; color:var(--ink-4); font-size:11px; margin-left:auto; }
+.review-note{ font-weight:500; color:var(--ink-4); font-size:0.6875rem; margin-left:auto; }
 .review-card{ border:1px solid var(--line); border-radius:14px; padding:13px 14px; margin-top:10px; background:var(--bg); }
 .review-card.rejected{ background:#FCF3F1; border-color:#F0D9D2; }
 .review-card-top{ display:flex; align-items:center; gap:8px; margin-bottom:7px; }
-.review-badge{ font-size:10.5px; font-weight:800; padding:3px 8px; border-radius:99px; letter-spacing:-0.2px; }
+.review-badge{ font-size:0.6562rem; font-weight:800; padding:3px 8px; border-radius:99px; letter-spacing:-0.2px; }
 .review-badge.review{ background:#FBF0E2; color:#B07A2E; }
 .review-badge.rejected{ background:#F6DED7; color:#B0432E; }
-.review-cat{ font-size:11px; color:var(--ink-3); font-weight:600; }
-.review-title{ font-size:15px; font-weight:700; color:var(--ink); letter-spacing:-0.3px; }
-.review-byline{ font-size:11.5px; color:var(--sage-deep); font-weight:600; margin-top:3px; }
-.review-excerpt{ font-size:12.5px; color:var(--ink-3); line-height:1.6; margin-top:6px; }
-.review-reason{ font-size:11.5px; color:#B0432E; background:#F9E7E2; padding:6px 9px; border-radius:8px; margin-top:8px; }
+.review-cat{ font-size:0.6875rem; color:var(--ink-3); font-weight:600; }
+.review-title{ font-size:0.9375rem; font-weight:700; color:var(--ink); letter-spacing:-0.3px; }
+.review-byline{ font-size:0.7188rem; color:var(--sage-deep); font-weight:600; margin-top:3px; }
+.review-excerpt{ font-size:0.7812rem; color:var(--ink-3); line-height:1.6; margin-top:6px; }
+.review-reason{ font-size:0.7188rem; color:#B0432E; background:#F9E7E2; padding:6px 9px; border-radius:8px; margin-top:8px; }
 .review-actions{ display:flex; gap:6px; margin-top:11px; }
-.rv-btn{ flex:1; border:none; cursor:pointer; padding:8px 0; border-radius:9px; font-size:12px; font-weight:700; font-family:var(--sans); transition:transform .1s ease; }
+.rv-btn{ flex:1; border:none; cursor:pointer; padding:8px 0; border-radius:9px; font-size:0.75rem; font-weight:700; font-family:var(--sans); transition:transform .1s ease; }
 .rv-btn:active{ transform:scale(0.96); }
 .rv-btn.approve{ background:var(--sage-dark); color:#fff; }
 .rv-btn.reject{ background:var(--terra-soft); color:#B0432E; }
@@ -3002,9 +3002,9 @@ svg[data-lucide],.lucide{ width:18px; height:18px; stroke-width:1.8; }
 .tsel-panel.active .tsel-ic{ transform:scale(1.07); }
 .tsel-ic svg{ width:21px; height:21px; }
 .tsel-info{ color:#fff; min-width:0; overflow:hidden; }
-.tsel-main{ font-weight:800; font-size:16px; letter-spacing:-.3px; white-space:nowrap; text-shadow:0 1px 6px rgba(0,0,0,.28);
+.tsel-main{ font-weight:800; font-size:1rem; letter-spacing:-.3px; white-space:nowrap; text-shadow:0 1px 6px rgba(0,0,0,.28);
   opacity:0; transform:translateX(24px); transition:opacity .55s ease .08s, transform .64s cubic-bezier(.28,1.7,.42,1) .08s; }
-.tsel-sub{ font-size:12.5px; color:rgba(255,255,255,.92); white-space:nowrap; text-shadow:0 1px 5px rgba(0,0,0,.3);
+.tsel-sub{ font-size:0.7812rem; color:rgba(255,255,255,.92); white-space:nowrap; text-shadow:0 1px 5px rgba(0,0,0,.3);
   opacity:0; transform:translateX(24px); transition:opacity .55s ease .14s, transform .64s cubic-bezier(.28,1.7,.42,1) .14s; }
 .tsel-panel.active .tsel-main, .tsel-panel.active .tsel-sub{ opacity:1; transform:translateX(0); }
 .tsel-go{ position:absolute; top:12px; right:12px; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center;
@@ -3019,12 +3019,12 @@ svg[data-lucide],.lucide{ width:18px; height:18px; stroke-width:1.8; }
 .tab-btn.active svg{ animation:tabPop .55s cubic-bezier(.34,1.56,.64,1); }
 .tab-btn.active .tab-label{ animation:tselBounce .55s cubic-bezier(.34,1.56,.64,1); }
 .tsel-badge{ position:absolute; top:10px; left:10px; z-index:3; min-width:19px; height:19px; padding:0 6px; border-radius:99px;
-  background:rgba(249,245,237,0.72); color:#5E5040; font-family:var(--en); font-size:11px; font-weight:700; line-height:1;
+  background:rgba(249,245,237,0.72); color:#5E5040; font-family:var(--en); font-size:0.6875rem; font-weight:700; line-height:1;
   display:flex; align-items:center; justify-content:center; border:1px solid rgba(255,255,255,0.55);
   -webkit-backdrop-filter:blur(7px); backdrop-filter:blur(7px);
   box-shadow:0 1px 4px rgba(60,50,40,0.16); animation:tselBadgePop .5s cubic-bezier(.34,1.5,.5,1) both; }
 @keyframes tselBadgePop{ 0%{ transform:scale(0); } 100%{ transform:scale(1); } }
-.tsel-hint{ display:flex; align-items:center; justify-content:center; gap:7px; margin:12px 0 2px; font-size:11.5px; color:var(--ink-3); font-weight:500; }
+.tsel-hint{ display:flex; align-items:center; justify-content:center; gap:7px; margin:12px 0 2px; font-size:0.7188rem; color:var(--ink-3); font-weight:500; }
 .tsel-dots{ display:flex; gap:5px; }
 .tsel-dots i{ width:6px; height:6px; border-radius:50%; background:var(--line); display:block; transition:all .3s ease; }
 .tsel-dots i.on{ width:18px; border-radius:99px; background:var(--sage); }
@@ -3094,7 +3094,7 @@ svg[data-lucide],.lucide{ width:18px; height:18px; stroke-width:1.8; }
   }
   .tabbar-brand .brand-mark{ width:30px; height:30px; }
   .tabbar-brand .tb-name{
-    font-family:var(--serif, var(--sans)); font-weight:700; font-size:17px;
+    font-family:var(--serif, var(--sans)); font-weight:700; font-size:1.0625rem;
     color:var(--ink); letter-spacing:-0.4px;
   }
   .tab-btn{
@@ -3103,7 +3103,7 @@ svg[data-lucide],.lucide{ width:18px; height:18px; stroke-width:1.8; }
     transition:background .15s, color .15s;
   }
   .tab-btn svg{ width:21px; height:21px; }
-  .tab-btn .tab-label{ font-size:14px; font-weight:600; letter-spacing:-0.2px; }
+  .tab-btn .tab-label{ font-size:0.875rem; font-weight:600; letter-spacing:-0.2px; }
   .tab-btn:hover{ background:var(--bg-soft); }
   .tab-btn.active{ background:var(--sage-pale); }
   .tab-btn.active .tab-label{ font-weight:700; }
@@ -3138,6 +3138,84 @@ svg[data-lucide],.lucide{ width:18px; height:18px; stroke-width:1.8; }
   html, body{ height:100%; height:100dvh; min-height:0; overflow:hidden; }
   .device-shell{ height:100vh; height:100dvh; min-height:0; overflow:hidden; }
 }
+</style>
+
+<!-- ============================================================================
+  v0.99 — 디자인 리파인 (CSS만, JS 무변경)
+  · D 뼈대: 익숙한 하단 탭 유지 + 아이콘·라벨·본문 글자 확대 (전 세대 배려)
+  · C 콘텐츠: 묵상·칼럼 제목 세리프(Noto Serif KR) — 에디토리얼 격조
+  · 색: 흰색+미색 베이스 위 포인트색 1개 = 미니멀 딥 그린 (다색 파스텔 → 중립화)
+============================================================================ -->
+<style id="design-v099">
+/* ── 전역 글자 스케일: 설정 '글자 크기'가 앱 전체(메뉴·카드·본문)에 적용 ──
+   모든 font-size가 rem 단위 → html 폰트 크기 하나로 전체 동시 조절.
+   기본(m)을 17px로 상향 — "글자가 작다" 피드백 반영 */
+html{ font-size:17px; }
+html.fs-s{ font-size:15px; }
+html.fs-m{ font-size:17px; }
+html.fs-l{ font-size:19px; }
+html.fs-xl{ font-size:21.5px; }
+
+/* ── 0. 팔레트: 단일 그린 포인트 ───────────────────────────── */
+:root{
+  /* 그린 — 채도 낮은 딥 세이지 (버튼·액티브·배지·강조에만) */
+  --sage:#4E7D63;
+  --sage-mid:#7FA68C;
+  --sage-soft:#DCE8DF;
+  --sage-pale:#EEF4EF;
+  --sage-dark:#3C664F;
+  --sage-deep:#2C4F3C;
+  --accent:#3C664F;
+  /* 보조 색(기도·칼럼·오늘)은 거의 무채색으로 탈색 — 포인트는 그린 하나 */
+  --terra:#A38D7C;      --terra-soft:#F3EEE8;
+  --plum:#8B8496;       --plum-soft:#EFEDF3;
+  --pray-blue:#7E93A6;  --pray-blue-soft:#EDF1F5;
+}
+.chip.terra{ color:#7C6A5A; }
+.chip.plum{ color:#615A6E; }
+
+/* 히어로(오늘의 말씀) — 딥 그린 표지 */
+.hero-card{
+  background:linear-gradient(168deg,#4E7D63 0%,#39604B 55%,#2A4A39 100%);
+  box-shadow:0 22px 52px rgba(44,79,60,.20);
+}
+/* 칼럼 대표 표지 — 그린 딥톤 */
+.col-cover{ background:linear-gradient(135deg,#3C664F 0%,#2A4A39 100%); }
+.movement-card.special{ box-shadow:0 12px 30px rgba(60,102,79,.14); }
+
+/* ── 1. D 뼈대: 익숙한 네비 + 큰 글씨 + 큰 탭 타깃 ─────────── */
+.tab-btn{ padding:8px 4px 6px; gap:4px; }
+.tab-btn svg{ width:24px; height:24px; }
+.tab-btn .tab-label{ font-size:0.75rem; font-weight:600; letter-spacing:-0.1px; }
+.btn{ min-height:48px; font-size:0.9375rem; }
+.section-title{ font-size:0.9375rem; }
+/* 묵상 본문 — 체류시간이 가장 긴 텍스트, 한 단계 크게 */
+.exposition{ font-size:1rem; line-height:1.9; }
+.maek{ font-size:0.9688rem; line-height:1.85; }
+.pray-h-sub,.column-h-sub,.mypage-sub,.rooms-hello-sub{ font-size:0.875rem; }
+.quick-card .ttl{ font-size:0.9375rem; }
+.quick-card .sub{ font-size:0.7812rem; }
+.hero-passage,.hero-meta{ font-size:0.8438rem; }
+/* 마이크로 라벨 최소 크기 상향 (세대 배려) */
+.hero-issue,.word-topic,.section-title .en,.w-section-en,.lectio-title-en,
+.amsung-ref,.cal-month-en,.one-thing-label,.rpost-date-ref,
+.cdetail-cat,.col-cover-cat,.col-mini-cat{ font-size:0.6562rem; }
+
+/* ── 2. C 콘텐츠: 세리프 제목 — 묵상·칼럼 격조 ─────────────── */
+.today-hello{ font-family:var(--serif); font-weight:600; }
+.hero-title{
+  font-family:var(--serif); font-size:1.4375rem; font-weight:600;
+  line-height:1.5; letter-spacing:-0.01em;
+}
+.word-title,.cdetail-title{
+  font-family:var(--serif); font-size:1.4375rem; font-weight:600;
+  line-height:1.55; letter-spacing:-0.015em;
+}
+.lectio-title,.hymn-title,.one-thing-title,
+.track-greet-l .tg-name{ font-family:var(--serif); }
+.col-ttl,.col-mini-ttl{ font-family:var(--serif); font-size:1.0625rem; line-height:1.5; }
+/* 본문 속 강조(이탤릭)만 그린 — '부분부분 미니멀 포인트' */
+.exposition em{ color:var(--sage-dark); }
 </style>
 </head>
 <body>
@@ -5274,8 +5352,12 @@ const BREATH_LEAF = `<svg viewBox="0 0 24 24" fill="none"><path d="M12 21 C12 13
 
 function applyFontSize(){
   const app = document.getElementById('app');
-  app.classList.remove('fs-s','fs-m','fs-l','fs-xl');
+  const sizes = ['fs-s','fs-m','fs-l','fs-xl'];
+  app.classList.remove(...sizes);
   app.classList.add('fs-'+state.fontSize);
+  /* v0.99: 전역 스케일 — html에 같은 클래스를 얹어 rem 기준을 바꾼다 */
+  document.documentElement.classList.remove(...sizes);
+  document.documentElement.classList.add('fs-'+state.fontSize);
 }
 
 /* 책자 구독자(PRO) 여부 — 4단계 잠금 등 모든 게이팅의 단일 진입점 */
@@ -5430,8 +5512,8 @@ function renderHomeBanner(){
   return `<div class="home-banner" ${hasUrl?'onclick="openHomeBanner()"':''} style="margin:14px 16px 0;padding:15px 18px;border-radius:16px;background:linear-gradient(135deg, var(--sage-pale, #E9F0EA), #F7F3E9);border:1px solid var(--line);display:flex;align-items:center;gap:12px;${hasUrl?'cursor:pointer':''}">
     <svg width="20" height="20" fill="none" stroke="var(--sage-dark, #3c5c4c)" stroke-width="1.8" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M11 5.882V19.24a1.76 1.76 0 0 1-3.417.592l-2.147-6.15M18 13a3 3 0 1 0 0-6M5.436 13.683A4.001 4.001 0 0 1 7 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 0 1-1.564-.317z"/></svg>
     <div style="flex:1;min-width:0">
-      <div style="font-weight:700;font-size:14px;letter-spacing:-0.3px;color:var(--ink)">${escapeHtml(b.title)}</div>
-      ${(b.sub||'').trim() ? '<div style="font-size:12.5px;color:var(--ink-3);margin-top:2px">'+escapeHtml(b.sub)+'</div>' : ''}
+      <div style="font-weight:700;font-size:0.875rem;letter-spacing:-0.3px;color:var(--ink)">${escapeHtml(b.title)}</div>
+      ${(b.sub||'').trim() ? '<div style="font-size:0.7812rem;color:var(--ink-3);margin-top:2px">'+escapeHtml(b.sub)+'</div>' : ''}
     </div>
     ${hasUrl ? '<svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--ink-3);flex-shrink:0"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg>' : ''}
   </div>`;
@@ -5682,7 +5764,7 @@ async function renderWord(){
         </div>
       </div>
       <div style="margin:24px 16px;padding:24px;text-align:center;background:var(--bg-card);border:1px solid var(--line);border-radius:16px">
-        <p style="color:var(--ink-3);font-size:13px;line-height:1.7">${formatKorDate(today)}의 묵상 본문이<br/>아직 등록되지 않았습니다.<br/><br/><strong style="color:var(--ink)">7월호는 1일~31일</strong><br/>시편 94~106편, 미가·나훔·하박국입니다.</p>
+        <p style="color:var(--ink-3);font-size:0.8125rem;line-height:1.7">${formatKorDate(today)}의 묵상 본문이<br/>아직 등록되지 않았습니다.<br/><br/><strong style="color:var(--ink)">7월호는 1일~31일</strong><br/>시편 94~106편, 미가·나훔·하박국입니다.</p>
         <button class="btn btn-secondary" style="margin-top:14px" onclick="goToDay('2026-07-01')">7월 1일로 이동</button>
       </div>
     `;
@@ -5718,8 +5800,8 @@ async function renderWord(){
         </div>
       </div>
       <div class="w-section" style="text-align:center">
-        <p style="font-family:var(--serif);font-size:16px;color:var(--ink);line-height:1.8;letter-spacing:-0.3px">오늘은 주일입니다.<br/>예배에서 받은 한 말씀과<br/>오늘의 통독 본문을 기록합니다.</p>
-        <p style="font-size:12px;color:var(--ink-3);margin-top:12px">${(TONGDOK[dateKey]||[]).join(' · ')}</p>
+        <p style="font-family:var(--serif);font-size:1rem;color:var(--ink);line-height:1.8;letter-spacing:-0.3px">오늘은 주일입니다.<br/>예배에서 받은 한 말씀과<br/>오늘의 통독 본문을 기록합니다.</p>
+        <p style="font-size:0.75rem;color:var(--ink-3);margin-top:12px">${(TONGDOK[dateKey]||[]).join(' · ')}</p>
       </div>
     `;
     return;
@@ -6296,22 +6378,22 @@ async function openMyRecord(){
         const mins = log[k];
         const disp = mins>=60 ? `${Math.floor(mins/60)}시간 ${mins%60? (mins%60)+'분':''}`.trim() : `${mins}분`;
         return `<div style="display:flex;justify-content:space-between;padding:11px 2px;border-bottom:1px solid var(--line-soft)">
-          <span style="font-size:13.5px;color:var(--ink-2)">${m}월 ${d}일 (${dow})</span>
-          <span style="font-size:13.5px;font-weight:600;color:var(--pray-blue)">${disp}</span>
+          <span style="font-size:0.8438rem;color:var(--ink-2)">${m}월 ${d}일 (${dow})</span>
+          <span style="font-size:0.8438rem;font-weight:600;color:var(--pray-blue)">${disp}</span>
         </div>`;
       }).join('')
-    : `<div style="padding:30px 10px;text-align:center;color:var(--ink-3);font-size:13px;line-height:1.7">아직 기록이 없어요.<br/>'기도했어요'를 눌러 첫 기록을 남겨 보세요.</div>`;
+    : `<div style="padding:30px 10px;text-align:center;color:var(--ink-3);font-size:0.8125rem;line-height:1.7">아직 기록이 없어요.<br/>'기도했어요'를 눌러 첫 기록을 남겨 보세요.</div>`;
 
   document.getElementById('modalContent').innerHTML = `
     <div style="padding:4px 2px">
-      <h3 style="font-family:var(--serif);font-size:19px;font-weight:600;margin-bottom:3px">내 기도 기록</h3>
-      <p style="font-size:12.5px;color:var(--ink-3);margin-bottom:14px">개인 기도 트래킹 · 데모</p>
+      <h3 style="font-family:var(--serif);font-size:1.1875rem;font-weight:600;margin-bottom:3px">내 기도 기록</h3>
+      <p style="font-size:0.7812rem;color:var(--ink-3);margin-bottom:14px">개인 기도 트래킹 · 데모</p>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:16px">
         <div class="tstat"><div class="tstat-lbl">이번달</div><div class="tstat-num">${fmtMin(t.monthMin)}</div></div>
         <div class="tstat"><div class="tstat-lbl">누적</div><div class="tstat-num">${fmtMin(t.totalMin)}</div></div>
         <div class="tstat"><div class="tstat-lbl">연속</div><div class="tstat-num">${t.streak}<em>일</em></div></div>
       </div>
-      <div style="font-size:12.5px;font-weight:700;color:var(--ink-3);margin-bottom:4px">최근 기록</div>
+      <div style="font-size:0.7812rem;font-weight:700;color:var(--ink-3);margin-bottom:4px">최근 기록</div>
       ${rows}
     </div>
   `;
@@ -6407,7 +6489,7 @@ async function renderRooms(){
     </div>
 
     <div class="breath">${BREATH_LEAF}</div>
-    <div style="text-align:center;font-size:12px;color:var(--ink-4);padding:0 30px 8px;line-height:1.7">
+    <div style="text-align:center;font-size:0.75rem;color:var(--ink-4);padding:0 30px 8px;line-height:1.7">
       방 안의 나눔은 <strong style="color:var(--ink-3)">방 식구들에게만</strong> 보입니다.
     </div>
   `;
@@ -6605,21 +6687,21 @@ async function openRoomInfoModal(roomId){
   const myName = (state.user && (state.user.nickname || state.user.name)) || '나';
   const members = (room.members||[]).map(m=>`
     <div style="display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px solid var(--line-soft)">
-      <div style="width:32px;height:32px;border-radius:50%;background:var(--sage-pale);color:var(--sage-deep);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">${escapeHtml(m.charAt(0))}</div>
-      <span style="font-size:13.5px;color:var(--ink)">${escapeHtml(m)}${m===myName?' <span style="color:var(--ink-4);font-size:11px">(나)</span>':''}</span>
-      ${m===room.owner ? '<span style="margin-left:auto;font-size:10.5px;font-weight:700;color:var(--sage-deep);background:var(--sage-pale);border-radius:999px;padding:3px 9px">방장</span>':''}
+      <div style="width:32px;height:32px;border-radius:50%;background:var(--sage-pale);color:var(--sage-deep);display:flex;align-items:center;justify-content:center;font-size:0.8125rem;font-weight:700">${escapeHtml(m.charAt(0))}</div>
+      <span style="font-size:0.8438rem;color:var(--ink)">${escapeHtml(m)}${m===myName?' <span style="color:var(--ink-4);font-size:0.6875rem">(나)</span>':''}</span>
+      ${m===room.owner ? '<span style="margin-left:auto;font-size:0.6562rem;font-weight:700;color:var(--sage-deep);background:var(--sage-pale);border-radius:999px;padding:3px 9px">방장</span>':''}
     </div>`).join('');
 
   document.getElementById('modalContent').innerHTML = `
     <div style="padding:4px 2px">
-      <h3 style="font-family:var(--serif);font-size:19px;font-weight:600;margin-bottom:3px">${escapeHtml(room.name)}</h3>
-      <p style="font-size:12.5px;color:var(--ink-3);margin-bottom:14px">식구 ${(room.members||[]).length}명 · ${room.type==='cell'?('내 '+(tierLabel('cell')||'목장')+' 방'):'소그룹 방'}</p>
+      <h3 style="font-family:var(--serif);font-size:1.1875rem;font-weight:600;margin-bottom:3px">${escapeHtml(room.name)}</h3>
+      <p style="font-size:0.7812rem;color:var(--ink-3);margin-bottom:14px">식구 ${(room.members||[]).length}명 · ${room.type==='cell'?('내 '+(tierLabel('cell')||'목장')+' 방'):'소그룹 방'}</p>
       <div class="invite-code-box">
         <div class="code">${escapeHtml(room.code||'')}</div>
         <div class="hint">이 초대코드를 알려 주면 누구나 함께할 수 있어요</div>
         <button class="btn btn-secondary" style="margin-top:12px" onclick="copyInviteCode('${escapeHtml(room.code||'')}')">코드 복사</button>
       </div>
-      <div style="font-size:12.5px;font-weight:700;color:var(--ink-3);margin:18px 0 4px">함께하는 식구들</div>
+      <div style="font-size:0.7812rem;font-weight:700;color:var(--ink-3);margin:18px 0 4px">함께하는 식구들</div>
       ${members}
       ${room.type==='group' ? `<button class="btn btn-block btn-secondary" style="margin-top:16px;color:#A8412F" onclick="leaveRoomNow('${room.id}')">방 나가기</button>` : ''}
     </div>
@@ -6657,7 +6739,7 @@ function openCreateRoomModal(){
       <input type="text" id="cr-desc" maxlength="40" placeholder="예) 매주 수요일 저녁, 함께 말씀을 읽어요"/>
       <label>방 아이콘</label>
       <div class="scope-pick" id="crEmojiPick">
-        ${emojis.map((e,i)=>`<label class="${i===0?'on':''}" data-emoji="${e}" style="min-width:46px;justify-content:center"><input type="radio" name="cr-emoji" value="${e}" ${i===0?'checked':''}><span class="lbl" style="font-size:18px">${e}</span></label>`).join('')}
+        ${emojis.map((e,i)=>`<label class="${i===0?'on':''}" data-emoji="${e}" style="min-width:46px;justify-content:center"><input type="radio" name="cr-emoji" value="${e}" ${i===0?'checked':''}><span class="lbl" style="font-size:1.125rem">${e}</span></label>`).join('')}
       </div>
       <button class="btn btn-block" style="margin-top:16px" onclick="submitCreateRoom()">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
@@ -6694,7 +6776,7 @@ function openJoinRoomModal(){
       <h3>초대코드로 참여</h3>
       <p class="h-sub">방장에게 받은 6자리 초대코드를 입력해 주세요.</p>
       <label>초대코드</label>
-      <input type="text" id="jr-code" maxlength="6" placeholder="예) SM2026" style="text-transform:uppercase;letter-spacing:4px;text-align:center;font-family:var(--en);font-weight:700;font-size:18px"/>
+      <input type="text" id="jr-code" maxlength="6" placeholder="예) SM2026" style="text-transform:uppercase;letter-spacing:4px;text-align:center;font-family:var(--en);font-weight:700;font-size:1.125rem"/>
       <div class="form-hint" style="margin-top:10px">
         <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
         데모 체험용 코드: <strong>SM2026</strong> (새벽을 깨우는 사람들)
@@ -6760,7 +6842,7 @@ async function openShareModal(dateKey, preRoomId){
           선택한 내용 나누기
         </button>
       ` : `
-        <div style="padding:22px 14px;text-align:center;color:var(--ink-3);font-size:13px;line-height:1.8;background:var(--bg-soft);border-radius:16px;margin-top:8px">
+        <div style="padding:22px 14px;text-align:center;color:var(--ink-3);font-size:0.8125rem;line-height:1.8;background:var(--bg-soft);border-radius:16px;margin-top:8px">
           이 날의 묵상 기록이 아직 없어요.<br/>먼저 말씀 탭에서 오늘의 묵상을 기록해 주세요.
         </div>
         <button class="btn btn-block" style="margin-top:14px" onclick="closeModal();goToDay('${dateKey}')">묵상 기록하러 가기</button>
@@ -6862,7 +6944,7 @@ async function renderPrayBody(){
   if(mainPrayers.length===0){
     document.getElementById('prayList').innerHTML = showUrgentSec ? '' : `
       <div style="margin:24px 16px;padding:32px 20px;text-align:center;color:var(--ink-3);background:var(--bg-card);border:1px solid var(--line);border-radius:16px">
-        <p style="font-size:13px;line-height:1.7">이 영역의 기도제목이 아직 없습니다.<br/>+ 버튼으로 첫 번째 기도제목을 나눠 보세요.</p>
+        <p style="font-size:0.8125rem;line-height:1.7">이 영역의 기도제목이 아직 없습니다.<br/>+ 버튼으로 첫 번째 기도제목을 나눠 보세요.</p>
       </div>
     `;
     return;
@@ -7184,7 +7266,7 @@ async function openColumnDetail(id){
     <div class="comments-wrap">
       <div class="comments-head">댓글 ${c.comments.length}</div>
       <div id="commentList">
-        ${c.comments.length===0 ? `<div style="text-align:center;padding:20px;color:var(--ink-3);font-size:12px">아직 댓글이 없습니다. 첫 댓글을 남겨 보세요.</div>` : c.comments.map(cm=>`
+        ${c.comments.length===0 ? `<div style="text-align:center;padding:20px;color:var(--ink-3);font-size:0.75rem">아직 댓글이 없습니다. 첫 댓글을 남겨 보세요.</div>` : c.comments.map(cm=>`
           <div class="comment-item">
             <div class="comment-avatar">${cm.avatar}</div>
             <div class="comment-body">
@@ -7419,8 +7501,8 @@ function openSettings(){
       </div>
 
       <div style="background:var(--bg-cream-soft);border:1px solid #EFE6D2;border-radius:12px;padding:14px;margin-bottom:14px">
-        <div style="font-size:12px;font-weight:700;color:#7D6534;margin-bottom:6px;letter-spacing:-0.2px">데모 모드 안내 <span class="demo-badge">DEMO</span></div>
-        <p style="font-size:12px;color:var(--ink-2);line-height:1.7">
+        <div style="font-size:0.75rem;font-weight:700;color:#7D6534;margin-bottom:6px;letter-spacing:-0.2px">데모 모드 안내 <span class="demo-badge">DEMO</span></div>
+        <p style="font-size:0.75rem;color:var(--ink-2);line-height:1.7">
           모든 데이터는 이 기기의 브라우저(localStorage)에 저장됩니다.<br/>
           • 묵상 기록 · 중보기도 · 좋아요 · 댓글 모두 저장/유지됨<br/>
           • 새로고침해도 데이터 유지<br/>
@@ -7558,10 +7640,10 @@ async function renderMypage(){
       <div class="mypage-header">
         <div class="mypage-title">마이 페이지</div>
       </div>
-      <div style="margin:24px 16px;padding:22px 18px;background:var(--bg-card);border:1px solid var(--line);border-radius:14px;color:var(--ink-2);font-size:13px;line-height:1.7">
+      <div style="margin:24px 16px;padding:22px 18px;background:var(--bg-card);border:1px solid var(--line);border-radius:14px;color:var(--ink-2);font-size:0.8125rem;line-height:1.7">
         화면을 불러오는 중 문제가 발생했습니다.<br/>
         <button class="btn btn-secondary" style="margin-top:10px" onclick="renderMypage()">다시 시도</button>
-        <div style="margin-top:10px;font-size:11px;color:var(--ink-3);font-family:var(--en)">${escapeHtml(String(e && e.message || e))}</div>
+        <div style="margin-top:10px;font-size:0.6875rem;color:var(--ink-3);font-family:var(--en)">${escapeHtml(String(e && e.message || e))}</div>
       </div>
     `;
   }
@@ -7677,7 +7759,7 @@ async function _renderMypageBody(view){
         <button class="section-more" onclick="switchTab('calendar')">전체 보기 →</button>
       </div>
       <div class="my-cal-mini">${miniCal}</div>
-      <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--line-soft);font-size:11px;color:var(--ink-3);display:flex;gap:12px;justify-content:center">
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--line-soft);font-size:0.6875rem;color:var(--ink-3);display:flex;gap:12px;justify-content:center">
         <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--sage);margin-right:4px;vertical-align:middle"></span>완주</span>
         <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--sage-pale);margin-right:4px;vertical-align:middle"></span>진행</span>
         <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--bg-soft);margin-right:4px;vertical-align:middle;border:1px solid var(--line)"></span>미시작</span>
@@ -7720,7 +7802,7 @@ async function _renderMypageBody(view){
       </div>
     </div>
 
-    <div style="text-align:center;padding:14px;font-family:var(--en);font-size:10.5px;color:var(--ink-4);letter-spacing:1px">
+    <div style="text-align:center;padding:14px;font-family:var(--en);font-size:0.6562rem;color:var(--ink-4);letter-spacing:1px">
       말씀함께 v0.96 · DEMO
     </div>
   `;
@@ -7947,7 +8029,7 @@ async function renderSettings(){
       </div>
     </div>
 
-    <div class="settings-section-h">개교회 설정 <span style="font-weight:500;color:var(--ink-4);font-size:11px">· 교회 색을 빼고 우리 교회에 맞게</span></div>
+    <div class="settings-section-h">개교회 설정 <span style="font-weight:500;color:var(--ink-4);font-size:0.6875rem">· 교회 색을 빼고 우리 교회에 맞게</span></div>
     <div class="menu-card">
       <div class="menu-row" style="cursor:default;align-items:flex-start">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4 8 4v14M9 21v-6h6v6"/></svg></div>
@@ -7956,7 +8038,7 @@ async function renderSettings(){
           <div class="menu-sub">앱 곳곳에 표시됩니다</div>
           <input id="churchNameInput" type="text" value="${escapeHtml(prefs.churchName||'')}" placeholder="우리 교회"
             onchange="setChurchName(this.value)"
-            style="margin-top:8px;width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:10px;font-size:13px;font-family:var(--sans);background:var(--bg-card);color:var(--ink)">
+            style="margin-top:8px;width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:10px;font-size:0.8125rem;font-family:var(--sans);background:var(--bg-card);color:var(--ink)">
         </div>
       </div>
       <div class="menu-row" style="cursor:default">
@@ -7969,14 +8051,14 @@ async function renderSettings(){
       </div>
       <div class="menu-row" style="cursor:default">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg></div>
-        <div class="menu-text"><div class="menu-ttl">언어 <span style="font-weight:500;color:var(--ink-4);font-size:11px">Language</span></div><div class="menu-sub">단일 앱 · 인앱 전환 (메뉴 즉시 적용, 콘텐츠 번역 준비 중)</div></div>
+        <div class="menu-text"><div class="menu-ttl">언어 <span style="font-weight:500;color:var(--ink-4);font-size:0.6875rem">Language</span></div><div class="menu-sub">단일 앱 · 인앱 전환 (메뉴 즉시 적용, 콘텐츠 번역 준비 중)</div></div>
         <div class="menu-right" style="gap:4px;display:flex">
           ${[['ko','한'],['en','EN'],['zh','中']].map(function(x){return '<button class="fs-btn '+((prefs.lang||'ko')===x[0]?'active':'')+'" style="width:auto;padding:0 10px;border:1px solid '+(((prefs.lang||'ko')===x[0])?'var(--sage)':'var(--line)')+'" onclick="setLang(\''+x[0]+'\');renderSettings()">'+x[1]+'</button>';}).join('')}
         </div>
       </div>
     </div>
 
-    <div class="settings-section-h">모임 단계 <span style="font-weight:500;color:var(--ink-4);font-size:11px">· 교회 규모에 맞춰 단계 구성</span></div>
+    <div class="settings-section-h">모임 단계 <span style="font-weight:500;color:var(--ink-4);font-size:0.6875rem">· 교회 규모에 맞춰 단계 구성</span></div>
     <div class="menu-card">
       <div class="menu-row" style="cursor:default;align-items:flex-start;flex-direction:column;gap:10px">
         <div style="display:flex;gap:8px;width:100%">
@@ -8001,7 +8083,7 @@ async function renderSettings(){
         </div>
       </div>
       ${getGroupTiers().map(function(t,i){
-        return '<div class="menu-row" style="cursor:default"><div class="menu-ic" style="background:var(--sage-pale);color:var(--sage-deep);font-family:var(--en);font-weight:700;font-size:12px">'+(i+1)+'</div><div class="menu-text" style="flex:1"><div class="menu-sub" style="margin-bottom:4px">'+(i===0?'가장 큰 단위':(i===getGroupTiers().length-1?'가장 작은 단위':'중간 단위'))+'</div><input type="text" value="'+escapeHtml(t.name)+'" placeholder="단계 이름" onchange="setGroupTierName('+i+',this.value);renderSettings()" style="width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:9px;font-size:13px;font-family:var(--sans);background:var(--bg-card);color:var(--ink)"></div></div>';
+        return '<div class="menu-row" style="cursor:default"><div class="menu-ic" style="background:var(--sage-pale);color:var(--sage-deep);font-family:var(--en);font-weight:700;font-size:0.75rem">'+(i+1)+'</div><div class="menu-text" style="flex:1"><div class="menu-sub" style="margin-bottom:4px">'+(i===0?'가장 큰 단위':(i===getGroupTiers().length-1?'가장 작은 단위':'중간 단위'))+'</div><input type="text" value="'+escapeHtml(t.name)+'" placeholder="단계 이름" onchange="setGroupTierName('+i+',this.value);renderSettings()" style="width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:9px;font-size:0.8125rem;font-family:var(--sans);background:var(--bg-card);color:var(--ink)"></div></div>';
       }).join('')}
       <div class="menu-row" style="cursor:default;background:var(--sage-pale)">
         <div class="menu-text"><div class="menu-sub" style="color:var(--sage-deep)">미리보기 · 기도 나눔 범위: 교회 › ${getGroupTiers().map(function(t){return escapeHtml(t.name)}).join(' › ')}</div></div>
@@ -8012,7 +8094,7 @@ async function renderSettings(){
     <div class="menu-card">
       <div class="menu-row" style="cursor:default">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg></div>
-        <div class="menu-text"><div class="menu-ttl">본문 글자 크기</div></div>
+        <div class="menu-text"><div class="menu-ttl">글자 크기 (앱 전체)</div></div>
         <div class="menu-right" style="gap:4px">
           ${['s','m','l','xl'].map(function(s){
             return '<button class="fs-btn '+s+(state.fontSize===s?' active':'')+'" style="border:1px solid '+(state.fontSize===s?'var(--sage)':'var(--line)')+'" onclick="setFontSize(\''+s+'\');renderSettings()">가</button>';
@@ -8054,7 +8136,7 @@ async function renderSettings(){
       </div>
     </div>
 
-    <div style="text-align:center;padding:18px;font-size:11px;color:var(--ink-4);line-height:1.7">
+    <div style="text-align:center;padding:18px;font-size:0.6875rem;color:var(--ink-4);line-height:1.7">
       © 2026 ${getChurchName()} · 말씀함께<br/>
       <span style="font-family:var(--en);letter-spacing:1px">DEMO MODE · localStorage</span>
     </div>
@@ -8231,7 +8313,7 @@ function init(){
         // render 자체가 실패해도 기본 UI는 보이도록 폴백
         try{
           var v = document.getElementById('view-today');
-          if(v) v.innerHTML = '<div style="padding:40px 20px;text-align:center;color:var(--ink-3)"><p style="font-size:14px;line-height:1.7">화면을 그리는 중 문제가 발생했습니다.<br/>외부 브라우저(Safari/Chrome)에서 열어 주세요.</p><button class="btn" style="margin-top:14px" onclick="openExternal()">외부 브라우저로 열기</button></div>';
+          if(v) v.innerHTML = '<div style="padding:40px 20px;text-align:center;color:var(--ink-3)"><p style="font-size:0.875rem;line-height:1.7">화면을 그리는 중 문제가 발생했습니다.<br/>외부 브라우저(Safari/Chrome)에서 열어 주세요.</p><button class="btn" style="margin-top:14px" onclick="openExternal()">외부 브라우저로 열기</button></div>';
         }catch(e2){}
       }
     }

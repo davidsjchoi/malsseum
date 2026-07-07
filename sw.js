@@ -1,5 +1,5 @@
-// 말씀함께 PWA — 앱 셸 서비스워커 (v0.99)
-const CACHE = 'msh-v0_99-1';
+// 말씀함께 PWA — 앱 셸 서비스워커 (v1.4.1)
+const CACHE = 'msh-v1_4_1-1';
 const SHELL = ['./', './index.html', './manifest.json',
   './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 

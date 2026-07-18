@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>말씀함께 · 관리자 v0.98</title>
+<title>말씀함께 · 관리자 v1.5</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -206,7 +206,7 @@ a{color:inherit}
       <div class="side-mark">함</div>
       <div>
         <div class="side-brand-text">말씀함께</div>
-        <div class="side-brand-sub en">ADMIN · v0.98</div>
+        <div class="side-brand-sub en">ADMIN · v1.5</div>
       </div>
     </div>
     <nav class="side-nav" id="sideNav"></nav>
@@ -254,7 +254,7 @@ a{color:inherit}
 
 <script>
 /* ====================================================================
-   말씀함께 관리자 v0.98 — 사용자 앱과 동일한 localStorage 키 공유
+   말씀함께 관리자 v1.5 — 사용자 앱과 동일한 localStorage 키 공유
    ==================================================================== */
 const STORAGE_KEYS = {
   user:'mh_v05_user', prefs:'mh_v05_prefs',
@@ -282,6 +282,198 @@ const GROUP_PRESETS = {
   simple1: {label:'소형교회형',     desc:'목장 단일 단계', tiers:['목장']},
 };
 const TIER_KEYS=['zone','grove','cell','team'];
+
+/* ===== 교회 조직 — 2026 당회 목장편성표 (사용자 앱과 동일 데이터) ===== */
+const ORG_DATA = {
+  // 2) 교구별 초원·목장 — 2026 당회 목장편성표 반영
+  districts: [
+    { id:'seongnam', name:'성남교구', branch:'본교회', groves:[
+      { name:'김재기 초원', cells:['김재기 목장','박정현 목장','정이레 목장','신우주 목장','김종훈 목장'] },
+      { name:'정태희 초원', cells:['이희영 목장','정태희 목장','유동근 목장','이건훈 목장','김재선 목장','장광웅 목장'] },
+      { name:'서재헌 초원', cells:['임석 목장','이상철 목장','하석병 목장','송인철 목장','조경래 목장'] },
+      { name:'김기영 초원', cells:['임용규 목장','지정호 목장','고인근 목장'] },
+      { name:'조재순 초원', cells:['오상원 목장','심경평 목장','장명수 목장','조영기 목장','이민화 목장'] },
+      { name:'임태순 초원', cells:['임태순 목장','김진 목장','이우호 목장','황순형 목장'] },
+      { name:'김선주 초원', cells:['백화영 목장','송희경 목장','박경란 목장','박은순 목장','김형순 목장','김민정 목장'] },
+      { name:'유승희 초원', cells:['탁혜경 목장','박영 목장','유승희 목장','장경란 목장','위준경 목장','송경미 목장','권민정 목장'] },
+      { name:'유정희 초원', cells:['이은숙 목장','김도은 목장','김양희 목장','노명자 목장','이춘화 목장','최영란 목장'] },
+      { name:'김혜영 초원', cells:['손현주 목장','김순복 목장','장영숙 목장','박윤신 목장','신현숙 목장'] },
+      { name:'김형옥 초원', cells:['이지영 목장','강선임 목장','신원진 목장','차지영 목장','이성래 목장','배정숙 목장'] },
+    ]},
+    { id:'seoul', name:'서울교구', branch:'본교회', groves:[
+      { name:'김우형 초원', cells:['조우석 목장','황민구 목장','김광은 목장','신종호 목장','정지인 목장'] },
+      { name:'김진호 초원', cells:['이옥근 목장','이길모 목장','박주봉 목장','박찬익 목장','정유석 목장','임완수 목장'] },
+      { name:'유종우 초원', cells:['최두성 목장','송진호 목장','문경일 목장','정동배 목장','김가순 목장'] },
+      { name:'이병학 초원', cells:['김장식 목장','변태훈 목장','민정식 목장','박윤석 목장','제갈명근 목장'] },
+      { name:'우대권 초원', cells:['김승겸 목장','나욱 목장','이재진 목장','김유기 목장','윤용석 목장'] },
+      { name:'박병각 초원', cells:['남재석 목장','고현준 목장','이현석 목장','박상현 목장','문충모 목장'] },
+      { name:'김금미 초원', cells:['구홍숙 목장','김연정 목장','김지현 목장','전수희 목장','염세희 목장','한문숙 목장'] },
+      { name:'박선영 초원', cells:['김경희 목장','김은우 목장','조윤하 목장','장은영 목장','유지영 목장','황경은 목장','양미득 목장'] },
+      { name:'이성희 초원', cells:['조은이 목장','이혜경 목장','임미숙 목장','최경미 목장','이은숙 목장','김종란 목장'] },
+      { name:'최유진 초원', cells:['정애자 목장','김순예 목장','박윤희 목장','권정희 목장','정성금 목장','최경분 목장'] },
+    ]},
+    { id:'songpa', name:'송파교구', branch:'본교회', groves:[
+      { name:'박광훈 초원', cells:['최현진 목장','장현수 목장','표정률 목장'] },
+      { name:'우병관 초원', cells:['조성백 목장','김광수 목장','김만섭 목장','김중열 목장','김주상 목장'] },
+      { name:'이완준 초원', cells:['정태화 목장','이태진 목장','이정근 목장','정지형 목장','안정원 목장'] },
+      { name:'이상원 초원', cells:['이우길 목장','남상욱 목장','조영주 목장','고재영 목장','김형일 목장'] },
+      { name:'이석명 초원', cells:['백성현 목장','송영춘 목장','박윤식 목장','김동국 목장','문현종 목장'] },
+      { name:'장현순 초원', cells:['이영주 목장','손준희 목장','강미영 목장','김상아 목장','김한나 목장','변숙희 목장','이연희 목장','강수진 목장'] },
+      { name:'박윤희 초원', cells:['오순단 목장','임수진 목장','정경화 목장','송영경 목장','박찬기 목장','소현애 목장','김영인 목장'] },
+      { name:'신영주 초원', cells:['이혜경 목장','문경혜 목장','손숙형 목장','이혜복 목장','김정자 목장','강영애 목장'] },
+    ]},
+    { id:'wirye', name:'위례교구', branch:'본교회', groves:[
+      { name:'오대현 초원', cells:['이성훈 목장','김준태 목장','김동엽 목장','장종호 목장','남병수 목장'] },
+      { name:'여인귀 초원', cells:['박종찬 목장','박석춘 목장','남장우 목장','최진호 목장','장기석 목장'] },
+      { name:'이희종 초원', cells:['유희승 목장','전대원 목장','홍보선 목장','김용진 목장','김영준 목장'] },
+      { name:'변진섭 초원', cells:['이재인 목장','김진성 목장','최광민 목장','노희준 목장','김새한 목장'] },
+      { name:'김영균 초원', cells:['전지현 목장','표성원 목장','이성주 목장','박주영 목장','안치형 목장'] },
+      { name:'윤미라 초원', cells:['홍미선 목장','윤미라 목장','조옥선 목장','박진아 목장','서미아 목장'] },
+      { name:'정연옥 초원', cells:['장옥희 목장','황선 목장','편영선 목장','장윤영 목장','김미경 목장'] },
+      { name:'김소연 초원', cells:['노현희 목장','한선례 목장','이영란 목장','신은자 목장','이은숙 목장'] },
+      { name:'박미선 초원', cells:['이지애 목장','김순정 목장','김소희 목장','전영생 목장','김혜자 목장'] },
+    ]},
+    { id:'gyeongnam', name:'경기남교구', branch:'본교회', groves:[
+      { name:'문춘식 초원', cells:['김종명 목장','오창윤 목장','박성욱 목장','정석찬 목장','신길호 목장','박은총 목장'] },
+      { name:'임석원 초원', cells:['유성일 목장','서정봉 목장','이세형 목장','김성철 목장','백승호 목장','이병석 목장'] },
+      { name:'권형석 초원', cells:['권정민 목장','김봉준 목장','김성모 목장','김봉근 목장','이병진 목장','조준묵 목장'] },
+      { name:'서정만 초원', cells:['방성원 목장','이정훈 목장','김종원 목장','김광택 목장','황우식 목장','정찬호 목장','이대재 목장'] },
+      { name:'김건영 초원', cells:['이헌수 목장','권순욱 목장','장시화 목장','이기현 목장','이관봉 목장','서경원 목장'] },
+      { name:'황수연 초원', cells:['김정석 목장','이기석 목장','김진수 목장','신동욱 목장','나유석 목장','황수연 목장'] },
+      { name:'한성호 초원', cells:['임환식 목장','남윤준 목장','김재용 목장','정치영 목장','김정택 목장','이원구 목장'] },
+      { name:'이성희 초원', cells:['고석화 목장','문진희 목장','길민선 목장','정은하 목장','박영미 목장'] },
+      { name:'손화경 초원', cells:['변현숙 목장','손정임 목장','곽희숙 목장','이기은 목장','양계정 목장','이승아 목장'] },
+      { name:'민선자 초원', cells:['원영이 목장','최성심 목장','백다정 목장','김희정 목장','김미진 목장','박율희 목장'] },
+      { name:'윤정인 초원', cells:['이진영 목장','조은순 목장','김지현 목장','심경희 목장','권은경 목장','박창순 목장'] },
+      { name:'신정용 초원', cells:['신정용 목장','손남기 목장','강성민 목장','김회모 목장'] },
+    ]},
+    { id:'gyeongbuk', name:'경기북교구', branch:'본교회', groves:[
+      { name:'박기석 초원', cells:['김학현 목장','정제균 목장','유길호 목장','이두만 목장','염민섭 목장'] },
+      { name:'최인섭 초원', cells:['정성민 목장','최종우 목장','조병준 목장','류용노 목장','이중곤 목장','이영민 목장'] },
+      { name:'장미나 초원', cells:['정현희 목장','노재숙 목장','정미영 목장','김은주 목장','이세정 목장','박세현 목장','노은정 목장'] },
+      { name:'김순건 초원', cells:['윤미순 목장','김선미 목장','이해연 목장','이주현 목장','박유진 목장'] },
+      { name:'김남수 초원', cells:['이세원 목장','김윤석 목장','이인 목장','박정기 목장','유민수 목장','김주현 목장'] },
+      { name:'김성곤 초원', cells:['박권배 목장','이민근 목장','정성한 목장','김세중 목장','김정훈 목장'] },
+      { name:'최성근 초원', cells:['이기성 목장','권남훈 목장','최중빈 목장','안병훈 목장'] },
+      { name:'김선미 초원', cells:['김미연 목장','김미숙 목장','유정은 목장','윤성희 목장','주은희 목장','홍진아 목장'] },
+    ]},
+    { id:'yoseph1', name:'요셉1교구', branch:'본교회', groves:[
+      { name:'김현승 초원', cells:['노우석 목장','김지한 목장','김동욱 목장','이영환 목장','조창연 목장','최원영 목장'] },
+      { name:'김준우 초원', cells:['김주영 목장','김연웅 목장','이경환 목장','정진 목장','안세인 목장'] },
+      { name:'조한 초원', cells:['김홍철 목장','윤영훈 목장','최준우 목장','김창성 목장','이석전 목장','안대웅 목장'] },
+      { name:'노재현 초원', cells:['김동현 목장','전동협 목장','유진우 목장','유재필 목장','장은종 목장'] },
+      { name:'한수정 초원', cells:['신만영 목장','백은주 목장','김수빈 목장','강정이 목장','이수민 목장'] },
+      { name:'강승택 초원', cells:['안규진 목장','이한재 목장','이정훈 목장','임준기 목장','강우석 목장','조득행 목장'] },
+      { name:'임서련 초원', cells:['신연형 목장','정에녹 목장','김우택 목장','최원빈 목장','김동규 목장'] },
+      { name:'조세훈 초원', cells:['조세훈 목장','김준성 목장','고정현 목장','최철 목장','박재현 목장','고홍관 목장'] },
+      { name:'이효진 초원', cells:['최영환 목장','문현기 목장','윤영관 목장','황하진 목장','성호은 목장'] },
+      { name:'박정은 초원', cells:['김주연 목장','박지숙 목장','조주희 목장','이지인 목장'] },
+    ]},
+    { id:'yoseph2', name:'요셉2교구', branch:'본교회', groves:[
+      { name:'이상호 초원', cells:['권용대 목장','곽동엽 목장','최영관 목장','문경수 목장','신민석 목장','조호연 목장'] },
+      { name:'조영광 초원', cells:['이용학 목장','이하원 목장','박연재 목장','이원택 목장','신태수 목장','박찬빈 목장','김형찬 목장'] },
+      { name:'송태진 초원', cells:['박세영 목장','이준구 목장','오석준 목장','임승준 목장','이혜섭 목장','이기성 목장'] },
+      { name:'박순호 초원', cells:['박종선 목장','오태경 목장','황준서 목장','성준규 목장','김주형 목장'] },
+      { name:'박준형 초원', cells:['류명권 목장','허성우 목장','정한별 목장','전종호 목장','김동영 목장','김선규 목장','이영호 목장','이창호 목장'] },
+      { name:'문수련 초원', cells:['김소연 목장','차진희 목장','이예은 목장'] },
+      { name:'김찬미 초원', cells:['양지유 목장','이주연 목장','신해영 목장','최윤희 목장'] },
+      { name:'이두일 초원', cells:['황원상 목장','김건하 목장','이승엽 목장','안태수 목장','김태용 목장','김대진 목장'] },
+    ]},
+    { id:'yoseph3', name:'요셉3교구', branch:'본교회', groves:[
+      { name:'전민혁 초원', cells:['김현준 목장','유경식 목장','이범우 목장','이현석 목장','이헤만 목장','최지훈 목장'] },
+      { name:'전보성 초원', cells:['권태민 목장','김완수 목장','김용민 목장','김진규 목장','임영광 목장','김태한 목장','이효관 목장','국동훈 목장'] },
+      { name:'심우송 초원', cells:['노진철 목장','이지훈 목장','정경민 목장','한승보 목장','최승찬 목장'] },
+      { name:'홍장원 초원', cells:['박철웅 목장','배정민 목장','임효택 목장','최승원 목장'] },
+      { name:'이동우 초원', cells:['김영인 목장','김한설 목장','이지환 목장','최요한 목장'] },
+      { name:'이호성 초원', cells:['배성한 목장','유동식 목장','이경욱 목장','서무궁 목장','윤영식 목장'] },
+      { name:'김유성 초원', cells:['박홍우 목장','안현철 목장','염현수 목장','전상덕 목장'] },
+      { name:'이윤정 초원', cells:['강정주 목장','김민지 목장','박연숙 목장','류미선 목장','최윤영 목장','엄재원 목장'] },
+    ]},
+    { id:'paul', name:'바울교구', branch:'본교회', groves:[
+      { name:'현성민 초원', cells:['파워','예수안에','하늘가족','아하','벧엘','샬롬의동산'] },
+      { name:'고호준 초원', cells:['위드원','선한농인','디아스포라','디사이플스','교통국','야곱의축복','믿사남'] },
+      { name:'윤영선 초원', cells:['할렐루야1','할렐루야2','할렐루야3','백향목','브릿지'] },
+      { name:'강성환 초원', cells:['북한선교1','북한선교2','응답받는 기도','호스피스속'] },
+      { name:'박주흥 초원', cells:['물댄동산','예수동행','에벤에셀','말씀지기','여디디야'] },
+      { name:'최주호 초원', cells:['어와나연합','다니엘','다음세대','유년부교사','주사랑','고등부'] },
+      { name:'조근실 초원', cells:['글로리아1','글로리아2','글로리아3','글로리아4','글로리아5','예루살렘1','예루살렘2'] },
+      { name:'류이곤 초원', cells:['그루터기','주바라기','의료선교','미용','로뎀나무'] },
+      { name:'성재우 초원', cells:['선한사랑가족1','선한사랑가족2','선한사랑가족3','예꿈남자','쉐마','하나님의 기쁨','선한사랑'] },
+    ]},
+    { id:'david', name:'다윗공동체', branch:'본교회', groves:[
+      { name:'양지완 초원', cells:['정승화 목장','정헤진 목장','박주영 목장','정명아 목장','은향지 목장','전유미 목장','고예진 목장'] },
+      { name:'신동엽 초원', cells:['이경천 목장','이다영 목장','김은성 목장','이예정 목장','배주윤 목장','한승용 목장','공준배 목장'] },
+      { name:'박문관 초원', cells:['권봉준 목장','김지연 목장','김보영 목장','김민경 목장','박가영 목장','이령임 목장','황미주 목장'] },
+      { name:'김빛나라 초원', cells:['최현석 목장','송현민 목장','장환학 목장','신동휘 목장','유미애 목장','최하나 목장','이윤재 목장'] },
+      { name:'조영학 초원', cells:['임상균 목장','고은빈 목장','김혜림 목장','박은민 목장','이승희 목장','이은혜 목장','인지혜 목장'] },
+      { name:'손현수 초원', cells:['박하늘 목장','박수정 목장','박승희 목장','김지혜 목장','황세희 목장','유은환 목장','이은임 목장'] },
+      { name:'한미리 초원', cells:['이효천 목장','한동준 목장','최귀영 목장','이지현 목장','배기주 목장','김미현 목장','이영원 목장'] },
+      { name:'김현진 초원', cells:['강민정 목장','이상훈 목장','박문수 목장','박은정 목장','박은경 목장'] },
+    ]},
+    { id:'nehemiah', name:'젊은이교회 느헤미야', branch:'젊은이교회', groves:[
+      // 목장편성표 미제공 — 추후 반영
+    ]},
+    { id:'joshua', name:'젊은이교회 여호수아', branch:'젊은이교회', groves:[
+      // 목장편성표 미제공 — 추후 반영
+    ]},
+    { id:'caleb1', name:'갈렙1교구', branch:'갈렙교회', groves:[
+      { name:'유흥수 초원', cells:['안진환 목장','우종호 목장','전병철 목장','한경수 목장'] },
+      { name:'김선중 초원', cells:['김태선 목장','박진순 목장','오세종 목장','이규선 목장','채원 목장'] },
+      { name:'송명선 초원', cells:['박두진 목장','정구영 목장','정정현 목장','홍승표 목장'] },
+      { name:'최성진 초원', cells:['최성진 목장','윤헌혁 목장','최덕규 목장','최창구 목장'] },
+      { name:'신인수 초원', cells:['신인수 목장','엄용원 목장'] },
+      { name:'강신헌 초원', cells:['김상수 목장','옥상조 목장'] },
+      { name:'강경인 초원', cells:['안의순 목장','이경희 목장','이명자 목장','이수잔 목장','임한순 목장'] },
+      { name:'민경해 초원', cells:['김유경 목장','김정희 목장','김진주 목장','김효선 목장','도경선 목장'] },
+      { name:'이종한 초원', cells:['김상현 목장','김성수 목장','위영태 목장'] },
+      { name:'유용희 초원', cells:['박상열 목장','박종대 목장','백광일 목장','이수만 목장'] },
+      { name:'한진용 초원', cells:['한진용 목장','김동기 목장','이철수 목장','이희홍 목장'] },
+      { name:'이조련 초원', cells:['이조련 목장','권영창 목장'] },
+      { name:'권명희 초원', cells:['김동수 목장','남은애 목장','남은희 목장','최금맹 목장'] },
+      { name:'기명복 초원', cells:['반영혜 목장','박숙희 목장','이무영 목장'] },
+      { name:'박민자 초원', cells:['윤삼희 목장','이경화 목장','정혜숙 목장','최영애 목장'] },
+    ]},
+    { id:'caleb2', name:'갈렙2교구', branch:'갈렙교회', groves:[
+      { name:'김준호 초원', cells:['김병렬 목장','박도창 목장','염성철 목장','윤보석 목장'] },
+      { name:'김연수 초원', cells:['이기정 목장','박승규 목장','이풍형 목장','안준홍 목장'] },
+      { name:'허무수 초원', cells:['허무수 목장','용환국 목장','윤준상 목장','진정하 목장','성낙소 목장'] },
+      { name:'명진섭 초원', cells:['명진섭 목장','김재일 목장','윤시중 목장','홍광표 목장'] },
+      { name:'엄성호 초원', cells:['김진곤 목장','이국정 목장','최형갑 목장','황서군 목장'] },
+      { name:'이설옥 초원', cells:['권임숙 목장','김한나 목장','백영금 목장','여야모 목장','윤정화 목장','이지야 목장'] },
+      { name:'박선여 초원', cells:['강태순 목장','김경희 목장','김정선 목장','남영분 목장','이재원 목장','현다경 목장'] },
+      { name:'한기숙 초원', cells:['강복순 목장','백미현 목장','소명임 목장','윤양숙 목장','이은옥 목장','이종의 목장'] },
+      { name:'이형우 초원', cells:['이형우 목장','강익형 목장','장환춘 목장'] },
+      { name:'김혜진 초원', cells:['강양일 목장','윤창균 목장','정우섭 목장','황기형 목장'] },
+      { name:'이영두 초원', cells:['김송만 목장','신장렬 목장','이율국 목장','이종성 목장','정규선 목장'] },
+      { name:'노순복 초원', cells:['신은숙 목장','양이순 목장','이상경 목장','정성복 목장'] },
+      { name:'기현숙 초원', cells:['김명숙 목장','김흥순 목장','박정례 목장','성경란 목장'] },
+      { name:'조해숙 초원', cells:['권영숙 목장','김성숙 목장','박정엽 목장','이현숙 목장'] },
+      { name:'빈태숙 초원', cells:['남궁계숙 목장','유선숙 목장','정완숙 목장','현명옥 목장'] },
+      { name:'신정숙 초원', cells:['김영숙 목장','박경남 목장','서기준 목장','이소영 목장','이순자 목장','최은묵 목장'] },
+    ]},
+    { id:'caleb3', name:'갈렙3교구', branch:'갈렙교회', groves:[
+      { name:'최상순 초원', cells:['강현배 목장','김수한 목장','안성범 목장','조철웅 목장','한윤교 목장'] },
+      { name:'조정남 초원', cells:['조정남 목장','김종필 목장','송기현 목장','정인섭 목장','최판대 목장'] },
+      { name:'이정임 초원', cells:['나윤자 목장','박의자 목장','석영희 목장','유순덕 목장'] },
+      { name:'전계화 초원', cells:['이병례 목장','전해인 목장','홍남숙 목장'] },
+      { name:'윤찬길 초원', cells:['박미숙 목장','송은희 목장','윤인규 목장'] },
+      { name:'이양순 초원', cells:['김선희 목장','김유리 목장','조정분 목장','황보건 목장'] },
+      { name:'강춘대 초원', cells:['김중석 목장','윤태영 목장','이광희 목장','전제영 목장'] },
+    ]},
+    { id:'online', name:'온라인', branch:'온라인교회', groves:[
+      { name:'유재훈 초원', cells:['김대아 목장','신동훈 목장'] },
+      { name:'안병철 초원', cells:['임상훈 목장','정희동 목장','김민준 목장'] },
+      { name:'우태희 초원', cells:['우태희 목장','한대석 목장','조수영 목장'] },
+      { name:'김충성 초원', cells:['이양희 목장','최윤민 목장','김화려 목장','윤지영 목장','정임숙 목장','박옥자 목장'] },
+      { name:'오지숙 초원', cells:['오지숙 목장','정난희 목장','허민순 목장','이수연 목장','장성자 목장','전경란 목장'] },
+      { name:'최원혜 초원', cells:['김정운 목장','이화정 목장','유현덕 목장','이정주 목장','김수진 목장','이수진 목장'] },
+      { name:'장재경 초원', cells:['김수연 목장','김윤희 목장','이수미 목장','동고은 목장'] },
+      { name:'강은진 초원', cells:['박지현 목장','주자은 목장','황선경 목장','정진희 목장','윤나리 목장','한희숙 목장'] },
+      { name:'김선희 초원', cells:['김선희 목장','고원희 목장','권소랑 목장','최민정 목장','김경훈 목장'] },
+    ]},
+  ],
+};
+
 function getGroupTiers(){
   const p=getPrefs();
   let names=Array.isArray(p.groupTiers)&&p.groupTiers.length?p.groupTiers:(GROUP_PRESETS[p.groupPreset]?GROUP_PRESETS[p.groupPreset].tiers:GROUP_PRESETS.shepherd.tiers);
@@ -314,11 +506,11 @@ const PRAYERS_SEED = [
   {id:1, scope:'church', who:'담임목사님', avatar:'담', district:null, grove:null, cell:null, committee:null, time:Date.now()-3600000*4, body:'주일예배를 통해 온 성도들에게 부어지는 은혜와, 다음 세대 부흥을 위한 한 시간 기도 운동이 모든 가정에 뿌리내리도록.', count:142, urgent:false},
   {id:2, scope:'church', who:'선교부', avatar:'선', district:null, grove:null, cell:null, committee:'선교위원회', time:Date.now()-3600000*5, body:'동남아시아 단기선교 출발 1주일 전입니다. 24명 모든 팀원의 건강과 비자, 영적 무장을 위해 함께 기도합니다.', count:89, urgent:false},
   {id:8, scope:'church', who:'다음세대국', avatar:'다', district:null, grove:null, cell:null, committee:'다음세대위원회', time:Date.now()-3600000*44, body:'여름성경학교 준비 모임이 시작됩니다. 교사들의 헌신과 아이들에게 부어질 은혜를 미리 구합니다.', count:56, urgent:false},
-  {id:3, scope:'zone', who:'송파교구 김초원', avatar:'김', district:'송파교구', grove:'생명초원', cell:null, committee:null, time:Date.now()-3600000*6, body:'다음 주 초원 모임을 새로 등록하신 두 가정과 함께 갖게 됩니다. 자연스럽게 정착하실 수 있도록.', count:34, urgent:false},
-  {id:4, scope:'zone', who:'송파교구 박초원', avatar:'박', district:'송파교구', grove:'평강초원', cell:null, committee:null, time:Date.now()-3600000*30, body:'우리 초원 권사님 자녀의 수능 100일 앞두고 영적·정신적 건강을 위해 함께 기도해 주세요.', count:28, urgent:false},
-  {id:5, scope:'cell', who:'생명목장 박목자', avatar:'박', district:'송파교구', grove:'생명초원', cell:'생명목장', committee:null, time:Date.now()-3600000*7, body:'이번 주 목장 모임에서 새가족 환영회를 합니다. 새가족 가정의 마음이 활짝 열리게 하소서.', count:18, urgent:false},
-  {id:6, scope:'urgent', who:'은혜목장 김집사', avatar:'김', district:'송파교구', grove:'생명초원', cell:'은혜목장', committee:null, time:Date.now()-3600000*3, body:'아버님께서 새벽에 응급실로 가셨습니다. 의식은 있으시지만 검사 결과를 기다리는 중입니다. 함께 기도 부탁드립니다.', count:67, urgent:true},
-  {id:7, scope:'cell', who:'사랑목장 이목자', avatar:'이', district:'경기남교구', grove:'사랑초원', cell:'사랑목장', committee:null, time:Date.now()-3600000*36, body:'우리 목장 자매님이 새 직장 면접을 앞두고 있습니다. 좋은 결과보다 하나님의 뜻 가운데 평안하길.', count:22, urgent:false},
+  {id:3, scope:'zone', who:'송파교구 김초원', avatar:'김', district:'송파교구', grove:'박광훈 초원', cell:null, committee:null, time:Date.now()-3600000*6, body:'다음 주 초원 모임을 새로 등록하신 두 가정과 함께 갖게 됩니다. 자연스럽게 정착하실 수 있도록.', count:34, urgent:false},
+  {id:4, scope:'zone', who:'송파교구 박초원', avatar:'박', district:'송파교구', grove:'우병관 초원', cell:null, committee:null, time:Date.now()-3600000*30, body:'우리 초원 권사님 자녀의 수능 100일 앞두고 영적·정신적 건강을 위해 함께 기도해 주세요.', count:28, urgent:false},
+  {id:5, scope:'cell', who:'최현진 목장 박목자', avatar:'박', district:'송파교구', grove:'박광훈 초원', cell:'최현진 목장', committee:null, time:Date.now()-3600000*7, body:'이번 주 목장 모임에서 새가족 환영회를 합니다. 새가족 가정의 마음이 활짝 열리게 하소서.', count:18, urgent:false},
+  {id:6, scope:'urgent', who:'장현수 목장 김집사', avatar:'김', district:'송파교구', grove:'박광훈 초원', cell:'장현수 목장', committee:null, time:Date.now()-3600000*3, body:'아버님께서 새벽에 응급실로 가셨습니다. 의식은 있으시지만 검사 결과를 기다리는 중입니다. 함께 기도 부탁드립니다.', count:67, urgent:true},
+  {id:7, scope:'cell', who:'김종명 목장 이목자', avatar:'이', district:'경기남교구', grove:'문춘식 초원', cell:'김종명 목장', committee:null, time:Date.now()-3600000*36, body:'우리 목장 자매님이 새 직장 면접을 앞두고 있습니다. 좋은 결과보다 하나님의 뜻 가운데 평안하길.', count:22, urgent:false},
   {id:9, scope:'committee', who:'중보기도위원회 간사', avatar:'중', district:null, grove:null, cell:null, committee:'중보기도위원회', time:Date.now()-3600000*8, body:'매월 첫째 주 중보기도 모임에 위원 모두가 한 마음으로 참여할 수 있도록.', count:14, urgent:false},
   {id:10, scope:'committee', who:'새가족위원회 위원장', avatar:'새', district:null, grove:null, cell:null, committee:'새가족위원회', time:Date.now()-3600000*48, body:'이번 달 새가족 등록자 12명이 안정적으로 양육 단계로 진입할 수 있도록 바나바와의 연결을 위해 기도해 주세요.', count:11, urgent:false},
 ];
@@ -400,9 +592,9 @@ function listPrayers(){
 function hiddenPrayers(){ return _read(STORAGE_KEYS.prayersHidden,[]); }
 function togglePrayerHidden(id){ let h=hiddenPrayers(); h=h.includes(id)?h.filter(x=>x!==id):h.concat(id); _write(STORAGE_KEYS.prayersHidden,h); }
 function togglePrayerUrgent(id){ const all=rawPrayers(); const p=all.find(x=>x.id===id); if(p){ p.urgent=!p.urgent; p._origScope=p._origScope||p.scope; p.scope=p.urgent?'urgent':(p._origScope&&p._origScope!=='urgent'?p._origScope:'church'); _write(STORAGE_KEYS.prayers,all); } }
-function addPrayer({who,scope,body,urgent,committee}){
+function addPrayer({who,scope,body,urgent,committee,district,grove,cell}){
   const all=rawPrayers(); const newId=Math.max(0,...all.map(p=>p.id||0))+1;
-  all.unshift({ id:newId, scope:urgent?'urgent':(scope||'church'), _origScope:scope||'church', who:who||'관리자', avatar:(who||'관').charAt(0), time:Date.now(), body:body||'', count:0, urgent:!!urgent, district:null, grove:null, cell:null, committee:committee||null });
+  all.unshift({ id:newId, scope:urgent?'urgent':(scope||'church'), _origScope:scope||'church', who:who||'관리자', avatar:(who||'관').charAt(0), time:Date.now(), body:body||'', count:0, urgent:!!urgent, district:district||null, grove:grove||null, cell:cell||null, committee:committee||null });
   _write(STORAGE_KEYS.prayers,all);
 }
 function urgentCount(){ return rawPrayers().filter(p=>p.urgent).length; }
@@ -456,7 +648,7 @@ function go(id){
   if(RENDERERS[id]) RENDERERS[id]();
   buildNav(); document.querySelectorAll('.side-item').forEach(e=>e.classList.toggle('active',e.dataset.view===id));
 }
-function openUserApp(){ window.open('./','_blank'); }
+function openUserApp(){ window.open('index.html','_blank'); }
 
 
 /* ── v0.98: 홈 배너 관리 (사용자 앱 첫 화면 상단 배너, 외부 안내 페이지 연결) ── */
@@ -832,11 +1024,22 @@ function openPrayerForm(){
     <div class="modal-body">
       <div class="field"><label>작성자 / 대상</label><input class="input" id="pf-who" placeholder="예) 은혜목장 김집사" value="${esc(getChurchName())} 관리자"></div>
       <div class="field"><label>공개 범위 <span class="sub">긴급은 모든 성도에게 상단 노출됩니다</span></label>
-        <select class="select" id="pf-scope">
+        <select class="select" id="pf-scope" onchange="onPrayerScopeChange()">
           <option value="church">교회 전체</option>
           ${tiers.map(t=>`<option value="${t.key}">${esc(t.name)}</option>`).join('')}
           <option value="committee">위원회</option>
         </select></div>
+      <div id="pf-target" style="display:none">
+        <div class="field"><label>교구</label>
+          <select class="select" id="pf-district" onchange="onPrayerDistrictChange()">
+            <option value="">선택해 주세요</option>
+            ${ORG_DATA.districts.map(d=>`<option value="${esc(d.name)}">${esc(d.name)}</option>`).join('')}
+          </select></div>
+        <div class="field" id="pf-grove-wrap" style="display:none"><label>초원</label>
+          <select class="select" id="pf-grove" onchange="onPrayerGroveChange()"><option value="">교구를 먼저 선택</option></select></div>
+        <div class="field" id="pf-cell-wrap" style="display:none"><label>목장</label>
+          <select class="select" id="pf-cell"><option value="">초원을 먼저 선택</option></select></div>
+      </div>
       <div class="field"><label>기도 내용</label><textarea class="textarea" id="pf-body" placeholder="긴급 기도제목을 입력하세요"></textarea></div>
       <div class="switch" style="margin-bottom:0">
         <div class="switch-info"><h4>🔥 긴급으로 등록</h4><p>상단 전용 섹션에 고정 노출됩니다</p></div>
@@ -845,11 +1048,45 @@ function openPrayerForm(){
     <div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal()">취소</button>
       <button class="btn btn-primary" onclick="submitPrayerForm()">등록</button></div>`);
 }
+function onPrayerScopeChange(){
+  const scope=document.getElementById('pf-scope').value;
+  const needTarget=['zone','grove','cell'].includes(scope);
+  document.getElementById('pf-target').style.display=needTarget?'':'none';
+  document.getElementById('pf-grove-wrap').style.display=(scope==='grove'||scope==='cell')?'':'none';
+  document.getElementById('pf-cell-wrap').style.display=(scope==='cell')?'':'none';
+}
+function onPrayerDistrictChange(){
+  const name=document.getElementById('pf-district').value;
+  const dist=ORG_DATA.districts.find(d=>d.name===name);
+  const g=document.getElementById('pf-grove'), c=document.getElementById('pf-cell');
+  if(!dist||!dist.groves.length){
+    g.innerHTML='<option value="">'+(dist?'초원 정보 준비 중':'교구를 먼저 선택')+'</option>';
+    c.innerHTML='<option value="">초원을 먼저 선택</option>';
+    return;
+  }
+  g.innerHTML='<option value="">선택해 주세요</option>'+dist.groves.map(x=>`<option value="${esc(x.name)}">${esc(x.name)}</option>`).join('');
+  c.innerHTML='<option value="">초원을 먼저 선택</option>';
+}
+function onPrayerGroveChange(){
+  const dist=ORG_DATA.districts.find(d=>d.name===document.getElementById('pf-district').value);
+  const grove=dist?dist.groves.find(x=>x.name===document.getElementById('pf-grove').value):null;
+  const c=document.getElementById('pf-cell');
+  c.innerHTML=grove?'<option value="">선택해 주세요</option>'+grove.cells.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join(''):'<option value="">초원을 먼저 선택</option>';
+}
 function submitPrayerForm(){
   const who=val('pf-who'), body=val('pf-body'); const scope=document.getElementById('pf-scope').value;
   const urgent=document.getElementById('pf-urgent').classList.contains('on');
   if(!body){ toast('기도 내용을 입력해 주세요'); return; }
-  addPrayer({who, scope, body, urgent}); closeModal(); toast(urgent?'긴급기도가 등록되었습니다 🔥':'기도제목이 등록되었습니다'); RENDERERS.prayer(); buildNav(); markActive();
+  let district=null, grove=null, cell=null;
+  if(['zone','grove','cell'].includes(scope)){
+    district=document.getElementById('pf-district').value||null;
+    if(scope==='grove'||scope==='cell') grove=document.getElementById('pf-grove').value||null;
+    if(scope==='cell') cell=document.getElementById('pf-cell').value||null;
+    if(!district){ toast('교구를 선택해 주세요'); return; }
+    if((scope==='grove'||scope==='cell')&&!grove){ toast('초원을 선택해 주세요'); return; }
+    if(scope==='cell'&&!cell){ toast('목장을 선택해 주세요'); return; }
+  }
+  addPrayer({who, scope, body, urgent, district, grove, cell}); closeModal(); toast(urgent?'긴급기도가 등록되었습니다 🔥':'기도제목이 등록되었습니다'); RENDERERS.prayer(); buildNav(); markActive();
 }
 
 /* ====================== 뷰: 목장방 ====================== */
@@ -885,7 +1122,7 @@ RENDERERS.settings=function(){
         <div class="switch-info"><h4>데모 데이터 초기화</h4><p>관리자·앱이 공유하는 모든 로컬 데이터를 삭제합니다</p></div>
         <button class="btn btn-bad" onclick="resetAll()">초기화</button></div>
     </div>
-    <div class="note" style="margin-top:18px"><b>연동 안내</b> — 이 관리자는 사용자 앱(말씀함께_데모_v0.98.html)과 동일한 브라우저 localStorage 키를 공유합니다. 같은 브라우저에서 두 파일을 열면 변경 사항이 즉시 반영됩니다.</div>`;
+    <div class="note" style="margin-top:18px"><b>연동 안내</b> — 이 관리자는 사용자 앱(index.html)과 동일한 브라우저 localStorage 키를 공유합니다. 같은 브라우저에서 두 파일을 열면 변경 사항이 즉시 반영됩니다.</div>`;
 };
 function saveChurch(v){ setPrefs({churchName:(v||'').trim()||'우리 교회'}); document.getElementById('sideChurch').textContent=getChurchName(); toast('저장되었습니다'); }
 function resetAll(){ if(confirm('정말 모든 데모 데이터를 초기화할까요?')){ Object.values(STORAGE_KEYS).forEach(k=>localStorage.removeItem(k)); toast('초기화되었습니다'); ensureSubmissionSeed(); init(); } }

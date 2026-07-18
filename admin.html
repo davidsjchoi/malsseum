@@ -511,8 +511,8 @@ const PRAYERS_SEED = [
   {id:5, scope:'cell', who:'최현진 목장 박목자', avatar:'박', district:'송파교구', grove:'박광훈 초원', cell:'최현진 목장', committee:null, time:Date.now()-3600000*7, body:'이번 주 목장 모임에서 새가족 환영회를 합니다. 새가족 가정의 마음이 활짝 열리게 하소서.', count:18, urgent:false},
   {id:6, scope:'urgent', who:'장현수 목장 김집사', avatar:'김', district:'송파교구', grove:'박광훈 초원', cell:'장현수 목장', committee:null, time:Date.now()-3600000*3, body:'아버님께서 새벽에 응급실로 가셨습니다. 의식은 있으시지만 검사 결과를 기다리는 중입니다. 함께 기도 부탁드립니다.', count:67, urgent:true},
   {id:7, scope:'cell', who:'김종명 목장 이목자', avatar:'이', district:'경기남교구', grove:'문춘식 초원', cell:'김종명 목장', committee:null, time:Date.now()-3600000*36, body:'우리 목장 자매님이 새 직장 면접을 앞두고 있습니다. 좋은 결과보다 하나님의 뜻 가운데 평안하길.', count:22, urgent:false},
-  {id:9, scope:'committee', who:'중보기도위원회 간사', avatar:'중', district:null, grove:null, cell:null, committee:'중보기도위원회', time:Date.now()-3600000*8, body:'매월 첫째 주 중보기도 모임에 위원 모두가 한 마음으로 참여할 수 있도록.', count:14, urgent:false},
-  {id:10, scope:'committee', who:'새가족위원회 위원장', avatar:'새', district:null, grove:null, cell:null, committee:'새가족위원회', time:Date.now()-3600000*48, body:'이번 달 새가족 등록자 12명이 안정적으로 양육 단계로 진입할 수 있도록 바나바와의 연결을 위해 기도해 주세요.', count:11, urgent:false},
+  {id:9, scope:'church', who:'중보기도위원회 간사', avatar:'중', district:null, grove:null, cell:null, committee:'중보기도위원회', time:Date.now()-3600000*8, body:'매월 첫째 주 중보기도 모임에 위원 모두가 한 마음으로 참여할 수 있도록.', count:14, urgent:false},
+  {id:10, scope:'church', who:'새가족위원회 위원장', avatar:'새', district:null, grove:null, cell:null, committee:'새가족위원회', time:Date.now()-3600000*48, body:'이번 달 새가족 등록자 12명이 안정적으로 양육 단계로 진입할 수 있도록 바나바와의 연결을 위해 기도해 주세요.', count:11, urgent:false},
 ];
 const SCOPE_LABEL={church:'교회 전체',zone:'교구',grove:'초원',cell:'목장',committee:'위원회',urgent:'긴급'};
 const DEVOTIONALS_SEED = {
@@ -1027,7 +1027,6 @@ function openPrayerForm(){
         <select class="select" id="pf-scope" onchange="onPrayerScopeChange()">
           <option value="church">교회 전체</option>
           ${tiers.map(t=>`<option value="${t.key}">${esc(t.name)}</option>`).join('')}
-          <option value="committee">위원회</option>
         </select></div>
       <div id="pf-target" style="display:none">
         <div class="field"><label>교구</label>

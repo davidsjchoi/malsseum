@@ -4913,9 +4913,9 @@ const PRAYERS_SEED = [
    time:Date.now()-3600000*36, body:'우리 목장 자매님이 새 직장 면접을 앞두고 있습니다. 좋은 결과보다 하나님의 뜻 가운데 평안하길.', count:22, urgent:false},
 
   // 위원회 — 위원만 볼 수 있음
-  {id:9, scope:'committee', who:'중보기도위원회 간사', avatar:'중', district:null, grove:null, cell:null, committee:'중보기도위원회',
+  {id:9, scope:'church', who:'중보기도위원회 간사', avatar:'중', district:null, grove:null, cell:null, committee:'중보기도위원회',
    time:Date.now()-3600000*8, body:'매월 첫째 주 중보기도 모임에 위원 모두가 한 마음으로 참여할 수 있도록 기도 부탁드립니다.', count:14, urgent:false},
-  {id:10, scope:'committee', who:'새가족위원회 위원장', avatar:'새', district:null, grove:null, cell:null, committee:'새가족위원회',
+  {id:10, scope:'church', who:'새가족위원회 위원장', avatar:'새', district:null, grove:null, cell:null, committee:'새가족위원회',
    time:Date.now()-3600000*48, body:'이번 달 새가족 등록자 12명이 안정적으로 양육 단계로 진입할 수 있도록 바나바와의 연결을 위해 기도해 주세요.', count:11, urgent:false},
 ];
 
@@ -5139,7 +5139,7 @@ const HOUR_PRAYER_PLAN = {
 
 // 시드 스키마/내용 호환을 위해 버전을 관리한다.
 // 변경 시 bump → 다음 로드에 migratePrayersSeed()가 누락 ID/필드를 보강.
-const PRAYERS_SEED_VERSION = 3;
+const PRAYERS_SEED_VERSION = 4;
 
 function migratePrayersSeed(){
   try{
@@ -7685,7 +7685,7 @@ async function renderPrayBody(){
         const tiers = getGroupTiers().map(t=>({k:t.key, n:t.name}));
         const chips = [{k:'all',n:'전체'},{k:'urgent',n:'긴급'},{k:'church',n:'교회'}]
           .concat(tiers)
-          .concat([{k:'committee',n:'위원회'},{k:'self',n:'내 기도제목'}]);
+          .concat([{k:'self',n:'내 기도제목'}]);
         return chips.map(c=>`<button class="scope-chip ${state.prayerScope===c.k?'active':''}" onclick="setPrayerScope('${c.k}')">${c.n}</button>`).join('');
       })()}
     </div>
@@ -7791,8 +7791,6 @@ function openWriteModal(){
   const u = state.user || {};
   const hasCell = !!u.cell;
   const hasDistrict = !!u.district;
-  const hasCommittee = (u.committees||[]).length>0;
-  const myCommittees = u.committees||[];
   const affilLine = [u.district, u.grove, u.cell].filter(Boolean).join(' · ');
 
   document.getElementById('modalContent').innerHTML = `
@@ -7811,14 +7809,7 @@ function openWriteModal(){
         <label class="on" onclick="pickScope(this,'self')"><input type="radio" name="wf-scope" value="self" checked><span class="lbl">나의 기도</span></label>
         <label class="${hasCell?'':'dim'}" onclick="${hasCell?'pickScope(this,\'cell\')':'toast(\'먼저 목장을 등록해 주세요\')'}"><input type="radio" name="wf-scope" value="cell" ${hasCell?'':'disabled'}><span class="lbl">우리 목장${hasCell?'':' · 잠김'}</span></label>
         <label class="${hasDistrict?'':'dim'}" onclick="${hasDistrict?'pickScope(this,\'zone\')':'toast(\'먼저 교구를 등록해 주세요\')'}"><input type="radio" name="wf-scope" value="zone" ${hasDistrict?'':'disabled'}><span class="lbl">우리 교구${hasDistrict?'':' · 잠김'}</span></label>
-        <label class="${hasCommittee?'':'dim'}" onclick="${hasCommittee?'pickScope(this,\'committee\')':'toast(\'먼저 위원회를 등록해 주세요\')'}"><input type="radio" name="wf-scope" value="committee" ${hasCommittee?'':'disabled'}><span class="lbl">위원회${hasCommittee?'':' · 잠김'}</span></label>
         <label onclick="pickScope(this,'church')"><input type="radio" name="wf-scope" value="church"><span class="lbl">교회 전체</span></label>
-      </div>
-      <div id="wf-committee-row" style="display:none">
-        <label>대상 위원회</label>
-        <select id="wf-committee">
-          ${myCommittees.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('')}
-        </select>
       </div>
       <label><input type="checkbox" id="wf-urgent" style="margin-right:6px;vertical-align:middle"> 긴급 기도제목 (상단 노출)</label>
       <label>기도 내용</label>
@@ -7829,12 +7820,6 @@ function openWriteModal(){
       </button>
     </div>
   `;
-  // 위원회 선택 시 위원회 드롭다운 표시
-  document.querySelectorAll('input[name="wf-scope"]').forEach(function(r){
-    r.addEventListener('change', function(){
-      document.getElementById('wf-committee-row').style.display = r.checked && r.value==='committee' ? 'block' : (document.querySelector('input[name="wf-scope"]:checked').value==='committee' ? 'block':'none');
-    });
-  });
   openModal();
 }
 
@@ -7844,13 +7829,7 @@ async function submitPrayer(){
   const urgent = document.getElementById('wf-urgent').checked;
   const body = document.getElementById('wf-body').value.trim();
   if(!body){ toast('기도 내용을 적어 주세요'); return; }
-  let committee = null;
-  if(scope==='committee'){
-    const sel = document.getElementById('wf-committee');
-    committee = sel ? sel.value : null;
-    if(!committee){ toast('위원회를 선택해 주세요'); return; }
-  }
-  await api.createPrayer({ scope, who, body, urgent, committee });
+  await api.createPrayer({ scope, who, body, urgent, committee:null });
   closeModal();
   toast('기도제목이 공유되었습니다 🙏');
   state.prayerScope = scope==='self' ? 'self' : 'all';
@@ -8620,7 +8599,6 @@ function myActivityLiked(){ toast('실제 앱에서 상세 화면으로 이동')
 function openProfileEditor(){
   const u = state.user || {};
   const districts = ORG_DATA.districts;
-  const committeeNames = ORG_DATA.committees.map(function(c){ return c.name; });
 
   // 현재 선택된 교구·초원에 따라 다음 단계 옵션 산출
   const curDistrict = districts.find(function(d){ return d.name===u.district; });
@@ -8664,14 +8642,6 @@ function openProfileEditor(){
           return '<option value="'+escapeHtml(c)+'" '+(u.cell===c?'selected':'')+'>'+escapeHtml(c)+'</option>';
         }).join('')}
       </select>
-
-      <label>위원회 <span class="lbl-aside">복수 선택 가능 · 조직도 14개 위원회</span></label>
-      <div class="committee-grid" id="pf-committees">
-        ${committeeNames.map(function(name){
-          const on = (u.committees||[]).indexOf(name)>=0;
-          return '<label class="chk-chip '+(on?'on':'')+'"><input type="checkbox" value="'+escapeHtml(name)+'" '+(on?'checked':'')+' onchange="toggleChip(this)"><span>'+escapeHtml(name)+'</span></label>';
-        }).join('')}
-      </div>
 
       <div class="form-section-title">연락 / 배송</div>
       <label>휴대전화</label>
@@ -8755,7 +8725,7 @@ async function saveProfileEditor(){
   const district = document.getElementById('pf-district').value;
   const grove    = document.getElementById('pf-grove').value;
   const cell     = document.getElementById('pf-cell').value;
-  const committees = Array.from(document.querySelectorAll('#pf-committees input[type=checkbox]:checked')).map(function(i){ return i.value; });
+  const committees = []; // v1.5: 위원회 소속 선택 제거
   const phone   = document.getElementById('pf-phone').value.trim();
   const zip     = document.getElementById('pf-zip').value.trim();
   const address = document.getElementById('pf-address').value.trim();

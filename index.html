@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="말씀함께">
-<title>말씀함께 · 데모 v1.5</title>
+<title>말씀함께 · 데모 v1.5.1</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -328,6 +328,45 @@ body{
   box-shadow:0 -8px 40px rgba(26,31,29,0.18);
 }
 .modal-overlay.show .modal-sheet{ transform:translateY(0); }
+
+/* v1.5.1 — 주소 검색 레이어 (카카오 우편번호 서비스) */
+.addr-layer{
+  position:fixed; inset:0; z-index:60;
+  background:rgba(26,31,29,0.5);
+  display:none; align-items:center; justify-content:center;
+}
+.addr-layer.show{ display:flex; }
+.addr-box{
+  width:min(480px, 94%); height:min(560px, 84vh);
+  background:var(--bg-card); border-radius:18px; overflow:hidden;
+  display:flex; flex-direction:column;
+  box-shadow:0 18px 48px rgba(26,31,29,0.3);
+}
+.addr-head{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 16px 12px; border-bottom:1px solid var(--line);
+}
+.addr-head .ttl{ font-size:0.9375rem; font-weight:700; color:var(--ink); }
+.addr-close{
+  width:30px; height:30px; border:none; border-radius:50%;
+  background:var(--bg-soft); color:var(--ink-2); font-size:1rem; line-height:1;
+  cursor:pointer;
+}
+.addr-manual{
+  height:30px; padding:0 10px; border:1px solid var(--line); border-radius:8px;
+  background:var(--bg-card); color:var(--ink-2); font-size:0.75rem; font-weight:600;
+  cursor:pointer;
+}
+.addr-note{
+  padding:10px 16px; background:#FFF7EC; color:#8A6A3B;
+  font-size:0.7188rem; line-height:1.6; border-bottom:1px solid #F2E4CE;
+}
+.addr-embed{ flex:1; min-height:0; }
+.addr-embed > div{ height:100% !important; }
+.addr-fallback{
+  padding:20px 18px; font-size:0.8125rem; color:var(--ink-2); line-height:1.7;
+}
+
 .modal-handle{
   width:36px; height:4px; background:var(--ink-4);
   border-radius:99px; margin:8px auto 4px;
@@ -1280,7 +1319,7 @@ body{
   font-size:0.75rem; font-weight:700; color:var(--ink-2);
   margin:14px 0 6px; letter-spacing:-0.2px;
 }
-.write-form textarea, .write-form input[type=text]{
+.write-form textarea, .write-form input[type=text], .write-form input[type=tel]{
   width:100%;
   background:var(--bg-soft); border:1px solid transparent;
   border-radius:10px; padding:11px 14px;
@@ -2631,7 +2670,7 @@ body{ letter-spacing:-0.01em; }
 .word-nav-btn,.rd-tool,.tg-btn,.pcard-pray-btn{ border-radius:999px; }
 .scope-chip{ padding:8px 16px; }
 .scope-chip.active{ background:var(--ink); border-color:var(--ink); }
-.lectio-input,.write-form textarea,.write-form input[type=text],
+.lectio-input,.write-form textarea,.write-form input[type=text],.write-form input[type=tel],
 .write-form select,.login-form input,.login-form select,
 .comment-form input,.rpost-comment-form input{
   border-radius:14px; background:#F3F4F3;
@@ -2869,7 +2908,7 @@ body{ background:var(--paper-2); }
 }
 
 /* ── Input: shadcn 인풋 — 보더 + 포커스 링 ── */
-.lectio-input,.write-form textarea,.write-form input[type=text],
+.lectio-input,.write-form textarea,.write-form input[type=text],.write-form input[type=tel],
 .write-form select,.login-form input,.login-form select,
 .comment-form input,.rpost-comment-form input{
   background:#fff; border:1px solid var(--border-strong);
@@ -8585,7 +8624,7 @@ async function _renderMypageBody(view){
     </div>
 
     <div style="text-align:center;padding:14px;font-family:var(--en);font-size:0.6562rem;color:var(--ink-4);letter-spacing:1px">
-      말씀함께 v1.5 · DEMO
+      말씀함께 v1.5.1 · DEMO
     </div>
   `;
 }
@@ -8648,10 +8687,10 @@ function openProfileEditor(){
       <input type="tel" id="pf-phone" placeholder="010-0000-0000" inputmode="tel" value="${escapeHtml(u.phone||'')}"/>
 
       <label>우편번호</label>
-      <input type="text" id="pf-zip" placeholder="예) 13594" inputmode="numeric" maxlength="6" value="${escapeHtml(u.zip||'')}"/>
+      <input type="text" id="pf-zip" placeholder="주소 검색 시 자동 입력" inputmode="numeric" maxlength="6" value="${escapeHtml(u.zip||'')}" onclick="openAddressSearch()" readonly/>
 
-      <label>주소 <span class="lbl-aside">말씀함께 책자 배송지</span></label>
-      <input type="text" id="pf-address" placeholder="예) 경기도 성남시 분당구 ○○로 12" value="${escapeHtml(u.address||'')}"/>
+      <label>주소 <span class="lbl-aside">말씀함께 책자 배송지 · 터치하여 검색</span></label>
+      <input type="text" id="pf-address" placeholder="도로명 또는 지번으로 검색 (예: 테헤란로 152)" value="${escapeHtml(u.address||'')}" onclick="openAddressSearch()" readonly/>
 
       <label>상세주소</label>
       <input type="text" id="pf-address-detail" placeholder="예) 101동 1004호" value="${escapeHtml(u.addressDetail||'')}"/>
@@ -8718,6 +8757,89 @@ function onGroveChange(){
   cellSel.innerHTML = '<option value="">선택해 주세요</option>' + grove.cells.map(function(c){
     return '<option value="'+escapeHtml(c)+'">'+escapeHtml(c)+'</option>';
   }).join('');
+}
+
+/* ─────────────────────────────────────────────────────────────
+   주소 검색 — 카카오(다음) 우편번호 서비스
+   · 주소/우편번호 입력란 터치 → 검색 레이어 → 도로명/지번 검색
+   · 항목 선택 시 우편번호+기본주소 자동 입력 후 상세주소로 포커스
+   · 스크립트 로드 실패(오프라인 등) 시 직접 입력으로 폴백
+   ───────────────────────────────────────────────────────────── */
+var _postcodeLoading = null;
+function _loadPostcodeScript(){
+  if(window.daum && window.daum.Postcode) return Promise.resolve();
+  if(_postcodeLoading) return _postcodeLoading;
+  _postcodeLoading = new Promise(function(resolve, reject){
+    var sc = document.createElement('script');
+    sc.src = 'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+    sc.onload = function(){ resolve(); };
+    sc.onerror = function(){ _postcodeLoading = null; reject(new Error('postcode load fail')); };
+    document.head.appendChild(sc);
+  });
+  return _postcodeLoading;
+}
+function _ensureAddrLayer(){
+  var layer = document.getElementById('addrLayer');
+  if(layer) return layer;
+  layer = document.createElement('div');
+  layer.id = 'addrLayer';
+  layer.className = 'addr-layer';
+  var fileNote = (location.protocol === 'file:')
+    ? '<div class="addr-note">로컬 파일로 열면 브라우저 보안 정책 때문에 검색 결과 선택이 전달되지 않을 수 있습니다. 배포된 앱(https)에서는 정상 동작하며, 여기서는 아래 \'직접 입력\'을 이용해 주세요.</div>'
+    : '';
+  layer.innerHTML = '<div class="addr-box">' +
+    '<div class="addr-head"><span class="ttl">주소 검색</span>' +
+    '<span style="display:flex;gap:6px;align-items:center">' +
+    '<button type="button" class="addr-manual" onclick="useManualAddress()">직접 입력</button>' +
+    '<button type="button" class="addr-close" onclick="closeAddressSearch()">×</button></span></div>' +
+    fileNote +
+    '<div class="addr-embed" id="addrEmbed"></div></div>';
+  layer.addEventListener('click', function(e){ if(e.target === layer) closeAddressSearch(); });
+  document.body.appendChild(layer);
+  return layer;
+}
+function openAddressSearch(){
+  var layer = _ensureAddrLayer();
+  var embed = document.getElementById('addrEmbed');
+  layer.classList.add('show');
+  _loadPostcodeScript().then(function(){
+    embed.innerHTML = '';
+    new daum.Postcode({
+      oncomplete: function(data){
+        var addr = data.userSelectedType === 'J' ? data.jibunAddress : data.roadAddress;
+        if(!addr) addr = data.roadAddress || data.jibunAddress || data.address || '';
+        var extra = '';
+        if(data.userSelectedType !== 'J'){
+          if(data.bname && /[동|로|가]$/.test(data.bname)) extra += data.bname;
+          if(data.buildingName && data.apartment === 'Y') extra += (extra ? ', ' : '') + data.buildingName;
+          if(extra) addr += ' (' + extra + ')';
+        }
+        var zipEl = document.getElementById('pf-zip');
+        var addrEl = document.getElementById('pf-address');
+        if(zipEl) zipEl.value = data.zonecode || '';
+        if(addrEl) addrEl.value = addr;
+        closeAddressSearch();
+        var detailEl = document.getElementById('pf-address-detail');
+        if(detailEl){ detailEl.focus(); }
+      },
+      onclose: function(state){ if(state === 'FORCE_CLOSE') closeAddressSearch(); }
+    }).embed(embed, { autoClose: false });
+  }).catch(function(){
+    // 오프라인/차단 폴백 — 직접 입력 허용
+    useManualAddress();
+    toast('주소 검색을 불러올 수 없어 직접 입력으로 전환합니다');
+  });
+}
+function useManualAddress(){
+  closeAddressSearch();
+  var zipEl = document.getElementById('pf-zip');
+  var addrEl = document.getElementById('pf-address');
+  if(zipEl){ zipEl.removeAttribute('readonly'); zipEl.removeAttribute('onclick'); zipEl.onclick=null; zipEl.placeholder = '우편번호 직접 입력'; }
+  if(addrEl){ addrEl.removeAttribute('readonly'); addrEl.removeAttribute('onclick'); addrEl.onclick=null; addrEl.placeholder = '주소를 직접 입력해 주세요'; addrEl.focus(); }
+}
+function closeAddressSearch(){
+  var layer = document.getElementById('addrLayer');
+  if(layer){ layer.classList.remove('show'); var e=document.getElementById('addrEmbed'); if(e) e.innerHTML=''; }
 }
 
 async function saveProfileEditor(){
@@ -8907,7 +9029,7 @@ async function renderSettings(){
       <div class="menu-row" style="cursor:default">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
         <div class="menu-text"><div class="menu-ttl">버전</div></div>
-        <div class="menu-right" style="font-family:var(--en);font-weight:600;color:var(--ink-3)">v1.5 · DEMO</div>
+        <div class="menu-right" style="font-family:var(--en);font-weight:600;color:var(--ink-3)">v1.5.1 · DEMO</div>
       </div>
       <div class="menu-row" onclick="toast('이용약관 (실제 앱에서 제공)')">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>

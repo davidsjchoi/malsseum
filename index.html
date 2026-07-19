@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="말씀함께">
-<title>말씀함께 · 데모 v1.6.1</title>
+<title>말씀함께 · 데모 v1.6.2</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -6077,6 +6077,7 @@ const api = {
 function getPrefsSync(){ return _read(STORAGE_KEYS.prefs, {}); }
 function getChurchName(){ const n=(getPrefsSync().churchName||'').trim(); return n || '우리 교회'; }
 function getMedMethod(){ return getPrefsSync().medMethod==='simple' ? 'simple' : 'lectio'; }
+function getColumnScope(){ return getPrefsSync().columnScope==='all' ? 'all' : 'pastor'; }   /* v1.6.2 — 관리자 제어 */
 function getLang(){ return 'ko'; }   /* v1.6 — 한국어 전용 (언어 설정 삭제) */
 // ── v0.95 : 다국어 i18n 스캐폴드 (단일 코드베이스 + 인앱 토글 권장) ──────
 // 구조 결정: 코드 1벌 + 언어 토글로 UI 현지화. 콘텐츠(묵상 본문·칼럼)는 언어별 채널.
@@ -6153,7 +6154,6 @@ const state = {
   icsExpanded:false,
   togetherTab:'pray',   // v0.6 — 함께 탭: 'pray' | 'rooms' (중보기도 우선)
   currentRoom:null,
-  columnFilter:'pastor', // v1.6 — 칼럼 기본: 우리 교회 담임목사 글만
 };
 
 let _syncTimer = null;
@@ -7975,15 +7975,6 @@ async function renderPrayBody(){
       </div>
     </div>
     <div id="urgentSection"></div>
-    <div class="scope-filter">
-      ${(function(){
-        const tiers = getGroupTiers().map(t=>({k:t.key, n:t.name}));
-        const chips = [{k:'all',n:'전체'},{k:'urgent',n:'긴급'},{k:'church',n:'교회'}]
-          .concat(tiers)
-          .concat([{k:'self',n:'내 기도제목'}]);
-        return chips.map(c=>`<button class="scope-chip ${state.prayerScope===c.k?'active':''}" onclick="setPrayerScope('${c.k}')">${c.n}</button>`).join('');
-      })()}
-    </div>
     <div id="prayList">
       ${Array.from({length:3}).map(()=>`<div style="margin:0 16px 10px"><div class="skeleton" style="height:140px;border-radius:16px"></div></div>`).join('')}
     </div>
@@ -8014,7 +8005,7 @@ async function renderPrayBody(){
     usEl.innerHTML = showUrgentSec ? `
       <div class="urgent-section">
         <div class="urgent-sec-head">
-          <span class="urgent-sec-title">🔥 긴급 기도 요청</span>
+          <span class="urgent-sec-title">🔥 긴급 화살기도 요청</span>
           <span class="urgent-sec-count">${urgentAll.length}건</span>
         </div>
         ${urgentAll.map(p=>prayerCardHTML(p)).join('')}
@@ -8236,7 +8227,6 @@ async function rejectSubmission(id){
 
 async function renderColumn(){
   const view = document.getElementById('view-column');
-  if(!state.columnFilter) state.columnFilter = 'pastor';   // v1.6 — 기본: 우리 교회 담임목사 글만
   view.innerHTML = `
     <div class="column-hero">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
@@ -8249,10 +8239,6 @@ async function renderColumn(){
           기고하기
         </button>
       </div>
-      <div class="col-filter">
-        <button class="scope-chip ${state.columnFilter!=='all'?'active':''}" onclick="state.columnFilter='pastor';renderColumn()">담임목사 글</button>
-        <button class="scope-chip ${state.columnFilter==='all'?'active':''}" onclick="state.columnFilter='all';renderColumn()">전체 글</button>
-      </div>
     </div>
     <div id="columnReview"></div>
     <div id="columnList">
@@ -8261,13 +8247,14 @@ async function renderColumn(){
   `;
   renderColumnReview();
   const colsAll = await api.listColumns();
-  const cols = state.columnFilter==='all'
+  /* v1.6.2 — 노출 범위는 관리자 설정(prefs.columnScope)으로 제어: 기본 '우리 교회 담임목사 글만' */
+  const cols = getColumnScope()==='all'
     ? colsAll
     : colsAll.filter(c=>(c.role||'담임목사')==='담임목사' && (c.church||getChurchName())===getChurchName());
   if(!cols.length){
     document.getElementById('columnList').innerHTML = `
       <div style="margin:14px 16px;padding:28px 20px;text-align:center;color:var(--ink-3);background:var(--bg-card);border:1px solid var(--line);border-radius:16px;font-size:0.8125rem;line-height:1.7">
-        표시할 칼럼이 없습니다.<br/>'전체 글'을 누르면 부목사·타교회 칼럼도 볼 수 있어요.
+        아직 게시된 담임목사님의 칼럼이 없습니다.
       </div>`;
     return;
   }
@@ -8894,7 +8881,7 @@ async function _renderMypageBody(view){
     </div>
 
     <div style="text-align:center;padding:14px;font-family:var(--en);font-size:0.6562rem;color:var(--ink-4);letter-spacing:1px">
-      말씀함께 v1.6.1 · DEMO
+      말씀함께 v1.6.2 · DEMO
     </div>
   `;
 }
@@ -9250,7 +9237,7 @@ async function renderSettings(){
       <div class="menu-row" style="cursor:default">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
         <div class="menu-text"><div class="menu-ttl">버전</div></div>
-        <div class="menu-right" style="font-family:var(--en);font-weight:600;color:var(--ink-3)">v1.6.1 · DEMO</div>
+        <div class="menu-right" style="font-family:var(--en);font-weight:600;color:var(--ink-3)">v1.6.2 · DEMO</div>
       </div>
       <div class="menu-row" onclick="toast('이용약관 (실제 앱에서 제공)')">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>

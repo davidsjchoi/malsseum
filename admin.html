@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>말씀함께 · 관리자 v1.6.1</title>
+<title>말씀함께 · 관리자 v1.6.2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -206,7 +206,7 @@ a{color:inherit}
       <div class="side-mark">함</div>
       <div>
         <div class="side-brand-text">말씀함께</div>
-        <div class="side-brand-sub en">ADMIN · v1.6.1</div>
+        <div class="side-brand-sub en">ADMIN · v1.6.2</div>
       </div>
     </div>
     <nav class="side-nav" id="sideNav"></nav>
@@ -675,7 +675,7 @@ function go(id){
   if(RENDERERS[id]) RENDERERS[id]();
   buildNav(); document.querySelectorAll('.side-item').forEach(e=>e.classList.toggle('active',e.dataset.view===id));
 }
-function openUserApp(){ window.open('말씀함께_데모_v1.6.1.html','_blank'); }
+function openUserApp(){ window.open('말씀함께_데모_v1.6.2.html','_blank'); }
 
 
 /* ── v0.98: 홈 배너 관리 (사용자 앱 첫 화면 상단 배너, 외부 안내 페이지 연결) ── */
@@ -773,10 +773,15 @@ let colTab='review';
 RENDERERS.column=function(){
   const subs=listSubmissions(); const pend=subs.filter(c=>c.status==='review'); const rej=subs.filter(c=>c.status==='rejected'); const pub=listPublished();
   let list = colTab==='review'?pend : colTab==='rejected'?rej : pub;
+  const colScope = (getPrefs().columnScope==='all') ? 'all' : 'pastor';
   document.getElementById('view-column').innerHTML=`
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
       <p class="hint">검수위원이 승인하면 전체 게시됩니다. <b>담임목사 칼럼은 승인 전에도 소속 교회 성도에게 공개</b>됩니다.</p>
       <button class="btn btn-primary btn-sm" onclick="openColumnForm()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>직접 작성</button>
+    </div>
+    <div class="switch" style="margin:12px 0 4px">
+      <div class="switch-info"><h4>앱 칼럼 노출 범위</h4><p>${colScope==='pastor'?'우리 교회 담임목사님의 글만 표시 (기본)':'승인된 전체 칼럼 표시 (부목사·타교회 포함)'}</p></div>
+      <button class="toggle ${colScope==='pastor'?'on':''}" onclick="toggleColumnScope()"></button>
     </div>
     <div class="tabs">
       ${colTabBtn('review','검수 대기',pend.length)}
@@ -1081,7 +1086,7 @@ RENDERERS.prayer=function(){
   const hidden=hiddenPrayers(); const list=listPrayers(); const uc=urgentCount();
   document.getElementById('view-prayer').innerHTML=`
     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:4px">
-      <p class="hint" style="margin:0">중보기도 제목을 관리합니다. 긴급기도는 사용자 앱 중보기도 탭 <b>상단 전용 섹션</b>에 🔥 표시로 고정 노출됩니다. 부적절한 제목은 숨길 수 있습니다.</p>
+      <p class="hint" style="margin:0">중보기도 제목을 관리합니다. 긴급 화살기도는 사용자 앱 중보기도 탭 <b>'긴급 화살기도 요청' 섹션</b>에 🔥 표시로 고정 노출됩니다. 부적절한 제목은 숨길 수 있습니다.</p>
       <button class="btn btn-primary btn-sm" style="flex-shrink:0;background:var(--terra);border-color:var(--terra)" onclick="openPrayerForm()">🔥 긴급기도 등록</button>
     </div>
     <div class="stat-grid" style="margin:16px 0 4px">
@@ -1095,7 +1100,7 @@ RENDERERS.prayer=function(){
         <div class="lrow-av" style="${p.urgent?'background:var(--terra-soft);color:#A45A3F':''}">${esc(p.avatar)}</div>
         <div class="lrow-main">
           <div style="display:flex;align-items:center;gap:7px">
-            <span class="scope-pill ${p.scope}">${p.urgent?'🔥 긴급':(SCOPE_LABEL[p.scope]||p.scope)}</span>
+            ${p.urgent?'<span class="scope-pill urgent">🔥 긴급</span>':''}
             <span class="lrow-title">${esc(p.who)}</span></div>
           <div class="lrow-sub">${esc(p.body)}</div></div>
         <div class="lrow-actions">
@@ -1104,6 +1109,12 @@ RENDERERS.prayer=function(){
         </div>
       </div>`; }).join('')}`;
 };
+function toggleColumnScope(){
+  const cur=(getPrefs().columnScope==='all')?'all':'pastor';
+  setPrefs({columnScope: cur==='pastor'?'all':'pastor'});
+  toast(cur==='pastor' ? '전체 칼럼 표시로 전환했습니다' : '담임목사 글만 표시로 전환했습니다 (기본)');
+  RENDERERS.column();
+}
 function doToggleP(id){ togglePrayerHidden(id); toast('변경되었습니다'); RENDERERS.prayer(); }
 function doToggleUrgent(id){ togglePrayerUrgent(id); toast('긴급 상태가 변경되었습니다'); RENDERERS.prayer(); buildNav(); markActive(); }
 function openPrayerForm(){
@@ -1111,23 +1122,7 @@ function openPrayerForm(){
   openModal(`<div class="modal-head"><h3>🔥 긴급기도 등록</h3><button class="modal-x" onclick="closeModal()">×</button></div>
     <div class="modal-body">
       <div class="field"><label>작성자 / 대상</label><input class="input" id="pf-who" placeholder="예) 은혜목장 김집사" value="${esc(getChurchName())} 관리자"></div>
-      <div class="field"><label>공개 범위 <span class="sub">긴급은 모든 성도에게 상단 노출됩니다</span></label>
-        <select class="select" id="pf-scope" onchange="onPrayerScopeChange()">
-          <option value="church">교회 전체</option>
-          ${tiers.map(t=>`<option value="${t.key}">${esc(t.name)}</option>`).join('')}
-        </select></div>
-      <div id="pf-target" style="display:none">
-        <div class="field"><label>교구</label>
-          <select class="select" id="pf-district" onchange="onPrayerDistrictChange()">
-            <option value="">선택해 주세요</option>
-            ${ORG_DATA.districts.map(d=>`<option value="${esc(d.name)}">${esc(d.name)}</option>`).join('')}
-          </select></div>
-        <div class="field" id="pf-grove-wrap" style="display:none"><label>초원</label>
-          <select class="select" id="pf-grove" onchange="onPrayerGroveChange()"><option value="">교구를 먼저 선택</option></select></div>
-        <div class="field" id="pf-cell-wrap" style="display:none"><label>목장</label>
-          <select class="select" id="pf-cell"><option value="">초원을 먼저 선택</option></select></div>
-      </div>
-      <div class="field"><label>기도 내용</label><textarea class="textarea" id="pf-body" placeholder="긴급 기도제목을 입력하세요"></textarea></div>
+      <div class="field"><label>기도 내용 <span class="sub">교회 전체에 공개되며, 긴급은 상단에 고정 노출됩니다</span></label><textarea class="textarea" id="pf-body" placeholder="긴급 기도제목을 입력하세요"></textarea></div>
       <div class="switch" style="margin-bottom:0">
         <div class="switch-info"><h4>🔥 긴급으로 등록</h4><p>상단 전용 섹션에 고정 노출됩니다</p></div>
         <button class="toggle on" id="pf-urgent" onclick="this.classList.toggle('on')"></button></div>
@@ -1161,19 +1156,11 @@ function onPrayerGroveChange(){
   c.innerHTML=grove?'<option value="">선택해 주세요</option>'+grove.cells.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join(''):'<option value="">초원을 먼저 선택</option>';
 }
 function submitPrayerForm(){
-  const who=val('pf-who'), body=val('pf-body'); const scope=document.getElementById('pf-scope').value;
+  const who=val('pf-who'), body=val('pf-body');
   const urgent=document.getElementById('pf-urgent').classList.contains('on');
   if(!body){ toast('기도 내용을 입력해 주세요'); return; }
-  let district=null, grove=null, cell=null;
-  if(['zone','grove','cell'].includes(scope)){
-    district=document.getElementById('pf-district').value||null;
-    if(scope==='grove'||scope==='cell') grove=document.getElementById('pf-grove').value||null;
-    if(scope==='cell') cell=document.getElementById('pf-cell').value||null;
-    if(!district){ toast('교구를 선택해 주세요'); return; }
-    if((scope==='grove'||scope==='cell')&&!grove){ toast('초원을 선택해 주세요'); return; }
-    if(scope==='cell'&&!cell){ toast('목장을 선택해 주세요'); return; }
-  }
-  addPrayer({who, scope, body, urgent, district, grove, cell}); closeModal(); toast(urgent?'긴급기도가 등록되었습니다 🔥':'기도제목이 등록되었습니다'); RENDERERS.prayer(); buildNav(); markActive();
+  /* v1.6.2 — 카테고리 정리: 관리자 등록은 항상 교회 전체 공개 */
+  addPrayer({who, scope:'church', body, urgent, district:null, grove:null, cell:null}); closeModal(); toast(urgent?'긴급기도가 등록되었습니다 🔥':'기도제목이 등록되었습니다'); RENDERERS.prayer(); buildNav(); markActive();
 }
 
 /* ====================== 뷰: 목장방 ====================== */
@@ -1209,7 +1196,7 @@ RENDERERS.settings=function(){
         <div class="switch-info"><h4>데모 데이터 초기화</h4><p>관리자·앱이 공유하는 모든 로컬 데이터를 삭제합니다</p></div>
         <button class="btn btn-bad" onclick="resetAll()">초기화</button></div>
     </div>
-    <div class="note" style="margin-top:18px"><b>연동 안내</b> — 이 관리자는 사용자 앱(말씀함께_데모_v1.6.1.html)과 동일한 브라우저 localStorage 키를 공유합니다. 같은 브라우저에서 두 파일을 열면 변경 사항이 즉시 반영됩니다.</div>`;
+    <div class="note" style="margin-top:18px"><b>연동 안내</b> — 이 관리자는 사용자 앱(말씀함께_데모_v1.6.2.html)과 동일한 브라우저 localStorage 키를 공유합니다. 같은 브라우저에서 두 파일을 열면 변경 사항이 즉시 반영됩니다.</div>`;
 };
 function saveChurch(v){ setPrefs({churchName:(v||'').trim()||'우리 교회'}); document.getElementById('sideChurch').textContent=getChurchName(); toast('저장되었습니다'); }
 function resetAll(){ if(confirm('정말 모든 데모 데이터를 초기화할까요?')){ Object.values(STORAGE_KEYS).forEach(k=>localStorage.removeItem(k)); toast('초기화되었습니다'); ensureSubmissionSeed(); init(); } }

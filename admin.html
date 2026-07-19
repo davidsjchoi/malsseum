@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>말씀함께 · 관리자 v1.5.2</title>
+<title>말씀함께 · 관리자 v1.6</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -206,7 +206,7 @@ a{color:inherit}
       <div class="side-mark">함</div>
       <div>
         <div class="side-brand-text">말씀함께</div>
-        <div class="side-brand-sub en">ADMIN · v1.5.2</div>
+        <div class="side-brand-sub en">ADMIN · v1.6</div>
       </div>
     </div>
     <nav class="side-nav" id="sideNav"></nav>
@@ -672,7 +672,7 @@ function go(id){
   if(RENDERERS[id]) RENDERERS[id]();
   buildNav(); document.querySelectorAll('.side-item').forEach(e=>e.classList.toggle('active',e.dataset.view===id));
 }
-function openUserApp(){ window.open('index.html','_blank'); }
+function openUserApp(){ window.open('말씀함께_데모_v1.6.html','_blank'); }
 
 
 /* ── v0.98: 홈 배너 관리 (사용자 앱 첫 화면 상단 배너, 외부 안내 페이지 연결) ── */
@@ -728,7 +728,7 @@ RENDERERS.dashboard=function(){
   const roomCnt=listRooms().length;
   const u=getUser(); const p=getPrefs();
   const tiers=getGroupTiers().map(t=>t.name).join(' · ');
-  const method=p.medMethod==='simple'?'심플 묵상':'렉시오 디비나';
+  const method=p.medMethod==='simple'?'간편 묵상':'렉시오 디비나';
   document.getElementById('view-dashboard').innerHTML=`
     <div class="stat-grid">
       ${statCard('warn','검수 대기 칼럼',pendCnt,'건','M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6')}
@@ -882,28 +882,29 @@ RENDERERS.method=function(){
     <div class="method-grid">
       <div class="method-card ${m==='lectio'?'on':''}" onclick="setMethod('lectio')">
         <h4>렉시오 디비나 ${m==='lectio'?'<span class="badge published" style="margin-left:auto">적용 중</span>':''}</h4>
-        <div class="method-en">Lectio Divina · 4단계 깊은 묵상</div>
+        <div class="method-en">Lectio Divina · 5단계 깊은 묵상</div>
         <div class="method-steps">
-          <div class="method-step"><span class="n en">1</span> 읽기 (Lectio) — 본문을 천천히 읽기</div>
-          <div class="method-step"><span class="n en">2</span> 묵상 (Meditatio) — 마음에 닿는 구절 새기기</div>
-          <div class="method-step"><span class="n en">3</span> 기도 (Oratio) — 말씀으로 기도하기</div>
-          <div class="method-step"><span class="n en">4</span> 관상 (Contemplatio) — 머무르기 <span class="muted">· PRO</span></div>
+          <div class="method-step"><span class="n en">1</span> 말씀읽기 (Lectio)</div>
+          <div class="method-step"><span class="n en">2</span> 말씀먹기 (Meditatio)</div>
+          <div class="method-step"><span class="n en">3</span> 말씀기도 (Oratio)</div>
+          <div class="method-step"><span class="n en">4</span> 말씀살기 (Contemplatio)</div>
+          <div class="method-step"><span class="n en">5</span> 말씀기록 (Scribo) <span class="muted">· 구독자 전용</span></div>
         </div>
       </div>
       <div class="method-card ${m==='simple'?'on':''}" onclick="setMethod('simple')">
-        <h4>심플 묵상 ${m==='simple'?'<span class="badge published" style="margin-left:auto">적용 중</span>':''}</h4>
+        <h4>간편 묵상 ${m==='simple'?'<span class="badge published" style="margin-left:auto">적용 중</span>':''}</h4>
         <div class="method-en">Simple Guide · 부담 없는 3단계</div>
         <div class="method-steps">
-          <div class="method-step"><span class="n en">1</span> 본문 읽기</div>
-          <div class="method-step"><span class="n en">2</span> 한 구절 붙잡기</div>
-          <div class="method-step"><span class="n en">3</span> 짧은 적용 기도</div>
+          <div class="method-step"><span class="n en">1</span> 말씀먹기</div>
+          <div class="method-step"><span class="n en">2</span> 말씀기도</div>
+          <div class="method-step"><span class="n en">3</span> 말씀살기</div>
           <div class="method-step muted" style="margin-top:6px">묵상이 처음인 새가족·다음세대에게 권장</div>
         </div>
       </div>
     </div>
     <div class="note" style="margin-top:18px"><b>정책 안내</b> — 묵상 본문(말씀·해설·기도제목)은 두 방식이 공유합니다. 방식은 \'어떻게 안내하느냐\'의 차이이며, 책자 구독자에게는 관상 단계 등 PRO 깊은 묵상이 함께 열립니다.</div>`;
 };
-function setMethod(m){ setPrefs({medMethod:m==='simple'?'simple':'lectio'}); toast((m==='simple'?'심플 묵상':'렉시오 디비나')+' 적용'); RENDERERS.method(); }
+function setMethod(m){ setPrefs({medMethod:m==='simple'?'simple':'lectio'}); toast((m==='simple'?'간편 묵상':'렉시오 디비나')+' 적용'); RENDERERS.method(); }
 
 /* ====================== 뷰: 구독 · PRO ====================== */
 RENDERERS.subscription=function(){
@@ -999,7 +1000,8 @@ function openDevForm(key){
       <div class="field"><label>본문 범위</label><input class="input" id="dv-range" value="${esc(d.range||'')}"></div>
       <div class="field"><label>소제목</label><input class="input" id="dv-sub" value="${esc(d.subtitle||'')}"></div>
       <div class="field"><label>오늘의 주제</label><input class="input" id="dv-theme" value="${esc(d.theme||'')}"></div>
-      <div class="field"><label>찬송</label><input class="input" id="dv-hymn" value="${esc(d.hymn||'')}"></div>
+      <div class="field"><label>찬양 (찬송가 · 복음성가)</label><input class="input" id="dv-hymn" value="${esc(d.hymn||'')}"></div>
+      <div class="field"><label>찬양 가사 <span style="font-weight:500;color:var(--ink-3)">· 입력하면 앱 '오늘의 찬양'에 가사가 표시됩니다</span></label><textarea class="textarea" id="dv-lyrics" style="min-height:110px" placeholder="교회가 사용권을 가진 가사를 붙여넣으세요 (줄바꿈 유지)">${esc(d.hymnLyrics||'')}</textarea></div>
       <div class="field"><label>묵상 질문</label><textarea class="textarea" id="dv-q" style="min-height:80px">${esc(d.question||'')}</textarea></div>
     </div>
     <div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal()">취소</button>
@@ -1007,7 +1009,7 @@ function openDevForm(key){
 }
 function saveDev(key){
   const custom=_read(STORAGE_KEYS.devotionalsCustom,{})||{};
-  custom[key]=Object.assign({},custom[key]||{},{range:val('dv-range'),subtitle:val('dv-sub'),theme:val('dv-theme'),hymn:val('dv-hymn'),question:val('dv-q')});
+  custom[key]=Object.assign({},custom[key]||{},{range:val('dv-range'),subtitle:val('dv-sub'),theme:val('dv-theme'),hymn:val('dv-hymn'),hymnLyrics:document.getElementById('dv-lyrics').value.trim(),question:val('dv-q')});
   _write(STORAGE_KEYS.devotionalsCustom,custom); closeModal(); toast('저장되었습니다'); RENDERERS.devotional();
 }
 function val(id){ return document.getElementById(id).value.trim(); }
@@ -1145,7 +1147,7 @@ RENDERERS.settings=function(){
         <div class="switch-info"><h4>데모 데이터 초기화</h4><p>관리자·앱이 공유하는 모든 로컬 데이터를 삭제합니다</p></div>
         <button class="btn btn-bad" onclick="resetAll()">초기화</button></div>
     </div>
-    <div class="note" style="margin-top:18px"><b>연동 안내</b> — 이 관리자는 사용자 앱(index.html)과 동일한 브라우저 localStorage 키를 공유합니다. 같은 브라우저에서 두 파일을 열면 변경 사항이 즉시 반영됩니다.</div>`;
+    <div class="note" style="margin-top:18px"><b>연동 안내</b> — 이 관리자는 사용자 앱(말씀함께_데모_v1.6.html)과 동일한 브라우저 localStorage 키를 공유합니다. 같은 브라우저에서 두 파일을 열면 변경 사항이 즉시 반영됩니다.</div>`;
 };
 function saveChurch(v){ setPrefs({churchName:(v||'').trim()||'우리 교회'}); document.getElementById('sideChurch').textContent=getChurchName(); toast('저장되었습니다'); }
 function resetAll(){ if(confirm('정말 모든 데모 데이터를 초기화할까요?')){ Object.values(STORAGE_KEYS).forEach(k=>localStorage.removeItem(k)); toast('초기화되었습니다'); ensureSubmissionSeed(); init(); } }

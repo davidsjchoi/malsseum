@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="말씀함께">
-<title>말씀함께 · 데모 v1.5.2</title>
+<title>말씀함께 · 데모 v1.6</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -149,6 +149,13 @@ body{
 .brand-mark{
   width:26px; height:26px; flex-shrink:0;
 }
+/* v1.6 — 가로형 폰트로고 (말씀함께가로로고.pdf 추출) */
+.logo-h{
+  display:inline-block; width:82px; height:25px; flex-shrink:0;
+  background-image:url(data:image/png;base64,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);
+  background-size:contain; background-position:left center; background-repeat:no-repeat;
+}
+.tabbar-brand .logo-h{ width:92px; height:28px; }
 .brand-name{
   font-family:var(--sans); font-weight:700; font-size:0.875rem;
   color:var(--ink); letter-spacing:-0.3px;
@@ -3624,6 +3631,8 @@ body,button,input,textarea,select{ font-family:var(--font-body); }
 }
 .passage-text{ line-height:2.05; letter-spacing:0.005em; }
 .amsung-text{ font-weight:700; }
+/* v1.6 — 오늘 탭 말씀 제목·말씀 탭 제목: 말씀암송(따옴표 안) 서체와 동일하게 */
+.today-hello,.word-title{ font-family:var(--font-scripture); font-weight:700; letter-spacing:-0.02em; }
 /* 절 번호는 기존 Inter 유지 (v1.1 레이어의 !important가 우선) */
 </style>
 
@@ -3650,6 +3659,36 @@ body,button,input,textarea,select{ font-family:var(--font-body); }
 }
 .today-hello{ white-space:normal; font-size:1.25rem; line-height:1.45; word-break:keep-all; }
 </style>
+
+<!-- ============================================================================
+  v1.6 — 신규 요소 스타일
+  · 찬양 텍스트(찬송가/복음성가/가사) · 나눔 공개/비공개 · 임시저장/저장
+  · 비공개 나눔 표시 · 칼럼 필터
+============================================================================ -->
+<style id="v16-additions">
+/* 찬양 — 재생 버튼 제거, 텍스트 표기 */
+.hymn-line{ display:flex; align-items:baseline; gap:9px; margin-top:6px; }
+.hymn-line:first-of-type{ margin-top:2px; }
+.hymn-k{ flex:0 0 auto; font-size:0.6875rem; font-weight:700; color:var(--sage-deep);
+  background:var(--sage-pale); border-radius:99px; padding:3px 10px; letter-spacing:-0.2px; }
+.hymn-v{ font-size:0.9062rem; font-weight:600; color:var(--ink); letter-spacing:-0.3px; line-height:1.5; }
+.hymn-lyrics{ margin-top:12px; padding:13px 15px; background:var(--bg-soft); border-radius:12px;
+  font-family:var(--font-scripture); font-size:0.9062rem; line-height:1.95; color:var(--ink-2); }
+/* 나눔 설정 (공개/비공개) */
+.share-privacy{ margin:14px 16px 0; padding:14px 16px; background:var(--bg-card);
+  border:1px solid var(--line); border-radius:16px; }
+.share-privacy .sp-head{ font-size:0.75rem; font-weight:800; color:var(--ink-3); margin-bottom:9px; letter-spacing:-0.2px; }
+.share-privacy .sp-opt{ display:flex; align-items:flex-start; gap:9px; padding:7px 2px; cursor:pointer;
+  font-size:0.8125rem; color:var(--ink-2); line-height:1.55; }
+.share-privacy .sp-opt input{ margin-top:3px; accent-color:var(--sage-dark); }
+.share-privacy .sp-opt strong{ color:var(--ink); }
+.save-hint{ margin:10px 20px 0; text-align:center; font-size:0.7188rem; color:var(--ink-4); line-height:1.7; }
+/* 비공개 저장 — 방에는 기록 표시만 */
+.rpost-private{ margin-top:10px; padding:11px 13px; background:var(--bg-soft); border:1px dashed var(--line);
+  border-radius:12px; font-size:0.7812rem; color:var(--ink-3); }
+/* 칼럼 필터 칩 */
+.col-filter{ display:flex; gap:6px; margin-top:14px; }
+</style>
 </head>
 <body>
 <div class="device-shell" id="app">
@@ -3664,8 +3703,7 @@ body,button,input,textarea,select{ font-family:var(--font-body); }
   <!-- 상단바 -->
   <div class="appbar">
     <button class="brand" onclick="goHome()" title="홈으로" aria-label="홈으로 이동">
-      <span class="brand-mark logo-mark"></span>
-      <span class="brand-name">말씀함께</span>
+      <span class="logo-h" role="img" aria-label="말씀함께"></span>
     </button>
     <div class="appbar-right">
       <div class="sync-pill" id="syncPill" title="데모: 가짜 API 동기화 상태">
@@ -3714,7 +3752,7 @@ body,button,input,textarea,select{ font-family:var(--font-body); }
 
   <!-- 탭바 -->
   <div class="tabbar">
-    <div class="tabbar-brand" onclick="goHome()"><span class="brand-mark logo-mark"></span><span class="tb-name">말씀함께</span></div>
+    <div class="tabbar-brand" onclick="goHome()"><span class="logo-h" role="img" aria-label="말씀함께"></span></div>
     <button class="tab-btn active" data-tab="today" onclick="switchTab('today')">
       <svg fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/></svg>
       <span class="tab-label">홈</span>
@@ -5073,6 +5111,7 @@ const STORAGE_KEYS = {
   roomPosts:'mh_v06_room_posts',         // 나눔 피드 [{id,roomId,kind,...}]
   roomPostsHidden:'mh_v06_room_posts_hidden', // 관리자 숨김 게시물 id 배열
   roomAmens:'mh_v06_room_amens',         // 내가 아멘한 게시물 id 배열
+  urgentSeen:'mh_v05_urgent_seen',       // v1.6 — 확인한 긴급 기도 id (버블 숫자 해제용)
 };
 
 /* ============================================================================
@@ -5302,8 +5341,9 @@ const api = {
       const base = WORD_DATA[dateKey] ? JSON.parse(JSON.stringify(WORD_DATA[dateKey])) : {};
       const c = JSON.parse(JSON.stringify(custom[dateKey]));
       if(typeof c.hymn==='string'){
-        const h=c.hymn.split('·');
-        c.hymn={ no:(h[0]||'').trim(), title:(h[1]||h[0]||'').trim() };
+        /* v1.6 — 관리자 편집 문자열은 찬송가 표기로 사용, 복음성가 제목은 시드 유지 */
+        const baseH = (base.hymn && typeof base.hymn==='object') ? base.hymn : {};
+        c.hymn = { no:c.hymn.trim(), title:baseH.title || '' };
       }
       const m = Object.assign(base, c);
       m.hymn = m.hymn && m.hymn.title!==undefined ? m.hymn : {no:'', title:String(m.hymn||'')};
@@ -5337,7 +5377,7 @@ const api = {
     const all = _read(STORAGE_KEYS.lectio, {});
     // 시드 데이터로 비어있는 날 채움 (캘린더용)
     if(!all[dateKey] && SEED_LECTIO[dateKey]) return JSON.parse(JSON.stringify(SEED_LECTIO[dateKey]));
-    return all[dateKey] || { lectio_read:'', meditatio1:'', meditatio2:'', meditatio3:'', oratio:'', contemplatio:'', scribo_walk:'', scribo_obey:'', thanks:['','',''], diary:'' };
+    return all[dateKey] || { lectio_read:'', meditatio1:'', meditatio2:'', meditatio3:'', oratio:'', contemplatio:'', scribo:'', scribo_walk:'', scribo_obey:'', thanks:['','',''], diary:'' };
   },
 
   // 예수동행일기 — 날짜별 일기 모음
@@ -5397,7 +5437,7 @@ const api = {
         const s2 = (d.meditatio1||'').trim() && (d.meditatio2||'').trim() && (d.meditatio3||'').trim() ? 1 : 0;
         const s3 = (d.oratio||'').trim() ? 1 : 0;
         const s4 = (d.contemplatio||'').trim() ? 1 : 0;
-        const s5 = (d.scribo_walk||'').trim() && (d.scribo_obey||'').trim() && (d.thanks||[]).some(t=>t.trim()) ? 1 : 0;
+        const s5 = ((d.scribo||'').trim() || ((d.scribo_walk||'').trim() && (d.scribo_obey||'').trim() && (d.thanks||[]).some(t=>t.trim()))) ? 1 : 0;
         result[k] = { s1, s2, s3, s4, s5, total:s1+s2+s3+s4+s5 };
       }
     });
@@ -5507,9 +5547,11 @@ const api = {
     // listPrayers 의 가시성 규칙을 그대로 적용
     const visible = await this.listPrayers('all');
     const prayedIds = _read(STORAGE_KEYS.prayed, []);
+    const seenUrgent = _read(STORAGE_KEYS.urgentSeen, []);
     return {
       total:visible.length,
       urgent:visible.filter(p=>p.urgent).length,
+      urgentNew:visible.filter(p=>p.urgent && !seenUrgent.includes(p.id)).length,   // v1.6 — 홈 버블 숫자용
       myPrayed:prayedIds.length,
       community:visible.reduce((s,p)=>s+(p.count||0), 0),
     };
@@ -5934,6 +5976,28 @@ const api = {
     return post;
   },
 
+  /* v1.6 — 저장 시 자동 나눔 게시/갱신 (하루·방·작성자당 1건 유지) */
+  async upsertLectioShare(roomId, dateKey, parts, isPrivate){
+    showSync(true);
+    await _delay(150,300);
+    const u = _normalizeUser(_read(STORAGE_KEYS.user, null) || {});
+    const myName = u.nickname || u.name || '성도님';
+    const posts = _read(STORAGE_KEYS.roomPosts, []);
+    let p = posts.find(x=>x.roomId===roomId && x.kind==='lectio' && x.dateKey===dateKey && x.who===myName && x.auto);
+    if(!p){
+      p = { id:'rp_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
+            roomId, kind:'lectio', who:myName, avatar:myName.charAt(0),
+            time:Date.now(), body:'', parts:null, dateKey, amens:0, comments:[], auto:true };
+      posts.unshift(p);
+    }
+    p.time = Date.now();
+    p.private = !!isPrivate;
+    p.parts = isPrivate ? null : parts;   // 저장 후 수정하면 나눔 글도 갱신
+    _write(STORAGE_KEYS.roomPosts, posts);
+    showSync(false);
+    return { ok:true, id:p.id };
+  },
+
   async toggleAmen(postId){
     showSync(true);
     await _delay(120,250);
@@ -5980,7 +6044,7 @@ const api = {
 function getPrefsSync(){ return _read(STORAGE_KEYS.prefs, {}); }
 function getChurchName(){ const n=(getPrefsSync().churchName||'').trim(); return n || '우리 교회'; }
 function getMedMethod(){ return getPrefsSync().medMethod==='simple' ? 'simple' : 'lectio'; }
-function getLang(){ return getPrefsSync().lang || 'ko'; }
+function getLang(){ return 'ko'; }   /* v1.6 — 한국어 전용 (언어 설정 삭제) */
 // ── v0.95 : 다국어 i18n 스캐폴드 (단일 코드베이스 + 인앱 토글 권장) ──────
 // 구조 결정: 코드 1벌 + 언어 토글로 UI 현지화. 콘텐츠(묵상 본문·칼럼)는 언어별 채널.
 // (앱을 언어별로 따로 개발하지 않음 — 스토어 배포만 언어별 빌드로.)
@@ -6056,6 +6120,7 @@ const state = {
   icsExpanded:false,
   togetherTab:'pray',   // v0.6 — 함께 탭: 'pray' | 'rooms' (중보기도 우선)
   currentRoom:null,
+  columnFilter:'pastor', // v1.6 — 칼럼 기본: 우리 교회 담임목사 글만
 };
 
 let _syncTimer = null;
@@ -6075,6 +6140,17 @@ function showSync(syncing){
       txt.textContent = '동기화됨 · 방금 전';
     }, 3000);
   }
+}
+
+/* v1.6 — 아멘·기도·모드 전환 등 전체 재렌더 시 스크롤 위치 유지 */
+function keepScroll(work){
+  const c = document.getElementById('viewContainer');
+  const y = c ? c.scrollTop : 0;
+  return Promise.resolve().then(work).then(function(r){
+    if(c) c.scrollTop = y;
+    requestAnimationFrame(function(){ if(c) c.scrollTop = y; });
+    return r;
+  });
 }
 
 function formatDateKey(d){
@@ -6256,7 +6332,7 @@ function buildTodaySelector(ctx){
   const newCols = (ctx.columns||[]).filter(function(c){return !c.read;}).length;
   const simple = (typeof getMedMethod==='function' && getMedMethod()==='simple');
   const rem = Math.max(0, (simple?3:5) - (ctx.doneCount||0));
-  const badges = [0, ((ctx.counts && ctx.counts.urgent)||0), newCols, 0];  /* v0.98: 묵상 5단계 패널 제거 */
+  const badges = [0, ((ctx.counts && ctx.counts.urgentNew)||0), newCols, 0];  /* v1.6: 긴급 배지 — 확인하지 않은 긴급 기도만 */
   const panels = [
     { main:'오늘의 말씀', sub:(ctx.devotional && (ctx.devotional.range)) ? ctx.devotional.range : '오늘의 본문', dark:'#223E30', mid:'#2E4F3F', img:'1507525428034-b723cf961d3e', icon:IC.book, act:"switchTab('word')" },
     { main:'중보기도', sub:('함께 기도 '+((ctx.counts && ctx.counts.total)||0)+'건'), dark:'#A8472C', mid:'#D9785A', img:'1502082553048-f009c37129b9', icon:IC.pray, act:"switchTab('pray')" },
@@ -6418,13 +6494,21 @@ async function renderToday(){
     api.listMyRooms(),
   ]);
 
+  const simpleMode = getMedMethod()==='simple';
   const s0 = lectio.lectio_read==='yes';
   const s1 = (lectio.meditatio1||'').trim() && (lectio.meditatio2||'').trim() && (lectio.meditatio3||'').trim();
   const s2 = (lectio.oratio||'').trim();
   const s3 = (lectio.contemplatio||'').trim();
-  const s4 = (lectio.scribo_walk||'').trim() && (lectio.scribo_obey||'').trim() && (lectio.thanks||[]).some(t=>t.trim());
-  const doneCount = [s0,s1,s2,s3,s4].filter(Boolean).length;
-  const pct = Math.round(doneCount/5*100);
+  const s4 = !!scriboText(lectio).trim();
+  /* v1.6 — 간편 묵상이면 3단계(말씀먹기·말씀기도·말씀살기) 기준으로 표시 */
+  const stepsDone = simpleMode
+    ? [!!(lectio.meditatio1||'').trim(), !!s2, !!s3]
+    : [s0, !!s1, !!s2, !!s3, s4];
+  const stepLabels = simpleMode
+    ? ['말씀먹기','말씀기도','말씀살기']
+    : ['말씀읽기','말씀먹기','말씀기도','말씀살기','말씀기록'];
+  const doneCount = stepsDone.filter(Boolean).length;
+  const pct = Math.round(doneCount/stepsDone.length*100);
 
   // 이번 주 (오늘 기준 일~토)
   const weekStart = new Date(today);
@@ -6449,10 +6533,11 @@ async function renderToday(){
     `;
   }).join('');
 
-  // 최근 칼럼 (가장 최신 1개)
-  const latestCol = columns[0];
+  // v1.6 — 칼럼 기본값: 우리 교회 담임목사 글만
+  const pastorCols = columns.filter(c=>(c.role||'담임목사')==='담임목사' && (c.church||getChurchName())===getChurchName());
+  const latestCol = pastorCols[0];
   if(typeof state.todaySel!=='number' || state.todaySel>3) state.todaySel = 0;  /* v0.98: 패널 4개 */
-  const todaySelectorHtml = buildTodaySelector({ devotional, lectio, columns, counts, doneCount, pct, dateKey, today });
+  const todaySelectorHtml = buildTodaySelector({ devotional, lectio, columns:pastorCols, counts, doneCount, pct, dateKey, today });
 
   view.innerHTML = `
     <div class="today-greeting">
@@ -6486,36 +6571,16 @@ async function renderToday(){
       <div class="progress-row">
         <div class="progress-label">
           <svg width="16" height="16" fill="none" stroke="var(--sage)" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
-          오늘의 묵상 5단계
+          ${simpleMode ? '오늘의 간편 묵상' : '오늘의 묵상 5단계'}
         </div>
-        <div class="progress-pct">${doneCount}/5 · ${pct}%</div>
+        <div class="progress-pct">${doneCount}/${stepsDone.length} · ${pct}%</div>
       </div>
       <div class="progress-dots">
-        <div class="progress-dot ${s0?'done':''}"></div>
-        <div class="progress-dot ${s1?'done':''}"></div>
-        <div class="progress-dot ${s2?'done':''}"></div>
-        <div class="progress-dot ${s3?'done':''}"></div>
-        <div class="progress-dot ${s4?'done':''}"></div>
+        ${stepsDone.map(x=>`<div class="progress-dot ${x?'done':''}"></div>`).join('')}
       </div>
       <div class="progress-steps">
-        <span>말씀읽기</span><span>말씀먹기</span><span>말씀기도</span><span>말씀살기</span><span>말씀기록</span>
+        ${stepLabels.map(l=>`<span>${l}</span>`).join('')}
       </div>
-    </div>
-
-    <div class="promo-banner" onclick="goPrayerMovement()">
-      <svg class="pb-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="24" cy="24" r="21" stroke="#C2876A" stroke-width="2.2"/>
-        <line x1="24" y1="4" x2="24" y2="9" stroke="#C2876A" stroke-width="2" stroke-linecap="round"/>
-        <line x1="24" y1="39" x2="24" y2="44" stroke="#C2876A" stroke-width="2" stroke-linecap="round"/>
-        <line x1="4" y1="24" x2="9" y2="24" stroke="#C2876A" stroke-width="2" stroke-linecap="round"/>
-        <line x1="39" y1="24" x2="44" y2="24" stroke="#C2876A" stroke-width="2" stroke-linecap="round"/>
-        <text x="24" y="29.5" text-anchor="middle" font-size="14.5" font-weight="800" fill="#615850" letter-spacing="-0.5">7만</text>
-      </svg>
-      <div class="pb-body">
-        <div class="pb-ttl">7만시간 기도운동에 함께해요</div>
-        <div class="pb-sub">온 교회가 기도로 7만 시간을 채워갑니다</div>
-      </div>
-      <svg class="pb-arrow" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
     </div>
 
     <div class="quick-grid">
@@ -6543,7 +6608,7 @@ async function renderToday(){
         </div>
         <div>
           <div class="ttl">묵상 캘린더</div>
-          <div class="sub">이번 달 ${Object.keys(monthProg).filter(k=>monthProg[k].total===5).length}일 완주</div>
+          <div class="sub">이번 달 ${Object.keys(monthProg).filter(k=>monthProg[k].total>0).length}일 묵상</div>
         </div>
       </button>
       <button class="quick-card" onclick="switchTab('column')">
@@ -6552,7 +6617,7 @@ async function renderToday(){
         </div>
         <div>
           <div class="ttl">목양 칼럼</div>
-          <div class="sub">${columns.filter(c=>!c.read).length}편 새 글</div>
+          <div class="sub">${pastorCols.filter(c=>!c.read).length}편 새 글</div>
         </div>
       </button>
     </div>
@@ -6581,6 +6646,7 @@ async function renderToday(){
       </div>`;
     })() : ''}
 
+    ${latestCol ? `
     <div class="section-head">
       <div class="section-title">담임목사 칼럼 <span class="en">From Pastor</span></div>
       <button class="section-more" onclick="switchTab('column')">전체 보기 →</button>
@@ -6593,7 +6659,7 @@ async function renderToday(){
         <span>·</span>
         <span>좋아요 ${latestCol.likes}</span>
       </div>
-    </div>
+    </div>` : ''}
   `;
   bindTodaySelector();
 }
@@ -6607,6 +6673,27 @@ function goToDay(dateKey){
 /* ============================================================================
    말씀 화면
    ============================================================================ */
+/* v1.6 — 찬양: 재생 버튼 제거, 찬송가·복음성가 곡명 텍스트 + 가사(관리자 입력 시) */
+function hymnSectionHTML(devotional){
+  let h = (devotional && devotional.hymn) || {};
+  const lyrics = ((devotional && devotional.hymnLyrics) || h.lyrics || '').trim();
+  if(!h.no && !h.title) return '';
+  /* 주일 등 '찬송 28장'+제목 형태(구분자 없음)는 찬송가 한 줄로 합쳐 표시 */
+  if(h.no && h.title && h.no.indexOf('·')<0){
+    h = { no:h.no+' · '+h.title, title:'' };
+  }
+  return `
+    <div class="w-section hymn">
+      <div class="w-section-head">
+        <div class="w-section-label">오늘의 찬양</div>
+        <div class="w-section-en">Hymn</div>
+      </div>
+      ${h.no ? `<div class="hymn-line"><span class="hymn-k">찬송가</span><span class="hymn-v">${escapeHtml(h.no)}</span></div>` : ''}
+      ${h.title ? `<div class="hymn-line"><span class="hymn-k">복음성가</span><span class="hymn-v">${escapeHtml(h.title)}</span></div>` : ''}
+      ${lyrics ? `<div class="hymn-lyrics">${escapeHtml(lyrics).replace(/\n/g,'<br/>')}</div>` : ''}
+    </div>`;
+}
+
 async function renderWord(){
   const view = document.getElementById('view-word');
   const today = state.currentDate;
@@ -6657,19 +6744,7 @@ async function renderWord(){
           <button class="word-nav-btn" onclick="changeDay(1)" ${isFuture?'disabled':''}>내일 <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
         </div>
       </div>
-      <div class="w-section hymn">
-        <div class="w-section-head">
-          <div class="w-section-label">오늘의 찬양</div>
-          <div class="w-section-en">Hymn</div>
-        </div>
-        <div class="hymn-row">
-          <button class="hymn-play" onclick="toast('찬양 재생 (실제 앱에서 지원)')"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-          <div class="hymn-info">
-            <div class="hymn-title">${devotional.hymn.title}</div>
-            <div class="hymn-sub">${devotional.hymn.no} · ${devotional.theme}</div>
-          </div>
-        </div>
-      </div>
+      ${hymnSectionHTML(devotional)}
       <div class="w-section" style="text-align:center">
         <p style="font-family:var(--serif);font-size:1rem;color:var(--ink);line-height:1.8;letter-spacing:-0.3px">오늘은 주일입니다.<br/>예배에서 받은 말씀을 기록합니다.</p>
       </div>
@@ -6694,6 +6769,8 @@ async function renderWord(){
           </button>
         </div>
       </div>
+
+      ${renderFamilyWorshipSection(today.getFullYear(), today.getMonth()+1)}
     `;
     api.getSundayNote(dateKey).then(function(n){
       const t=document.getElementById('sn-title'), r=document.getElementById('sn-ref'),
@@ -6718,7 +6795,6 @@ async function renderWord(){
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
         ${formatKorDate(today)}
       </div>
-      <div class="word-topic">${ISSUE.monthEn} · ${devotional.book.toUpperCase()}</div>
       <div class="word-passage-ref">${devotional.range}</div>
       <div class="word-title">${devotional.subtitle}</div>
       <div class="word-nav">
@@ -6727,19 +6803,7 @@ async function renderWord(){
       </div>
     </div>
 
-    <div class="w-section hymn">
-      <div class="w-section-head">
-        <div class="w-section-label">오늘의 찬양</div>
-        <div class="w-section-en">Hymn</div>
-      </div>
-      <div class="hymn-row">
-        <button class="hymn-play" onclick="toast('찬양 재생 (실제 앱에서 지원)')"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-        <div class="hymn-info">
-          <div class="hymn-title">${devotional.hymn.title}</div>
-          <div class="hymn-sub">${devotional.hymn.no} · ${devotional.theme}</div>
-        </div>
-      </div>
-    </div>
+    ${hymnSectionHTML(devotional)}
 
     <div class="w-section">
       <div class="w-section-head">
@@ -6747,6 +6811,14 @@ async function renderWord(){
         <div class="w-section-en">Context</div>
       </div>
       <div class="maek">${devotional.maek}</div>
+    </div>
+
+    <div class="w-section">
+      <div class="w-section-head">
+        <div class="w-section-label">본문</div>
+        <div class="w-section-en">Today's Passage</div>
+      </div>
+      <div class="passage-text">${devotional.passage}</div>
     </div>
 
     <div class="w-section amsung">
@@ -6760,14 +6832,6 @@ async function renderWord(){
 
     <div class="w-section">
       <div class="w-section-head">
-        <div class="w-section-label">본문</div>
-        <div class="w-section-en">Today's Passage</div>
-      </div>
-      <div class="passage-text">${devotional.passage}</div>
-    </div>
-
-    <div class="w-section">
-      <div class="w-section-head">
         <div class="w-section-label">말씀해설</div>
         <div class="w-section-en">Exposition</div>
       </div>
@@ -6776,7 +6840,7 @@ async function renderWord(){
 
     <div class="w-section">
       <div class="w-section-head">
-        <div class="w-section-label">적용질문</div>
+        <div class="w-section-label">묵상질문</div>
         <div class="w-section-en">Application</div>
       </div>
       <div class="question-text">${devotional.question}</div>
@@ -6827,12 +6891,24 @@ function renderLectioForm(key, d){
     : renderLectioFormFull(key, d));
 }
 
+/* v1.6 — 말씀기록 한 칸: 새 scribo 필드 우선, 이전 버전(동행/순종/감사/일기) 기록은 합쳐서 표시 */
+function scriboText(d){
+  if(((d&&d.scribo)||'').trim()) return d.scribo;
+  const legacy = [];
+  if(((d&&d.scribo_walk)||'').trim()) legacy.push(d.scribo_walk.trim());
+  if(((d&&d.scribo_obey)||'').trim()) legacy.push('순종: '+d.scribo_obey.trim());
+  const th = ((d&&d.thanks)||[]).filter(function(t){ return (t||'').trim(); });
+  if(th.length) legacy.push('감사: '+th.join(', '));
+  if(((d&&d.diary)||'').trim()) legacy.push(d.diary.trim());
+  return legacy.join('\n');
+}
+
 function renderLectioFormFull(key, d){
   const s0 = d.lectio_read==='yes';
   const s1 = (d.meditatio1||'').trim() && (d.meditatio2||'').trim() && (d.meditatio3||'').trim();
   const s2 = (d.oratio||'').trim();
   const s3 = (d.contemplatio||'').trim();
-  const s4 = (d.scribo_walk||'').trim() && (d.scribo_obey||'').trim() && (d.thanks||[]).some(t=>t.trim());
+  const s4 = !!scriboText(d).trim();
   const done = [s0,s1,s2,s3,s4];
 
   return `
@@ -6911,106 +6987,90 @@ function renderLectioFormFull(key, d){
             : '<div class="lectio-lock-badge">PRO</div>'}
         </div>
         <div class="step-illust">${ILLUST.step4}</div>
-        <div class="lectio-hint">오늘 하루 '예수님과 동행한 삶', '말씀살기(순종한 삶)', '세 가지 감사'를 기록합니다.</div>
+        <div class="lectio-hint">오늘 하루 말씀에 순종한 삶과 세 가지 감사를 적어 보십시오.</div>
         ${isProUser() ? `
-          <div class="lectio-q"><span class="qn">·</span> 예수님과 동행한 삶</div>
-          <textarea class="lectio-input" data-field="scribo_walk" rows="3" placeholder="오늘 하루 주님과 함께한 발자취를 기록하세요.">${escapeHtml(d.scribo_walk)}</textarea>
-          <div class="lectio-q"><span class="qn">·</span> 말씀살기 — 오늘 순종한 한 가지</div>
-          <textarea class="lectio-input" data-field="scribo_obey" rows="2" placeholder="실제로 순종한 결과를 기록하세요.">${escapeHtml(d.scribo_obey)}</textarea>
-          <div class="lectio-q"><span class="qn">·</span> 세 가지 감사</div>
-          <div class="thanks-row"><div class="thanks-num">1</div><textarea class="lectio-input" data-field="thanks0" rows="1" placeholder="첫 번째 감사">${escapeHtml((d.thanks||[])[0]||'')}</textarea></div>
-          <div class="thanks-row"><div class="thanks-num">2</div><textarea class="lectio-input" data-field="thanks1" rows="1" placeholder="두 번째 감사">${escapeHtml((d.thanks||[])[1]||'')}</textarea></div>
-          <div class="thanks-row"><div class="thanks-num">3</div><textarea class="lectio-input" data-field="thanks2" rows="1" placeholder="세 번째 감사">${escapeHtml((d.thanks||[])[2]||'')}</textarea></div>
-
-          <div class="diary-block">
-            <div class="diary-head">
-              <span class="diary-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span>
-              <span class="diary-title">예수동행일기</span>
-            </div>
-            <div class="diary-sub">오늘 주님과 동행하며 느낀 점, 깨달음, 하루의 이야기를 자유롭게 적어 보세요.</div>
-            <textarea class="lectio-input diary-input" data-field="diary" rows="5" placeholder="오늘 하루, 주님은 어디에 함께 계셨나요?&#10;&#10;자유롭게 일기를 적어 보세요…">${escapeHtml(d.diary||'')}</textarea>
-            <button class="diary-save-btn" id="diarySaveBtn" onclick="saveDiaryNow('${key}')">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
-              예수동행일기에 저장
-            </button>
-            <div class="diary-status" id="diaryStatus"></div>
-          </div>
+          <textarea class="lectio-input" data-field="scribo" rows="6" placeholder="오늘 하루 말씀에 순종한 삶과 세 가지 감사를 자유롭게 적어 보세요.">${escapeHtml(scriboText(d))}</textarea>
         ` : `
           <div class="lectio-lock-card">
             <div class="lectio-lock-ic">🔒</div>
-            <div class="lectio-lock-title">5단계 <em>말씀기록</em>은 책자 구독자 전용입니다</div>
+            <div class="lectio-lock-title">5단계 <em>말씀기록</em>은 구독자 전용입니다</div>
             <div class="lectio-lock-desc">
-              종이 책자를 구독하시면 앱의 모든 기능을 무료로 이용하실 수 있습니다.<br/>
-              <span class="muted">동행한 삶 · 순종 일지 · 세 가지 감사</span>
+              구독하시면 앱의 모든 기능을 이용하실 수 있고,<br/>원하시면 말씀함께 책자를 매달 집으로 보내드립니다.
             </div>
-            <button class="btn" style="margin-top:14px" onclick="switchTab('mypage');setTimeout(openProfileEditor,300)">
+            <button class="btn" style="margin-top:14px" onclick="switchTab('mypage')">
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-              책자 구독 / 프로필에서 신청
+              구독 신청하러 가기
             </button>
           </div>
         `}
       </div>
     </div>
 
+    <div class="share-privacy">
+      <div class="sp-head">나눔 설정</div>
+      <label class="sp-opt"><input type="radio" name="sharePrivacy" value="public" ${d.share_private?'':'checked'}/><span><strong>공개</strong> — 저장하면 ${tierLabel('cell')||'목장'}방에 자동으로 나눠집니다</span></label>
+      <label class="sp-opt"><input type="radio" name="sharePrivacy" value="private" ${d.share_private?'checked':''}/><span><strong>비공개</strong> — 기록했다는 표시만 되고, 내용은 나만 볼 수 있습니다</span></label>
+    </div>
     <div class="lectio-save-bar">
+      <button class="btn btn-secondary" id="lectioDraftBtn" onclick="saveLectioNow('${key}', true)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M4 21h16"/></svg>
+        임시저장
+      </button>
       <button class="btn" id="lectioSaveBtn" onclick="saveLectioNow('${key}')">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/></svg>
-        오늘의 묵상 저장
-      </button>
-      <button class="btn btn-secondary" onclick="openShareModal('${key}')">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        ${tierLabel('cell')||'목장'}에 나누기
+        저장
       </button>
     </div>
+    <div class="save-hint">임시저장은 내 기기에만 저장되고 나눔되지 않습니다.<br/>저장 후 다시 수정해 저장하면 나눔 글도 함께 갱신됩니다.</div>
   `;
 }
 
 
-/* v0.95 — 묵상 나눔방식 전환 (렉시오디비나 / 심플 가이드) */
+/* v0.95 — 묵상 방식 전환 (렉시오디비나 5단계 / 간편 묵상) · v1.6 용어 통일 */
 function renderMedMethodSwitch(){
   const m = getMedMethod();
   return `
     <div class="med-switch">
-      <div class="med-switch-label">묵상 나눔방식</div>
+      <div class="med-switch-label">묵상 방식</div>
       <div class="med-switch-seg">
         <button class="mss-btn ${m==='lectio'?'on':''}" onclick="setMedMethod('lectio')">렉시오디비나 · 5단계</button>
-        <button class="mss-btn ${m==='simple'?'on':''}" onclick="setMedMethod('simple')">심플 가이드</button>
+        <button class="mss-btn ${m==='simple'?'on':''}" onclick="setMedMethod('simple')">간편 묵상</button>
       </div>
     </div>`;
 }
 function setMedMethod(m){
   _write(STORAGE_KEYS.prefs, Object.assign({}, getPrefsSync(), { medMethod:(m==='simple'?'simple':'lectio') }));
-  toast(m==='simple' ? '심플 가이드로 전환했습니다' : '렉시오디비나 5단계로 전환했습니다');
-  renderWord();
+  toast(m==='simple' ? '간편 묵상으로 전환했습니다' : '렉시오디비나 5단계로 전환했습니다');
+  keepScroll(function(){ return renderWord(); });
 }
 
-/* v0.95 — 심플 가이드: 핵심 3단계 (데이터는 4단계와 호환) */
+/* v0.95 — 간편 묵상: 핵심 3단계 (데이터는 5단계와 호환) */
 function renderLectioFormSimple(key, d){
   const s1=(d.meditatio1||'').trim(), s2=(d.oratio||'').trim(), s3=(d.contemplatio||'').trim();
   const done=[!!s1,!!s2,!!s3];
   return `
     <div class="lectio-wrap simple">
       <div class="lectio-header">
-        <div class="lectio-title">말씀 묵상 · 심플 가이드</div>
+        <div class="lectio-title">말씀 묵상 · 간편 묵상</div>
         <div class="lectio-title-en">Simple Guide</div>
         <div class="lectio-progress">${done.map(x=>`<div class="pdot ${x?'on':''}"></div>`).join('')}</div>
       </div>
 
       <div class="lectio-step ${s1?'done':''}" data-step="1">
         <div class="lectio-step-head"><div class="lectio-num">1</div><div class="lectio-step-name">말씀먹기<span class="latin">Read</span></div><div class="lectio-check">✓</div></div>
-        <div class="lectio-hint">오늘 본문에서 마음에 와닿은 구절이나 단어를 천천히 되새겨 보세요.</div>
+        <div class="lectio-hint">오늘 말씀에서 마음에 와닿은 구절과 그 이유를 적어 보십시오.</div>
         <textarea class="lectio-input" data-field="meditatio1" rows="4" placeholder="와닿은 말씀과 그 이유를 자유롭게 적어 보세요.">${escapeHtml(d.meditatio1)}</textarea>
       </div>
 
       <div class="lectio-step ${s2?'done':''}" data-step="2">
         <div class="lectio-step-head"><div class="lectio-num">2</div><div class="lectio-step-name">말씀기도<span class="latin">Pray</span></div><div class="lectio-check">✓</div></div>
-        <div class="lectio-hint">말씀에 기도로 반응합니다.</div>
+        <div class="lectio-hint">말씀을 붙들고 드리는 기도를 적어 보십시오.</div>
         <textarea class="lectio-input" data-field="oratio" rows="4" placeholder="주님,&#10;&#10;오늘 이 말씀 앞에서…">${escapeHtml(d.oratio)}</textarea>
       </div>
 
       <div class="lectio-step ${s3?'done':''}" data-step="3">
         <div class="lectio-step-head"><div class="lectio-num">3</div><div class="lectio-step-name">말씀살기<span class="latin">Live</span></div><div class="lectio-check">✓</div></div>
-        <div class="lectio-hint">오늘 삶으로 순종할 한 가지를 적어 보세요.</div>
+        <div class="lectio-hint">오늘 삶에서 순종할 한 가지를 적어 보십시오.</div>
         <div class="one-thing">
           <div class="one-thing-label">One Thing</div>
           <div class="one-thing-title">오늘, 이 한 가지에 순종합니다</div>
@@ -7019,16 +7079,22 @@ function renderLectioFormSimple(key, d){
       </div>
     </div>
 
+    <div class="share-privacy">
+      <div class="sp-head">나눔 설정</div>
+      <label class="sp-opt"><input type="radio" name="sharePrivacy" value="public" ${d.share_private?'':'checked'}/><span><strong>공개</strong> — 저장하면 ${tierLabel('cell')||'목장'}방에 자동으로 나눠집니다</span></label>
+      <label class="sp-opt"><input type="radio" name="sharePrivacy" value="private" ${d.share_private?'checked':''}/><span><strong>비공개</strong> — 기록했다는 표시만 되고, 내용은 나만 볼 수 있습니다</span></label>
+    </div>
     <div class="lectio-save-bar">
+      <button class="btn btn-secondary" id="lectioDraftBtn" onclick="saveLectioNow('${key}', true)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M4 21h16"/></svg>
+        임시저장
+      </button>
       <button class="btn" id="lectioSaveBtn" onclick="saveLectioNow('${key}')">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/></svg>
-        오늘의 묵상 저장
-      </button>
-      <button class="btn btn-secondary" onclick="openShareModal('${key}')">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        ${tierLabel('cell')||'목장'}에 나누기
+        저장
       </button>
     </div>
+    <div class="save-hint">임시저장은 내 기기에만 저장되고 나눔되지 않습니다.<br/>저장 후 다시 수정해 저장하면 나눔 글도 함께 갱신됩니다.</div>
   `;
 }
 
@@ -7042,62 +7108,54 @@ function bindLectioInputs(key){
     // 초기 높이
     setTimeout(()=>{ el.style.height='auto'; el.style.height=(el.scrollHeight+2)+'px'; },0);
   });
-  // 예수동행일기 저장 현황 표시
-  const status = document.getElementById('diaryStatus');
-  if(status){
-    api.getDiaryCount().then(n=>{
-      if(n>0) status.textContent = `지금까지 예수동행일기 ${n}편을 기록했습니다.`;
-    });
-  }
 }
 
-async function saveLectioNow(key){
-  const data = { lectio_read:'', meditatio1:'', meditatio2:'', meditatio3:'', oratio:'', contemplatio:'', scribo_walk:'', scribo_obey:'', thanks:['','',''], diary:'' };
+async function saveLectioNow(key, draftOnly){
+  const data = { lectio_read:'', meditatio1:'', meditatio2:'', meditatio3:'', oratio:'', contemplatio:'', scribo:'' };
   document.querySelectorAll(`#view-word .lectio-input`).forEach(el=>{
     const f = el.dataset.field;
-    if(f && f.startsWith('thanks')){
-      const i = parseInt(f.replace('thanks',''),10);
-      data.thanks[i] = el.value;
-    }else if(f){
-      data[f] = el.value;
-    }
+    if(f) data[f] = el.value;
   });
+  const prev = (_read(STORAGE_KEYS.lectio, {})[key]) || SEED_LECTIO[key] || {};
   const rd = document.querySelector('#view-word input[name="lectioRead"]:checked');
-  if(rd){ data.lectio_read = rd.value; }
-  else{
-    // 심플 가이드 화면 등 라디오가 없을 때는 기존 저장값 유지
-    const prev = (_read(STORAGE_KEYS.lectio, {})[key]) || SEED_LECTIO[key] || {};
-    data.lectio_read = prev.lectio_read || '';
-  }
-  const btn = document.getElementById('lectioSaveBtn');
+  data.lectio_read = rd ? rd.value : (prev.lectio_read || '');
+  // 간편 묵상 화면 등에서 말씀기록 칸이 없으면 기존 기록 유지
+  if(!document.querySelector('#view-word .lectio-input[data-field="scribo"]')) data.scribo = prev.scribo || scriboText(prev);
+  const pv = document.querySelector('#view-word input[name="sharePrivacy"]:checked');
+  data.share_private = pv ? pv.value==='private' : !!prev.share_private;
+  data.draft = !!draftOnly;   // 임시저장 = 내 기기에만 저장 (나눔 없음)
+
+  const btn = document.getElementById(draftOnly ? 'lectioDraftBtn' : 'lectioSaveBtn');
   if(btn){ btn.disabled = true; btn.textContent = '저장 중…'; }
-  const res = await api.saveLectio(key, data);
-  if(btn){ btn.disabled = false; btn.innerHTML = `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16" height="16"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg> 저장됨`; }
-  toast('서버에 저장되었습니다');
-  // 단계 도트 갱신
-  setTimeout(()=>renderWord(), 800);
+  await api.saveLectio(key, data);
+
+  let shared = 'none';
+  if(!draftOnly){
+    // 저장 = 확정 + 내 목장방에 자동 게시 (비공개 시 '기록함' 표시만, 재저장 시 나눔 글도 갱신)
+    try{ shared = await autoShareLectio(key, data); }catch(e){ shared = 'none'; }
+  }
+  if(btn){ btn.disabled = false; }
+  if(draftOnly) toast('임시저장되었습니다 · 내 기기에만 저장');
+  else if(shared==='shared') toast(`저장 완료 · ${tierLabel('cell')||'목장'}방에 나눠졌습니다 🌿`);
+  else if(shared==='marked') toast('저장 완료 · 기록 표시만 남고 내용은 비공개입니다 🔒');
+  else toast('저장되었습니다');
+  // 단계 도트 갱신 — 스크롤 위치 유지
+  setTimeout(()=>keepScroll(()=>renderWord()), 600);
 }
 
-/* 예수동행일기에 저장 (말씀기록 4단계 안의 일기) */
-async function saveDiaryNow(key){
-  const el = document.querySelector(`#view-word .diary-input`);
-  const text = el ? el.value : '';
-  const btn = document.getElementById('diarySaveBtn');
-  const status = document.getElementById('diaryStatus');
-  const orig = btn ? btn.innerHTML : '';
-  if(btn){ btn.disabled = true; btn.textContent = '저장 중…'; }
-  const res = await api.saveDiary(key, text);
-  if(btn){
-    btn.disabled = false;
-    btn.innerHTML = `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg> 예수동행일기에 저장됨`;
-    setTimeout(()=>{ if(btn) btn.innerHTML = orig; }, 2200);
-  }
-  if(status){
-    status.textContent = (text||'').trim()
-      ? `예수동행일기에 저장되었습니다 · 지금까지 ${res.count}편`
-      : '일기 내용이 비어 있어 저장을 취소했습니다.';
-  }
-  toast((text||'').trim() ? '예수동행일기에 기록했습니다' : '내용이 비어 있습니다');
+/* v1.6 — 저장 시 자동 나눔: 내 목장방(없으면 첫 방)에 게시/갱신 */
+async function autoShareLectio(dateKey, lectio){
+  const rooms = await api.listMyRooms();
+  if(!rooms.length) return 'noroom';
+  const room = rooms.find(r=>r.type==='cell') || rooms[0];
+  const parts = lectio.share_private ? null : {
+    grace:(lectio.meditatio3||'').trim(),
+    oratio:(lectio.oratio||'').trim(),
+    oneThing:(lectio.contemplatio||'').trim(),
+    record:(lectio.scribo||'').trim(),
+  };
+  await api.upsertLectioShare(room.id, dateKey, parts, !!lectio.share_private);
+  return lectio.share_private ? 'marked' : 'shared';
 }
 
 /* ============================================================================
@@ -7138,8 +7196,6 @@ async function renderTrackPanel(){
     : `${t.moveHours.toLocaleString()}시간`;
 
   el.innerHTML = `
-    ${renderMovementCard(t, pct, pctLabel, mvHoursLabel)}
-
     <div class="track-greet">
       <div class="track-greet-l">
         <div class="tg-date">${dateLine}</div>
@@ -7476,7 +7532,7 @@ function closeRoom(){
   switchTab('pray');
 }
 
-const ROOM_PART_LABELS = { grace:'받은 은혜', oratio:'말씀기도', oneThing:'One Thing · 오늘의 순종', thanks:'세 가지 감사' };
+const ROOM_PART_LABELS = { grace:'받은 은혜', oratio:'말씀기도', oneThing:'One Thing · 오늘의 순종', thanks:'세 가지 감사', record:'말씀기록 · 순종과 감사' };
 
 function renderRoomPost(p){
   let partsHtml = '';
@@ -7484,9 +7540,14 @@ function renderRoomPost(p){
     if(p.parts.grace) partsHtml += `<div class="rpost-part grace"><span class="pp-label">${ROOM_PART_LABELS.grace}</span>${escapeHtml(p.parts.grace)}</div>`;
     if(p.parts.oratio) partsHtml += `<div class="rpost-part pray-part"><span class="pp-label">${ROOM_PART_LABELS.oratio}</span>${escapeHtml(p.parts.oratio)}</div>`;
     if(p.parts.oneThing) partsHtml += `<div class="rpost-part"><span class="pp-label">${ROOM_PART_LABELS.oneThing}</span>${escapeHtml(p.parts.oneThing)}</div>`;
+    if(p.parts.record) partsHtml += `<div class="rpost-part"><span class="pp-label">${ROOM_PART_LABELS.record}</span>${escapeHtml(p.parts.record).replace(/\n/g,'<br/>')}</div>`;
     if(p.parts.thanks && p.parts.thanks.length){
       partsHtml += `<div class="rpost-part"><span class="pp-label">${ROOM_PART_LABELS.thanks}</span>${p.parts.thanks.filter(t=>(t||'').trim()).map((t,i)=>`${i+1}. ${escapeHtml(t)}`).join('<br/>')}</div>`;
     }
+  }
+  // v1.6 — 비공개 저장: 기록했다는 표시만
+  if(p.kind==='lectio' && p.private){
+    partsHtml = `<div class="rpost-private">🔒 오늘의 묵상을 기록했습니다 · 내용은 비공개입니다</div>`;
   }
   const dateRef = (p.kind==='lectio' && p.dateKey && WORD_DATA[p.dateKey])
     ? `<span class="rpost-date-ref">${WORD_DATA[p.dateKey].range || p.dateKey}</span>` : '';
@@ -7531,7 +7592,7 @@ async function toggleRoomAmen(postId){
   const res = await api.toggleAmen(postId);
   if(res.ok && state.currentRoom){
     if(res.amened) toast('함께해 주셔서 감사합니다 🙏');
-    renderRoomDetail(state.currentRoom);
+    keepScroll(()=>renderRoomDetail(state.currentRoom));
   }
 }
 
@@ -7549,7 +7610,7 @@ async function submitRoomComment(postId){
   if(!txt){ toast('댓글을 입력해 주세요'); return; }
   await api.addRoomComment(postId, txt);
   toast('댓글을 남겼습니다');
-  if(state.currentRoom) renderRoomDetail(state.currentRoom);
+  if(state.currentRoom) keepScroll(()=>renderRoomDetail(state.currentRoom));
 }
 
 /* ── 기도제목 나누기 (방 안) ────────────────────────────────── */
@@ -7704,12 +7765,11 @@ async function openShareModal(dateKey, preRoomId){
     return;
   }
   const d = WORD_DATA[dateKey] || {};
-  const thanksJoined = (lectio.thanks||[]).filter(t=>(t||'').trim());
   const parts = [
     { key:'grace',    label:'받은 은혜 한 줄',          value:(lectio.meditatio3||'').trim() },
     { key:'oratio',   label:'말씀기도',                  value:(lectio.oratio||'').trim() },
     { key:'oneThing', label:'One Thing · 오늘의 순종',   value:(lectio.contemplatio||'').trim() },
-    { key:'thanks',   label:'세 가지 감사',              value:thanksJoined.join(' · ') },
+    { key:'record',   label:'말씀기록 · 순종과 감사',    value:scriboText(lectio).trim() },
   ];
   const hasAny = parts.some(p=>p.value);
 
@@ -7763,7 +7823,7 @@ async function submitShare(dateKey){
   if(checked.includes('grace'))    parts.grace = (lectio.meditatio3||'').trim();
   if(checked.includes('oratio'))   parts.oratio = (lectio.oratio||'').trim();
   if(checked.includes('oneThing')) parts.oneThing = (lectio.contemplatio||'').trim();
-  if(checked.includes('thanks'))   parts.thanks = (lectio.thanks||[]).filter(t=>(t||'').trim());
+  if(checked.includes('record'))   parts.record = scriboText(lectio).trim();
   await api.createRoomPost({ roomId, kind:'lectio', body:note, parts, dateKey });
   closeModal();
   toast('목장에 나눴습니다 🌿');
@@ -7814,6 +7874,9 @@ async function renderPrayBody(){
     api.listPrayers(state.prayerScope),
     api.listPrayers('urgent'),
   ]);
+
+  // v1.6 — 중보기도 화면을 열면 긴급 기도를 '확인함' 처리 → 홈 버블 숫자 해제
+  try{ _write(STORAGE_KEYS.urgentSeen, urgentAll.map(p=>p.id)); }catch(e){}
 
   document.getElementById('prayCounts').innerHTML = `
     <div class="pray-count-card"><div class="pcc-num">${counts.total}</div><div class="pcc-lbl">전체</div></div>
@@ -7896,7 +7959,7 @@ async function togglePrayed(id){
   const res = await api.togglePrayed(id);
   if(res.ok){
     toast(res.prayed ? '함께 기도해 주셔서 감사합니다 🙏' : '기도 표시를 해제했습니다');
-    renderPray();
+    keepScroll(()=>renderPray());
   }
 }
 
@@ -8051,6 +8114,7 @@ async function rejectSubmission(id){
 
 async function renderColumn(){
   const view = document.getElementById('view-column');
+  if(!state.columnFilter) state.columnFilter = 'pastor';   // v1.6 — 기본: 우리 교회 담임목사 글만
   view.innerHTML = `
     <div class="column-hero">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
@@ -8063,6 +8127,10 @@ async function renderColumn(){
           기고하기
         </button>
       </div>
+      <div class="col-filter">
+        <button class="scope-chip ${state.columnFilter!=='all'?'active':''}" onclick="state.columnFilter='pastor';renderColumn()">담임목사 글</button>
+        <button class="scope-chip ${state.columnFilter==='all'?'active':''}" onclick="state.columnFilter='all';renderColumn()">전체 글</button>
+      </div>
     </div>
     <div id="columnReview"></div>
     <div id="columnList">
@@ -8070,7 +8138,17 @@ async function renderColumn(){
     </div>
   `;
   renderColumnReview();
-  const cols = await api.listColumns();
+  const colsAll = await api.listColumns();
+  const cols = state.columnFilter==='all'
+    ? colsAll
+    : colsAll.filter(c=>(c.role||'담임목사')==='담임목사' && (c.church||getChurchName())===getChurchName());
+  if(!cols.length){
+    document.getElementById('columnList').innerHTML = `
+      <div style="margin:14px 16px;padding:28px 20px;text-align:center;color:var(--ink-3);background:var(--bg-card);border:1px solid var(--line);border-radius:16px;font-size:0.8125rem;line-height:1.7">
+        표시할 칼럼이 없습니다.<br/>'전체 글'을 누르면 부목사·타교회 칼럼도 볼 수 있어요.
+      </div>`;
+    return;
+  }
   document.getElementById('columnList').innerHTML = cols.map(c=>`
     <div class="column-card" onclick="openColumnDetail(${c.id})">
       <div class="col-cover ${c.cover}">
@@ -8165,7 +8243,7 @@ async function toggleLike(id){
   const res = await api.toggleLike(id);
   if(res.ok){
     toast(res.liked ? '좋아요를 눌렀어요 ♥' : '좋아요를 해제했습니다');
-    openColumnDetail(id);
+    keepScroll(()=>openColumnDetail(id));
   }
 }
 
@@ -8176,7 +8254,7 @@ async function submitComment(id){
   await api.addComment(id, txt);
   inp.value = '';
   toast('댓글을 남겼습니다');
-  openColumnDetail(id);
+  keepScroll(()=>openColumnDetail(id));
 }
 
 /* ============================================================================
@@ -8260,16 +8338,15 @@ async function renderCalendar(){
       </div>
     </div>
     <div class="cal-stats" id="calStats">
-      <div class="cal-stat-card"><div class="cal-stat-num">···</div><div class="cal-stat-lbl">완주한 날</div></div>
-      <div class="cal-stat-card"><div class="cal-stat-num">···</div><div class="cal-stat-lbl">시작한 날</div></div>
+      <div class="cal-stat-card"><div class="cal-stat-num">···</div><div class="cal-stat-lbl">묵상한 날</div></div>
+      <div class="cal-stat-card"><div class="cal-stat-num">···</div><div class="cal-stat-lbl">5단계 완주</div></div>
       <div class="cal-stat-card"><div class="cal-stat-num">···</div><div class="cal-stat-lbl">평균 단계</div></div>
     </div>
     <div class="cal-grid-wrap" id="calGrid">
       <div class="skeleton" style="height:320px"></div>
     </div>
     <div class="cal-legend">
-      <div class="cal-leg-item"><div class="cal-leg-sw" style="background:var(--sage)"></div>5단계 완주</div>
-      <div class="cal-leg-item"><div class="cal-leg-sw" style="background:var(--sage-pale)"></div>일부 진행</div>
+      <div class="cal-leg-item"><div class="cal-leg-sw" style="background:var(--sage)"></div>묵상한 날</div>
       <div class="cal-leg-item"><div class="cal-leg-sw" style="background:var(--sage-dark)"></div>오늘</div>
       <div class="cal-leg-item"><div class="cal-leg-sw" style="background:var(--bg-soft);border:1px solid var(--line)"></div>미시작</div>
     </div>
@@ -8287,8 +8364,8 @@ async function renderCalendar(){
   const avgStage = started ? (dayKeys.reduce((s,k)=>s+prog[k].total,0)/started).toFixed(1) : '0';
 
   document.getElementById('calStats').innerHTML = `
-    <div class="cal-stat-card"><div class="cal-stat-num">${completed}</div><div class="cal-stat-lbl">완주한 날</div></div>
-    <div class="cal-stat-card"><div class="cal-stat-num">${started}</div><div class="cal-stat-lbl">시작한 날</div></div>
+    <div class="cal-stat-card"><div class="cal-stat-num">${started}</div><div class="cal-stat-lbl">묵상한 날</div></div>
+    <div class="cal-stat-card"><div class="cal-stat-num">${completed}</div><div class="cal-stat-lbl">5단계 완주</div></div>
     <div class="cal-stat-card"><div class="cal-stat-num">${avgStage}</div><div class="cal-stat-lbl">평균 단계</div></div>
   `;
 
@@ -8336,8 +8413,7 @@ async function renderCalendar(){
         var total = p ? p.total : 0;
         var cls = '';
         if(isToday) cls = 'today';
-        else if(total===5) cls = 'complete';
-        else if(total>0) cls = 'partial';
+        else if(total>0) cls = 'complete';   /* v1.6 — 하나라도 저장하면 '묵상한 날' */
         if(isSun && !isToday && !cls) cls = 'sunday';
         var dots = '';
         for(var i=1;i<=4;i++){
@@ -8553,8 +8629,7 @@ async function _renderMypageBody(view){
   const miniCal = cells.map(function(c){
     if(c.outside) return '<div class="mc-cell outside"></div>';
     let cls = '';
-    if(c.total===5) cls = 'complete';
-    else if(c.total>0) cls = 'partial';
+    if(c.total>0) cls = 'complete';   /* v1.6 — 하나라도 저장하면 묵상한 날 */
     if(c.dow===0) cls += ' sunday';
     if(c.isToday) cls += ' today';
     return '<div class="mc-cell '+cls+'" onclick="goToDay(\''+c.key+'\')">'+c.d+'</div>';
@@ -8577,7 +8652,7 @@ async function _renderMypageBody(view){
         <div style="flex:1;min-width:0">
           <div class="profile-name">${escapeHtml(user.nickname || user.name || '성도님')}
             ${subscribed
-              ? '<span class="badge-pro">PRO · 책자 구독</span>'
+              ? '<span class="badge-pro">PRO · 구독 중</span>'
               : '<span class="badge-free">FREE</span>'}
           </div>
           <div class="profile-meta">${escapeHtml(affilLine)}</div>
@@ -8601,14 +8676,14 @@ async function _renderMypageBody(view){
       <div class="sub-card-top">
         <div class="sub-icon">${subscribed ? '✦' : '+'}</div>
         <div class="sub-text">
-          <div class="sub-title">${subscribed ? '말씀함께 책자 구독 중' : '책자 구독으로 모든 기능 열기'}</div>
+          <div class="sub-title">${subscribed ? '말씀함께 구독 중' : '구독으로 모든 기능 열기'}</div>
           <div class="sub-desc">${subscribed
-            ? '종이 책자를 매달 받아보시는 동안 앱의 모든 기능을 자유롭게 이용하실 수 있습니다.'
-            : '책자 유료 구독자는 앱을 무료로 사용하실 수 있습니다.<br/>무료 이용 시 묵상 5단계(<em>말씀기록</em>) 입력이 제한됩니다.'}</div>
+            ? '앱의 모든 기능을 이용하실 수 있습니다.<br/>원하시면 종이 책자를 매달 집으로 보내드립니다 — 프로필 편집에서 배송지를 입력해 주세요.'
+            : '구독하시면 앱의 모든 기능이 열리고, 원하시면 말씀함께 책자를 매달 집으로 받아보실 수 있습니다.<br/>무료 이용 시 묵상 5단계(<em>말씀기록</em>) 입력이 제한됩니다.'}</div>
         </div>
       </div>
       <button class="sub-toggle" onclick="toggleSubscription()">
-        ${subscribed ? '구독 해지 (데모)' : '책자 구독 신청'}
+        ${subscribed ? '구독 해지 (데모)' : '구독 신청'}
       </button>
     </div>
 
@@ -8632,8 +8707,8 @@ async function _renderMypageBody(view){
 
     <div class="my-stats">
       <div class="my-stat-card">
-        <div class="my-stat-num">${completed}</div>
-        <div class="my-stat-lbl">완주한 날</div>
+        <div class="my-stat-num">${started}</div>
+        <div class="my-stat-lbl">묵상한 날</div>
       </div>
       <div class="my-stat-card">
         <div class="my-stat-num" style="color:var(--terra)">${activity.prayedCount}</div>
@@ -8655,8 +8730,7 @@ async function _renderMypageBody(view){
       </div>
       <div class="my-cal-mini">${miniCal}</div>
       <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--line-soft);font-size:0.6875rem;color:var(--ink-3);display:flex;gap:12px;justify-content:center">
-        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--sage);margin-right:4px;vertical-align:middle"></span>완주</span>
-        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--sage-pale);margin-right:4px;vertical-align:middle"></span>진행</span>
+        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--sage);margin-right:4px;vertical-align:middle"></span>묵상한 날</span>
         <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--bg-soft);margin-right:4px;vertical-align:middle;border:1px solid var(--line)"></span>미시작</span>
       </div>
     </div>
@@ -8664,7 +8738,7 @@ async function _renderMypageBody(view){
     <div class="menu-card">
       <div class="menu-row" onclick="switchTab('calendar')">
         <div class="menu-ic sage"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div>
-        <div class="menu-text"><div class="menu-ttl">묵상 캘린더</div><div class="menu-sub">월별 4단계 진행 한눈에 보기</div></div>
+        <div class="menu-text"><div class="menu-ttl">묵상 캘린더</div><div class="menu-sub">월별 묵상현황 보기</div></div>
         <div class="menu-right"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
       </div>
       <div class="menu-row" onclick="myActivityPrayed()">
@@ -8698,7 +8772,7 @@ async function _renderMypageBody(view){
     </div>
 
     <div style="text-align:center;padding:14px;font-family:var(--en);font-size:0.6562rem;color:var(--ink-4);letter-spacing:1px">
-      말씀함께 v1.5.2 · DEMO
+      말씀함께 v1.6 · DEMO
     </div>
   `;
 }
@@ -8725,7 +8799,7 @@ function openProfileEditor(){
   document.getElementById('modalContent').innerHTML = `
     <div class="write-form profile-editor">
       <h3>프로필 편집</h3>
-      <p class="h-sub">교회 소속과 연락처를 등록해 주세요. 중보기도 가시 범위와 책자 배송에 사용됩니다.</p>
+      <p class="h-sub">교회 소속과 연락처를 등록해 주세요. 중보기도 공개 범위와, 책자 수령을 원하시는 경우 배송에 사용됩니다.</p>
 
       <label>닉네임 <span class="lbl-aside">앱에서 표시되는 이름</span></label>
       <input type="text" id="pf-nickname" placeholder="예) 선목지기" maxlength="14" value="${escapeHtml(u.nickname||'')}"/>
@@ -8756,7 +8830,7 @@ function openProfileEditor(){
         }).join('')}
       </select>
 
-      <div class="form-section-title">연락 / 배송</div>
+      <div class="form-section-title">연락처 / 책자 배송지 <span style="font-weight:500;color:var(--ink-4);font-size:0.6875rem">· 배송지는 책자 수령 희망 시에만</span></div>
       <label>휴대전화</label>
       <input type="tel" id="pf-phone" placeholder="010-0000-0000" inputmode="tel" value="${escapeHtml(u.phone||'')}"/>
 
@@ -8771,7 +8845,7 @@ function openProfileEditor(){
 
       <div class="form-hint">
         <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        주소는 책자 발송에만 사용되며 외부에 공개되지 않습니다.
+        구독자 중 책자 수령을 원하시는 분만 입력하시면 됩니다. 주소는 책자 발송에만 사용되며 외부에 공개되지 않습니다.
       </div>
 
       <button class="btn btn-block" style="margin-top:18px" onclick="saveProfileEditor()">
@@ -8943,13 +9017,13 @@ async function saveProfileEditor(){
 async function toggleSubscription(){
   const cur = state.user || {};
   if(cur.subscribed){
-    if(!confirm('책자 구독을 해지하시겠어요?\n\n무료 사용자로 전환되며 묵상 4단계 입력 등 일부 기능이 제한됩니다.')) return;
+    if(!confirm('구독을 해지하시겠어요?\n\n무료 사용자로 전환되며 묵상 5단계(말씀기록) 입력이 제한됩니다.')) return;
   }else{
-    if(!confirm('말씀함께 책자 구독을 신청하시겠어요?\n\n(데모: 실제 결제 없이 PRO 권한이 즉시 적용됩니다)')) return;
+    if(!confirm('말씀함께 구독을 신청하시겠어요?\n\n앱의 모든 기능이 열리고, 원하시면 책자를 집으로 보내드립니다.\n(데모: 실제 결제 없이 PRO 권한이 즉시 적용됩니다)')) return;
   }
   const u = await api.toggleSubscription();
   state.user = u;
-  toast(u.subscribed ? '책자 구독이 시작되었습니다 — PRO 권한 적용' : '무료 사용자로 전환되었습니다');
+  toast(u.subscribed ? '구독이 시작되었습니다 — 모든 기능이 열렸습니다' : '무료 사용자로 전환되었습니다');
   renderMypage();
 }
 
@@ -8975,27 +9049,11 @@ async function renderSettings(){
       <div class="settings-title">설정</div>
     </div>
 
-    <div class="settings-section-h">이 앱을 만드는 이유</div>
-    <div class="menu-card purpose-card">
-      <div class="purpose-row">
-        <div class="purpose-ic">1</div>
-        <div class="purpose-text"><div class="purpose-ttl">접근성</div><div class="purpose-sub">해외에 계신 분, 책자가 어려운 분, 언제든 보기 원하는 분 누구나.</div></div>
-      </div>
-      <div class="purpose-row">
-        <div class="purpose-ic">2</div>
-        <div class="purpose-text"><div class="purpose-ttl">공동체</div><div class="purpose-sub">말씀을 나누는 공동체를 세우는 플랫폼. 교회 색을 빼 개교회가 함께 쓰도록.</div></div>
-      </div>
-      <div class="purpose-row">
-        <div class="purpose-ic">3</div>
-        <div class="purpose-text"><div class="purpose-ttl">기도와의 통합</div><div class="purpose-sub">말씀과 기도를 이 앱 하나로 — 기도 트래킹·긴급 기도·매일합심기도까지.</div></div>
-      </div>
-    </div>
-
     <div class="settings-section-h">알림</div>
     <div class="menu-card">
       <div class="menu-row">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></div>
-        <div class="menu-text"><div class="menu-ttl">묵상 알림</div><div class="menu-sub">매일 아침 6시</div></div>
+        <div class="menu-text"><div class="menu-ttl">묵상 알림</div><div class="menu-sub">매일 <input type="time" id="notifyTimeInput" value="${escapeHtml(prefs.notifyTime||'06:00')}" onchange="setNotifyTime(this.value)" onclick="event.stopPropagation()" style="border:1px solid var(--line);border-radius:8px;padding:3px 7px;font-family:var(--sans);font-size:0.75rem;background:var(--bg-card);color:var(--ink)"> 에 알려드려요</div></div>
         <div class="menu-right"><div class="toggle ${prefs.notifications?'on':''}" onclick="togglePref('notifications', this)"></div></div>
       </div>
       <div class="menu-row">
@@ -9005,12 +9063,17 @@ async function renderSettings(){
       </div>
     </div>
 
-    <div class="settings-section-h">개교회 설정 <span style="font-weight:500;color:var(--ink-4);font-size:0.6875rem">· 교회 색을 빼고 우리 교회에 맞게</span></div>
+    <div class="settings-section-h">개인 정보 수정</div>
     <div class="menu-card">
+      <div class="menu-row" onclick="openProfileEditor()">
+        <div class="menu-ic sage"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div>
+        <div class="menu-text"><div class="menu-ttl">프로필 편집</div><div class="menu-sub">이름 · 소속 · 연락처 · 책자 배송지</div></div>
+        <div class="menu-right"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+      </div>
       <div class="menu-row" style="cursor:default;align-items:flex-start">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4 8 4v14M9 21v-6h6v6"/></svg></div>
         <div class="menu-text" style="flex:1">
-          <div class="menu-ttl">교회 이름</div>
+          <div class="menu-ttl">교회명</div>
           <div class="menu-sub">앱 곳곳에 표시됩니다</div>
           <input id="churchNameInput" type="text" value="${escapeHtml(prefs.churchName||'')}" placeholder="우리 교회"
             onchange="setChurchName(this.value)"
@@ -9019,53 +9082,15 @@ async function renderSettings(){
       </div>
       <div class="menu-row" style="cursor:default">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg></div>
-        <div class="menu-text"><div class="menu-ttl">묵상 나눔방식</div><div class="menu-sub">렉시오디비나 4단계 / 심플 가이드</div></div>
+        <div class="menu-text"><div class="menu-ttl">묵상 방식</div><div class="menu-sub">렉시오디비나 5단계 / 간편 묵상</div></div>
         <div class="menu-right" style="gap:4px;display:flex">
           <button class="fs-btn ${prefs.medMethod!=='simple'?'active':''}" style="width:auto;padding:0 10px;border:1px solid ${prefs.medMethod!=='simple'?'var(--sage)':'var(--line)'}" onclick="setMedMethod('lectio');renderSettings()">렉시오</button>
-          <button class="fs-btn ${prefs.medMethod==='simple'?'active':''}" style="width:auto;padding:0 10px;border:1px solid ${prefs.medMethod==='simple'?'var(--sage)':'var(--line)'}" onclick="setMedMethod('simple');renderSettings()">심플</button>
-        </div>
-      </div>
-      <div class="menu-row" style="cursor:default">
-        <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg></div>
-        <div class="menu-text"><div class="menu-ttl">언어 <span style="font-weight:500;color:var(--ink-4);font-size:0.6875rem">Language</span></div><div class="menu-sub">단일 앱 · 인앱 전환 (메뉴 즉시 적용, 콘텐츠 번역 준비 중)</div></div>
-        <div class="menu-right" style="gap:4px;display:flex">
-          ${[['ko','한'],['en','EN'],['zh','中']].map(function(x){return '<button class="fs-btn '+((prefs.lang||'ko')===x[0]?'active':'')+'" style="width:auto;padding:0 10px;border:1px solid '+(((prefs.lang||'ko')===x[0])?'var(--sage)':'var(--line)')+'" onclick="setLang(\''+x[0]+'\');renderSettings()">'+x[1]+'</button>';}).join('')}
+          <button class="fs-btn ${prefs.medMethod==='simple'?'active':''}" style="width:auto;padding:0 10px;border:1px solid ${prefs.medMethod==='simple'?'var(--sage)':'var(--line)'}" onclick="setMedMethod('simple');renderSettings()">간편 묵상</button>
         </div>
       </div>
     </div>
 
-    <div class="settings-section-h">모임 단계 <span style="font-weight:500;color:var(--ink-4);font-size:0.6875rem">· 교회 규모에 맞춰 단계 구성</span></div>
-    <div class="menu-card">
-      <div class="menu-row" style="cursor:default;align-items:flex-start;flex-direction:column;gap:10px">
-        <div style="display:flex;gap:8px;width:100%">
-          <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.4"/><circle cx="6" cy="14" r="2.4"/><circle cx="18" cy="14" r="2.4"/><path d="M12 7.4V11M9.6 12.6 7.4 12.8M14.4 12.6l2.2.2M12 11c-2 0-4.2 1.2-5 2.5M12 11c2 0 4.2 1.2 5 2.5"/></svg></div>
-          <div class="menu-text" style="flex:1"><div class="menu-ttl">프리셋</div><div class="menu-sub">교회 유형을 고르면 단계가 자동 구성돼요</div></div>
-        </div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;width:100%">
-          ${Object.keys(GROUP_PRESETS).map(function(id){
-            var on = (prefs.groupPreset===id);
-            return '<button class="fs-btn '+(on?'active':'')+'" style="width:auto;padding:0 11px;height:32px;border:1px solid '+(on?'var(--sage)':'var(--line)')+'" onclick="setGroupPreset(\''+id+'\');renderSettings()">'+GROUP_PRESETS[id].label+'</button>';
-          }).join('')}
-        </div>
-      </div>
-      <div class="menu-row" style="cursor:default">
-        <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div>
-        <div class="menu-text"><div class="menu-ttl">단계 수</div><div class="menu-sub">1 ~ 4 단계</div></div>
-        <div class="menu-right" style="gap:4px;display:flex">
-          ${[1,2,3,4].map(function(n){
-            var on = (getGroupTiers().length===n);
-            return '<button class="fs-btn '+(on?'active':'')+'" style="width:34px;border:1px solid '+(on?'var(--sage)':'var(--line)')+'" onclick="setGroupTierCount('+n+');renderSettings()">'+n+'</button>';
-          }).join('')}
-        </div>
-      </div>
-      ${getGroupTiers().map(function(t,i){
-        return '<div class="menu-row" style="cursor:default"><div class="menu-ic" style="background:var(--sage-pale);color:var(--sage-deep);font-family:var(--en);font-weight:700;font-size:0.75rem">'+(i+1)+'</div><div class="menu-text" style="flex:1"><div class="menu-sub" style="margin-bottom:4px">'+(i===0?'가장 큰 단위':(i===getGroupTiers().length-1?'가장 작은 단위':'중간 단위'))+'</div><input type="text" value="'+escapeHtml(t.name)+'" placeholder="단계 이름" onchange="setGroupTierName('+i+',this.value);renderSettings()" style="width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:9px;font-size:0.8125rem;font-family:var(--sans);background:var(--bg-card);color:var(--ink)"></div></div>';
-      }).join('')}
-      <div class="menu-row" style="cursor:default;background:var(--sage-pale)">
-        <div class="menu-text"><div class="menu-sub" style="color:var(--sage-deep)">미리보기 · 기도 나눔 범위: 교회 › ${getGroupTiers().map(function(t){return escapeHtml(t.name)}).join(' › ')}</div></div>
-      </div>
-    </div>
-
+    <!-- v1.6 — 모임 단계 설정은 관리자 페이지로 이관 -->
     <div class="settings-section-h">화면</div>
     <div class="menu-card">
       <div class="menu-row" style="cursor:default">
@@ -9103,7 +9128,7 @@ async function renderSettings(){
       <div class="menu-row" style="cursor:default">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
         <div class="menu-text"><div class="menu-ttl">버전</div></div>
-        <div class="menu-right" style="font-family:var(--en);font-weight:600;color:var(--ink-3)">v1.5.2 · DEMO</div>
+        <div class="menu-right" style="font-family:var(--en);font-weight:600;color:var(--ink-3)">v1.6 · DEMO</div>
       </div>
       <div class="menu-row" onclick="toast('이용약관 (실제 앱에서 제공)')">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
@@ -9119,6 +9144,10 @@ async function renderSettings(){
   `;
 }
 
+function setNotifyTime(v){
+  _write(STORAGE_KEYS.prefs, Object.assign({}, getPrefsSync(), { notifyTime:(v||'06:00') }));
+  toast('묵상 알림 시간이 '+(v||'06:00')+'로 설정되었습니다');
+}
 function setChurchName(v){
   const name=(v||'').trim();
   _write(STORAGE_KEYS.prefs, Object.assign({}, getPrefsSync(), { churchName:name }));
@@ -9324,10 +9353,10 @@ if(document.readyState === 'loading'){
   }).observe(document.body, { childList:true, subtree:true });
 })();
 </script>
+</body>
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }
 </script>
-</body>
 </html>

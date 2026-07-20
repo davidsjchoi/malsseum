@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="말씀함께">
-<title>말씀함께 · 데모 v1.7.2</title>
+<title>말씀함께 · 데모 v1.7.3</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -3666,11 +3666,8 @@ body,button,input,textarea,select{ font-family:var(--font-body); }
 .today-date{ font-size:0.9688rem; }
 .today-date .td-dow{ font-size:0.7812rem; font-weight:600; color:var(--ink-3); }
 
-/* v1.7.2 — 말씀탭 날짜: 중보기도 탭 날짜(tg-date)와 동일한 폰트·색 */
-.word-date-plain{
-  font-size:0.7812rem; color:var(--ink-3); font-weight:500;
-  margin-bottom:12px; cursor:pointer;
-}
+/* v1.7.3 — 말씀·중보기도 탭 날짜: 오늘 탭 날짜(today-date)와 동일한 폰트·형식 */
+.word-date-plain{ margin-bottom:12px; cursor:pointer; }
 
 /* v1.7.2 — 중보기도 현황 박스: 누르면 목록 필터 */
 .pray-count-card{ cursor:pointer; transition:border-color .15s, background .15s, box-shadow .15s; }
@@ -6173,13 +6170,21 @@ function setGroupTierName(i,v){
 }
 
 
+/* v1.7.3 — 실제 기기 오늘 날짜 (7월호 범위 밖이면 경계로 보정) */
+function realToday(){
+  const n=new Date(), s=new Date(2026,6,1), e=new Date(2026,6,31);
+  if(n<s) return s; if(n>e) return e;
+  return new Date(n.getFullYear(), n.getMonth(), n.getDate());
+}
+/* v1.7.3 — 오늘 탭 날짜 형식 공용: "2026년 7월 20일 월요일(작게)" */
+function dateLineHtml(d, extra){
+  const dows=['일','월','화','수','목','금','토'];
+  return d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일 <span class="td-dow">'+dows[d.getDay()]+'요일'+(extra?(' '+extra):'')+'</span>';
+}
+
 const state = {
   tab:'today',
-  currentDate:(function(){ /* 실제 기기 날짜 사용 — 7월호 범위(2026-07-01~31) 밖이면 경계로 보정 */
-    const n=new Date(), s=new Date(2026,6,1), e=new Date(2026,6,31);
-    if(n<s) return s; if(n>e) return e;
-    return new Date(n.getFullYear(), n.getMonth(), n.getDate());
-  })(),
+  currentDate:realToday(),
   fontSize:'m',
   prayerScope:'all',
   calMonth:new Date(2026, 6, 1),
@@ -6699,6 +6704,8 @@ function goToLectio(){
 
 async function renderToday(){
   const view = document.getElementById('view-today');
+  /* v1.7.3 — 오늘 탭은 항상 실제 오늘 날짜 (말씀 탭에서 어제/내일로 이동해도 복원) */
+  state.currentDate = realToday();
   const today = state.currentDate;
   const dateKey = formatDateKey(today);
   if(!state.user){ try{ state.user = await api.getUser(); }catch(e){} }
@@ -6709,7 +6716,7 @@ async function renderToday(){
   const greetHtml = `
     <div class="today-greeting">
       <div style="flex:1;min-width:0">
-        <div class="today-date">${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일 <span class="td-dow">${['일','월','화','수','목','금','토'][today.getDay()]}요일</span></div>
+        <div class="today-date">${dateLineHtml(today)}</div>
         <div class="today-hello">${escapeHtml(name)}님 <span class="hello-sub">오늘도 <em>말씀으로 승리</em>하세요!</span></div>
       </div>
       <div class="greet-illust">${greet.art}</div>
@@ -6846,7 +6853,7 @@ async function renderWord(){
   if(!devotional){
     view.innerHTML = `
       <div class="word-header">
-        <div class="word-date-plain" onclick="switchTab('calendar')">${formatKorDate(today)}</div>
+        <div class="today-date word-date-plain" onclick="switchTab('calendar')">${dateLineHtml(today)}</div>
       </div>
       <div style="margin:24px 16px;padding:24px;text-align:center;background:var(--bg-card);border:1px solid var(--line);border-radius:16px">
         <p style="color:var(--ink-3);font-size:0.8125rem;line-height:1.7">${formatKorDate(today)}의 묵상 본문이<br/>아직 등록되지 않았습니다.<br/><br/><strong style="color:var(--ink)">7월호는 1일~31일</strong><br/>시편 94~106편, 미가·나훔·하박국입니다.</p>
@@ -6860,7 +6867,7 @@ async function renderWord(){
   if(devotional.sunday){
     view.innerHTML = `
       <div class="word-header">
-        <div class="word-date-plain" onclick="switchTab('calendar')">${formatKorDate(today)} · 주일</div>
+        <div class="today-date word-date-plain" onclick="switchTab('calendar')">${dateLineHtml(today, '· 주일')}</div>
         <div class="word-title">${devotional.subtitle}</div>
         <div class="word-nav">
           <button class="word-nav-btn" onclick="changeDay(-1)"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> 어제</button>
@@ -6893,7 +6900,7 @@ async function renderWord(){
         </div>
       </div>
 
-      ${renderFamilyWorshipSection(today.getFullYear(), today.getMonth()+1)}
+      ${renderFamilyWorshipSection(today.getFullYear(), today.getMonth()+1, Math.ceil(today.getDate()/7))}
     `;
     api.getSundayNote(dateKey).then(function(n){
       const t=document.getElementById('sn-title'), r=document.getElementById('sn-ref'),
@@ -6914,7 +6921,7 @@ async function renderWord(){
   // 평일 묵상
   view.innerHTML = `
     <div class="word-header">
-      <div class="word-date-plain" onclick="switchTab('calendar')">${formatKorDate(today)}</div>
+      <div class="today-date word-date-plain" onclick="switchTab('calendar')">${dateLineHtml(today)}</div>
       <div class="word-passage-ref">${devotional.range}</div>
       <div class="word-title">${devotional.subtitle}</div>
       <div class="word-nav">
@@ -7300,13 +7307,13 @@ async function renderTrackPanel(){
   const dows=['일','월','화','수','목','금','토'];
   const dateLine = `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 ${dows[now.getDay()]}요일`;
 
-  /* v1.7 — 날짜만 중보기도 화면 맨 위로 (이름·내 기록 버튼·설정 아이콘 제거) */
+  /* v1.7.3 — 날짜: 오늘 탭과 동일한 폰트·형식 */
   const greetEl = document.getElementById('prayGreet');
   if(greetEl){
     greetEl.innerHTML = `
     <div class="track-greet">
       <div class="track-greet-l">
-        <div class="tg-date">${dateLine}</div>
+        <div class="today-date">${dateLineHtml(now)}</div>
       </div>
     </div>`;
   }
@@ -7320,7 +7327,6 @@ async function renderTrackPanel(){
       기도했어요
     </button>
     <div class="pray-now-foot">
-      <span class="pnf-hint">한 번 누를 때마다 10분씩 적립돼요</span>
       ${t.todayMin>0 ? `<button class="pray-undo-btn" onclick="cancelPray()">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-1"/></svg>
         실수로 눌렀어요 · 10분 취소
@@ -8049,6 +8055,10 @@ async function renderPrayBody(){
       ${Array.from({length:3}).map(()=>`<div style="margin:0 16px 10px"><div class="skeleton" style="height:140px;border-radius:16px"></div></div>`).join('')}
     </div>
     <div id="urgentSection"></div>
+    <div class="pray-header" style="margin-top:26px;padding-bottom:0">
+      <div class="pray-h-title">오늘도 기도했어요</div>
+      <div class="pray-h-sub">한 번 누를 때마다 10분씩 기도 시간이 쌓입니다</div>
+    </div>
     <div id="trackPanel"></div>
     <div class="breath">${BREATH_LEAF}</div>
   `;
@@ -8520,20 +8530,29 @@ function getFamilyWorshipList(key){
   const custom = _read(STORAGE_KEYS.familyWorship, {}) || {};
   return (custom[key] && custom[key].length) ? custom[key] : FAMILY_WORSHIP[key];
 }
-function renderFamilyWorshipSection(year, month){
+function renderFamilyWorshipSection(year, month, weekNo){
   const key = year+'-'+String(month).padStart(2,'0');
-  const list = getFamilyWorshipList(key);
+  let list = getFamilyWorshipList(key);
   if(!list || !list.length) return '';
+  /* v1.7.3 — 주일 말씀 탭에서는 해당 주차만 노출 (weekNo: 1=첫째 주 …) */
+  let rows = list.map((w,i)=>({w,i}));
+  if(weekNo){
+    const ko=['첫','둘','셋','넷','다섯'][weekNo-1];
+    const matched = rows.filter(x=>ko && (x.w.week||'').indexOf(ko)===0);
+    if(matched.length) rows=matched;
+    else if(rows[weekNo-1]) rows=[rows[weekNo-1]];
+  }
+  list=rows;
   return `
     <div class="fw-wrap">
       <div class="fw-head">
         <div>
-          <div class="fw-title">온 세대 가정예배</div>
+          <div class="fw-title">온 세대 가정예배${weekNo?` <span style="font-size:0.75rem;font-weight:600;color:var(--ink-3)">· 이번 주</span>`:''}</div>
           <div class="fw-sub">주 1회 · 온 가족이 함께 드리는 예배</div>
         </div>
         <svg width="20" height="20" fill="none" stroke="var(--sage)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/><path d="M9 21v-6h6v6"/></svg>
       </div>
-      ${list.map((w,i)=>`
+      ${list.map(({w,i})=>`
         <button class="fw-card" onclick="openFamilyWorship('${key}',${i})">
           <div class="fw-week">${w.week}</div>
           <div class="fw-card-main">
@@ -9027,7 +9046,7 @@ async function _renderMypageBody(view){
     </div>
 
     <div style="text-align:center;padding:14px;font-family:var(--en);font-size:0.6562rem;color:var(--ink-4);letter-spacing:1px">
-      말씀함께 v1.7.2 · DEMO
+      말씀함께 v1.7.3 · DEMO
     </div>
   `;
 }
@@ -9383,7 +9402,7 @@ async function renderSettings(){
       <div class="menu-row" style="cursor:default">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
         <div class="menu-text"><div class="menu-ttl">버전</div></div>
-        <div class="menu-right" style="font-family:var(--en);font-weight:600;color:var(--ink-3)">v1.7.2 · DEMO</div>
+        <div class="menu-right" style="font-family:var(--en);font-weight:600;color:var(--ink-3)">v1.7.3 · DEMO</div>
       </div>
       <div class="menu-row" onclick="toast('이용약관 (실제 앱에서 제공)')">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>

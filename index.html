@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="말씀함께">
-<title>말씀함께 · 데모 v1.7.3</title>
+<title>말씀함께 · 데모 v1.7.4</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -6170,11 +6170,26 @@ function setGroupTierName(i,v){
 }
 
 
-/* v1.7.3 — 실제 기기 오늘 날짜 (7월호 범위 밖이면 경계로 보정) */
+/* v1.7.4 — 월호 자동 인식: 시드(7월호) + 관리자 PDF 반영분(devotionalsCustom)을 합쳐
+   콘텐츠가 등록된 전체 날짜 범위를 계산. 8월호를 반영하면 범위가 자동 확장된다. */
+function contentDateRange(){
+  let keys = Object.keys(WORD_DATA);
+  try{
+    const c = _read(STORAGE_KEYS.devotionalsCustom, {}) || {};
+    keys = keys.concat(Object.keys(c).filter(function(k){ return c[k] && /^\d{4}-\d{2}-\d{2}$/.test(k); }));
+  }catch(e){}
+  keys = keys.filter(function(k){ return /^\d{4}-\d{2}-\d{2}$/.test(k); }).sort();
+  const p = function(k){ const a=k.split('-').map(Number); return new Date(a[0], a[1]-1, a[2]); };
+  return { start:p(keys[0]), end:p(keys[keys.length-1]) };
+}
+/* 실제 기기 오늘 날짜 (등록된 콘텐츠 범위 밖이면 경계로 보정) */
 function realToday(){
-  const n=new Date(), s=new Date(2026,6,1), e=new Date(2026,6,31);
-  if(n<s) return s; if(n>e) return e;
-  return new Date(n.getFullYear(), n.getMonth(), n.getDate());
+  const r = contentDateRange();
+  const n = new Date();
+  const today = new Date(n.getFullYear(), n.getMonth(), n.getDate());
+  if(today < r.start) return r.start;
+  if(today > r.end) return r.end;
+  return today;
 }
 /* v1.7.3 — 오늘 탭 날짜 형식 공용: "2026년 7월 20일 월요일(작게)" */
 function dateLineHtml(d, extra){
@@ -6187,7 +6202,7 @@ const state = {
   currentDate:realToday(),
   fontSize:'m',
   prayerScope:'all',
-  calMonth:new Date(2026, 6, 1),
+  calMonth:(function(){ const t=realToday(); return new Date(t.getFullYear(), t.getMonth(), 1); })(),
   user:null,
   icsExpanded:false,
   togetherTab:'pray',   // v0.6 — 함께 탭: 'pray' | 'rooms' (중보기도 우선)
@@ -6742,7 +6757,9 @@ async function renderToday(){
   // v1.7 — 오늘의 말씀 사진 박스 (제목 + 본문, 누르면 말씀 탭으로)
   const wTitle = devotional ? (devotional.subtitle || devotional.theme || '오늘의 묵상') : ISSUE.bookKor;
   const wRange = devotional
-    ? (devotional.sunday ? '주일 · 통독 ' + (TONGDOK[dateKey]||[]).join(' · ') : devotional.range)
+    ? (devotional.sunday
+        ? ((TONGDOK[dateKey]||[]).length ? '주일 · 통독 ' + TONGDOK[dateKey].join(' · ') : (devotional.range || '주일 말씀'))
+        : devotional.range)
     : '오늘의 본문';
   const wordBoxHtml = `
     <div class="word-photo-card" onclick="switchTab('word')" style="position:relative;margin:16px 16px 4px;height:190px;border-radius:24px;overflow:hidden;cursor:pointer;background-image:linear-gradient(to top, rgba(14,25,19,.80) 6%, rgba(14,25,19,.30) 52%, rgba(14,25,19,.10) 100%), url('${getHomePhotoUrl()}');background-size:cover;background-position:center;box-shadow:0 10px 26px rgba(20,40,30,.18)">
@@ -6856,7 +6873,7 @@ async function renderWord(){
         <div class="today-date word-date-plain" onclick="switchTab('calendar')">${dateLineHtml(today)}</div>
       </div>
       <div style="margin:24px 16px;padding:24px;text-align:center;background:var(--bg-card);border:1px solid var(--line);border-radius:16px">
-        <p style="color:var(--ink-3);font-size:0.8125rem;line-height:1.7">${formatKorDate(today)}의 묵상 본문이<br/>아직 등록되지 않았습니다.<br/><br/><strong style="color:var(--ink)">7월호는 1일~31일</strong><br/>시편 94~106편, 미가·나훔·하박국입니다.</p>
+        <p style="color:var(--ink-3);font-size:0.8125rem;line-height:1.7">${formatKorDate(today)}의 묵상 본문이<br/>아직 등록되지 않았습니다.<br/><br/><strong style="color:var(--ink)">등록된 묵상 범위</strong><br/>${(function(){const r=contentDateRange();const f=d=>(d.getMonth()+1)+'월 '+d.getDate()+'일';return f(r.start)+' ~ '+f(r.end);})()}<br/>관리자에서 책자 PDF를 반영하면 범위가 자동 확장됩니다.</p>
         <button class="btn btn-secondary" style="margin-top:14px" onclick="goToDay('2026-07-01')">7월 1일로 이동</button>
       </div>
     `;
@@ -6996,6 +7013,12 @@ async function renderWord(){
 function changeDay(delta){
   const d = new Date(state.currentDate);
   d.setDate(d.getDate()+delta);
+  /* v1.7.4 — 등록된 콘텐츠 범위 안에서만 이동 */
+  const r = contentDateRange();
+  if(d < r.start || d > r.end){
+    toast('등록된 묵상 범위를 벗어났습니다');
+    return;
+  }
   state.currentDate = d;
   renderWord();
 }
@@ -8702,6 +8725,14 @@ async function renderCalendar(){
 function changeMonth(delta){
   const m = new Date(state.calMonth);
   m.setMonth(m.getMonth()+delta);
+  /* v1.7.4 — 콘텐츠가 등록된 월 범위 안에서만 이동 */
+  const r = contentDateRange();
+  const first = new Date(r.start.getFullYear(), r.start.getMonth(), 1);
+  const last = new Date(r.end.getFullYear(), r.end.getMonth(), 1);
+  if(m < first || m > last){
+    toast('등록된 묵상이 있는 달만 볼 수 있습니다');
+    return;
+  }
   state.calMonth = m;
   renderCalendar();
 }
@@ -8878,7 +8909,7 @@ async function renderMypage(){
 
 async function _renderMypageBody(view){
   const [user, prog, activity, prefs] = await Promise.all([
-    api.getUser(), api.getMonthProgress(2026, 7), api.getMyActivity(), api.getPrefs()
+    api.getUser(), api.getMonthProgress(realToday().getFullYear(), realToday().getMonth()+1), api.getMyActivity(), api.getPrefs()
   ]);
   state.user = user;
 
@@ -9046,7 +9077,7 @@ async function _renderMypageBody(view){
     </div>
 
     <div style="text-align:center;padding:14px;font-family:var(--en);font-size:0.6562rem;color:var(--ink-4);letter-spacing:1px">
-      말씀함께 v1.7.3 · DEMO
+      말씀함께 v1.7.4 · DEMO
     </div>
   `;
 }
@@ -9402,7 +9433,7 @@ async function renderSettings(){
       <div class="menu-row" style="cursor:default">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
         <div class="menu-text"><div class="menu-ttl">버전</div></div>
-        <div class="menu-right" style="font-family:var(--en);font-weight:600;color:var(--ink-3)">v1.7.3 · DEMO</div>
+        <div class="menu-right" style="font-family:var(--en);font-weight:600;color:var(--ink-3)">v1.7.4 · DEMO</div>
       </div>
       <div class="menu-row" onclick="toast('이용약관 (실제 앱에서 제공)')">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>

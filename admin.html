@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>말씀함께 · 관리자 v1.7.3</title>
+<title>말씀함께 · 관리자 v1.7.4</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -206,7 +206,7 @@ a{color:inherit}
       <div class="side-mark">함</div>
       <div>
         <div class="side-brand-text">말씀함께</div>
-        <div class="side-brand-sub en">ADMIN · v1.7.3</div>
+        <div class="side-brand-sub en">ADMIN · v1.7.4</div>
       </div>
     </div>
     <nav class="side-nav" id="sideNav"></nav>
@@ -1298,7 +1298,7 @@ RENDERERS.settings=function(){
         <div class="switch-info"><h4>데모 데이터 초기화</h4><p>관리자·앱이 공유하는 모든 로컬 데이터를 삭제합니다</p></div>
         <button class="btn btn-bad" onclick="resetAll()">초기화</button></div>
     </div>
-    <div class="note" style="margin-top:18px"><b>연동 안내</b> — 이 관리자는 사용자 앱(말씀함께_데모_v1.7.3.html)과 동일한 브라우저 localStorage 키를 공유합니다. 같은 브라우저에서 두 파일을 열면 변경 사항이 즉시 반영됩니다.</div>`;
+    <div class="note" style="margin-top:18px"><b>연동 안내</b> — 이 관리자는 사용자 앱(말씀함께_데모_v1.7.4.html)과 동일한 브라우저 localStorage 키를 공유합니다. 같은 브라우저에서 두 파일을 열면 변경 사항이 즉시 반영됩니다.</div>`;
 };
 function saveChurch(v){ setPrefs({churchName:(v||'').trim()||'우리 교회'}); document.getElementById('sideChurch').textContent=getChurchName(); toast('저장되었습니다'); }
 function resetAll(){ if(confirm('정말 모든 데모 데이터를 초기화할까요?')){ Object.values(STORAGE_KEYS).forEach(k=>localStorage.removeItem(k)); toast('초기화되었습니다'); ensureSubmissionSeed(); init(); } }
@@ -1312,7 +1312,7 @@ let _fwParsed = null;    // 온 세대 가정예배 파싱 결과
 
 RENDERERS.pdf=function(){
   document.getElementById('view-pdf').innerHTML=`
-    <p class="hint">「말씀함께」 내지 PDF(펼침)를 업로드하면 <b>매일 묵상</b> 페이지를 자동으로 인식해 날짜별 묵상 본문으로 변환합니다. 변환 결과를 확인한 뒤 앱에 반영하세요.</p>
+    <p class="hint">「말씀함께」 내지 PDF(펼침)를 업로드하면 <b>매일 묵상</b> 페이지를 자동으로 인식해 날짜별 묵상 본문으로 변환합니다. 변환 결과를 확인한 뒤 앱에 반영하세요. <b>발행 월을 8월 등으로 선택해 반영하면 사용자 앱(v1.7.4+)의 날짜 범위·캘린더가 해당 월까지 자동 확장됩니다.</b></p>
     <div class="card" style="padding:22px">
       <div class="section-title" style="margin-top:0">1. 발행 월 선택 & PDF 업로드</div>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">

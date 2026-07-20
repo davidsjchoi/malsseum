@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="말씀함께">
-<title>말씀함께 · 데모 v1.6.2</title>
+<title>말씀함께 · 데모 v1.7.1</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -3658,6 +3658,10 @@ body,button,input,textarea,select{ font-family:var(--font-body); }
   color:var(--ink-2);
 }
 .today-hello{ white-space:normal; font-size:1.25rem; line-height:1.45; word-break:keep-all; }
+
+/* v1.7.1 — 홈: 맨 위 날짜 줄과 인사말 뒷부분('오늘도 말씀으로 승리하세요!')만 살짝 축소 */
+.today-date{ font-size:0.875rem; }
+.today-hello .hello-sub{ font-size:0.85em; }
 </style>
 
 <!-- ============================================================================
@@ -5143,8 +5147,9 @@ const STORAGE_KEYS = {
   roomPostsHidden:'mh_v06_room_posts_hidden', // 관리자 숨김 게시물 id 배열
   roomAmens:'mh_v06_room_amens',         // 내가 아멘한 게시물 id 배열
   urgentSeen:'mh_v05_urgent_seen',       // v1.6 — 확인한 긴급 기도 id (버블 숫자 해제용)
-  pwj:'mh_v05_pwj_content',              // v1.6.1 — 예수동행기도 콘텐츠(긴급기도·대한민국 기도) 관리자 편집본
+  pwj:'mh_v05_pwj_content',              // v1.6.1 — 예수동행기도 콘텐츠(긴급기도·나라를 위한 기도) 관리자 편집본
   myPrayerItems:'mh_v05_my_prayer_items',// v1.6.1 — 나의 기도제목 (내 기기)
+  homePhoto:'mh_v05_home_photo',         // v1.7 — 홈 '오늘의 말씀' 박스 배경 사진 (관리자 업로드)
 };
 
 /* ============================================================================
@@ -6472,6 +6477,170 @@ function renderHomeBanner(){
   </div>`;
 }
 
+/* ── v1.7: 홈 '오늘의 말씀' 사진 박스 배경 (관리자 업로드, 기본 대표 사진) ── */
+const HOME_PHOTO_DEFAULT = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1080&q=75';
+function getHomePhotoUrl(){
+  try{
+    const p = _read(STORAGE_KEYS.homePhoto, null);
+    if(p && (p.img||'').trim()) return p.img;
+  }catch(e){}
+  return HOME_PHOTO_DEFAULT;
+}
+
+/* ── v1.7: 나의 말씀기록 — 저장한 묵상(5단계/간편)을 날짜별로 (최근순) ── */
+function hasLectioContent(d){
+  if(!d) return false;
+  if(d.lectio_read==='yes') return true;
+  if(((d.meditatio1||'')+(d.meditatio2||'')+(d.meditatio3||'')+(d.oratio||'')+(d.contemplatio||'')).trim()) return true;
+  if(scriboText(d).trim()) return true;
+  return false;
+}
+function listMyWordRecords(){
+  const saved = _read(STORAGE_KEYS.lectio, {});
+  const merged = { ...SEED_LECTIO };
+  Object.keys(saved).forEach(k=>{ merged[k] = saved[k]; });
+  return Object.keys(merged)
+    .filter(k=>hasLectioContent(merged[k]))
+    .sort()
+    .reverse()
+    .map(k=>({ key:k, data:merged[k] }));
+}
+function recordMethodLabel(d){
+  const full = d.lectio_read || ((d.meditatio2||'').trim()) || ((d.meditatio3||'').trim()) || scriboText(d).trim();
+  return full ? '묵상 5단계' : '간편 묵상';
+}
+/* v1.7 — 내가 목장방에 나눈 그 날의 묵상 글(아멘·댓글 확인용) */
+function getMyLectioShare(dateKey){
+  try{
+    const u = state.user || _read(STORAGE_KEYS.user, null) || {};
+    const myName = u.nickname || u.name || '성도님';
+    const posts = _read(STORAGE_KEYS.roomPosts, []);
+    return posts.find(p=>p.kind==='lectio' && p.dateKey===dateKey && p.who===myName) || null;
+  }catch(e){ return null; }
+}
+function openWordRecordView(dateKey, fromAll){
+  const saved = _read(STORAGE_KEYS.lectio, {});
+  const d = saved[dateKey] || SEED_LECTIO[dateKey];
+  if(!d){ toast('저장된 기록이 없습니다'); return; }
+  const w = WORD_DATA[dateKey] || {};
+  const [y,m,dd] = dateKey.split('-').map(Number);
+  const dows = ['일','월','화','수','목','금','토'];
+  const dateLine = `${y}년 ${m}월 ${dd}일 ${dows[new Date(y,m-1,dd).getDay()]}요일`;
+  const sec = (label, latin, body)=> (body||'').trim() ? `
+    <div style="margin-top:15px">
+      <div style="font-size:0.7188rem;font-weight:700;color:var(--sage-deep, #3c5c4c);letter-spacing:-0.2px">${label}${latin?` <span style="font-family:var(--en);font-weight:600;color:var(--ink-4)">${latin}</span>`:''}</div>
+      <div style="margin-top:5px;font-size:0.8438rem;line-height:1.75;color:var(--ink-2);white-space:pre-wrap">${escapeHtml(body.trim())}</div>
+    </div>` : '';
+  const med = [d.meditatio1, d.meditatio2, d.meditatio3].filter(t=>(t||'').trim()).map(t=>t.trim()).join('\n\n');
+
+  /* v1.7 — 목장방에 나눈 글의 아멘·댓글 표시 */
+  const share = getMyLectioShare(dateKey);
+  const amens = (share && share.amens) || 0;
+  const comments = (share && share.comments) || [];
+  const shareHtml = share ? `
+    <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--line-soft)">
+      <div style="display:flex;align-items:center;gap:10px;font-size:0.7812rem;color:var(--ink-3)">
+        <span style="font-weight:700;color:var(--ink-2)">목장 나눔</span>
+        <span>🌿 아멘 ${amens}</span>
+        <span>💬 댓글 ${comments.length}</span>
+      </div>
+      ${comments.map(c=>`
+        <div style="display:flex;gap:9px;margin-top:11px">
+          <div style="flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--sage-pale, #E9F0EA);color:var(--sage-deep, #3c5c4c);display:flex;align-items:center;justify-content:center;font-size:0.6875rem;font-weight:700">${escapeHtml((c.name||'?').charAt(0))}</div>
+          <div style="flex:1;min-width:0;background:var(--bg-soft, #F5F3EC);border-radius:12px;padding:9px 12px">
+            <div style="font-size:0.7188rem;font-weight:700;color:var(--ink-2)">${escapeHtml(c.name||'')}</div>
+            <div style="font-size:0.7969rem;line-height:1.65;color:var(--ink-2);margin-top:2px">${escapeHtml(c.text||'')}</div>
+          </div>
+        </div>`).join('')}
+    </div>` : '';
+
+  document.getElementById('modalContent').innerHTML = `
+    <div style="padding:8px 22px 14px">
+      ${fromAll ? `<button onclick="openAllWordRecords()" style="display:inline-flex;align-items:center;gap:5px;border:none;background:none;padding:0 0 10px;font-size:0.75rem;font-weight:700;color:var(--ink-3);cursor:pointer"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> 전체 목록</button>` : ''}
+      <div style="font-size:0.7188rem;font-weight:700;color:var(--ink-4);letter-spacing:0.2px">${dateLine} · ${recordMethodLabel(d)}</div>
+      <h3 style="font-family:var(--serif);font-size:1.1875rem;font-weight:600;margin:6px 0 2px">${escapeHtml(w.subtitle || w.theme || '나의 말씀기록')}</h3>
+      <p style="font-size:0.7812rem;color:var(--ink-3);margin-bottom:6px">${escapeHtml(w.range || dateKey)}</p>
+      ${d.lectio_read==='yes' ? `<div style="margin-top:12px;font-size:0.7812rem;color:var(--sage-deep, #3c5c4c);font-weight:600">✓ 말씀읽기 완료</div>`:''}
+      ${sec('말씀먹기','Meditatio', med)}
+      ${sec('말씀기도','Oratio', d.oratio)}
+      ${sec('말씀살기','Contemplatio', d.contemplatio)}
+      ${sec('말씀기록','Scribo', scriboText(d))}
+      ${shareHtml}
+      <button class="btn btn-block btn-secondary" style="margin-top:18px" onclick="closeModal();goToDay('${dateKey}')">이 날의 말씀 본문 보기 →</button>
+    </div>
+  `;
+  openModal();
+}
+
+/* v1.7 — 말씀기록 목록 한 줄 (홈 최근 3개 + 전체보기 팝업 공용) */
+function wordRecordRowHTML(r, fromAll){
+  const [y,m,dd] = r.key.split('-').map(Number);
+  const dows = ['일','월','화','수','목','금','토'];
+  const w = WORD_DATA[r.key] || {};
+  const share = getMyLectioShare(r.key);
+  const amens = (share && share.amens) || 0;
+  const cmts = (share && share.comments && share.comments.length) || 0;
+  const badges = (amens>0?`<span style="margin-left:7px;color:var(--sage-deep, #3c5c4c);font-weight:600">🌿 ${amens}</span>`:'')
+    + (cmts>0?`<span style="margin-left:7px;color:var(--ink-3);font-weight:600">💬 ${cmts}</span>`:'');
+  return `
+    <div onclick="openWordRecordView('${r.key}'${fromAll?', true':''})" style="display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--bg-card);border:1px solid var(--line);border-radius:16px;margin:0 ${fromAll?'0':'16px'} 8px;cursor:pointer">
+      <div style="flex-shrink:0;width:44px;text-align:center;background:var(--sage-pale, #E9F0EA);border-radius:12px;padding:6px 0">
+        <div style="font-size:0.625rem;font-weight:700;color:var(--sage-deep, #3c5c4c)">${m}월</div>
+        <div style="font-family:var(--en);font-size:1.0625rem;font-weight:700;color:var(--ink);line-height:1.1">${dd}</div>
+        <div style="font-size:0.625rem;color:var(--ink-3)">${dows[new Date(y,m-1,dd).getDay()]}</div>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:0.8438rem;font-weight:600;color:var(--ink);letter-spacing:-0.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(w.subtitle || w.theme || '말씀 묵상')}</div>
+        <div style="font-size:0.7188rem;color:var(--ink-3);margin-top:3px">${escapeHtml(w.range || r.key)} · ${recordMethodLabel(r.data)}${badges}</div>
+      </div>
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--ink-4);flex-shrink:0"><path d="M9 18l6-6-6-6"/></svg>
+    </div>`;
+}
+
+/* v1.7 — 전체보기 팝업: 월별로 묶어서 표시, 지난 기록은 캘린더로 */
+function openAllWordRecords(){
+  const recs = listMyWordRecords();
+  const byMonth = {};
+  recs.forEach(r=>{
+    const ym = r.key.slice(0,7);
+    (byMonth[ym] = byMonth[ym] || []).push(r);
+  });
+  const months = Object.keys(byMonth).sort().reverse();
+  const body = months.map(ym=>{
+    const [y,m] = ym.split('-').map(Number);
+    return `
+      <div style="font-size:0.8125rem;font-weight:700;color:var(--ink-2);letter-spacing:-0.3px;margin:16px 0 9px">${y}년 ${m}월 <span style="font-size:0.6875rem;font-weight:600;color:var(--ink-4)">· ${byMonth[ym].length}건</span></div>
+      ${byMonth[ym].map(r=>wordRecordRowHTML(r, true)).join('')}`;
+  }).join('');
+  document.getElementById('modalContent').innerHTML = `
+    <div style="padding:8px 22px 14px">
+      <h3 style="font-family:var(--serif);font-size:1.1875rem;font-weight:600;margin-bottom:2px">나의 말씀기록</h3>
+      <p style="font-size:0.7812rem;color:var(--ink-3)">저장한 묵상 ${recs.length}건 · 최근 순</p>
+      ${recs.length ? body : `<div style="padding:26px 0;text-align:center;color:var(--ink-3);font-size:0.8125rem;line-height:1.7">아직 저장한 말씀기록이 없어요.</div>`}
+      <button class="btn btn-block btn-secondary" style="margin-top:16px" onclick="closeModal();switchTab('calendar')">지난 기록은 캘린더에서 보기 →</button>
+    </div>
+  `;
+  openModal();
+}
+
+function renderMyWordRecords(){
+  const recs = listMyWordRecords();
+  const rows = recs.slice(0, 3).map(r=>wordRecordRowHTML(r, false)).join('');
+  return `
+    <div class="section-head">
+      <div class="section-title">나의 말씀기록 <span class="en">My Records</span></div>
+    </div>
+    ${recs.length ? rows : `
+      <div style="margin:4px 16px 8px;padding:26px 20px;text-align:center;color:var(--ink-3);background:var(--bg-card);border:1px solid var(--line);border-radius:16px">
+        <p style="font-size:0.8125rem;line-height:1.7">아직 저장한 말씀기록이 없어요.<br/>말씀 탭에서 오늘의 묵상을 기록해 보세요.</p>
+      </div>`}
+    ${recs.length ? `
+      <div style="margin:2px 16px 8px;text-align:center">
+        <button onclick="openAllWordRecords()" style="border:none;background:none;padding:8px 14px;font-size:0.7812rem;font-weight:700;color:var(--sage-deep, #3c5c4c);cursor:pointer">전체보기 →</button>
+      </div>` : ''}
+  `;
+}
+
 /* v1.5.2: 오늘 탭 인사말 자리 — 해당 날짜의 말씀 제목 표시 */
 function todayTitleLine(dateKey){
   try{
@@ -6503,162 +6672,62 @@ async function renderToday(){
   const view = document.getElementById('view-today');
   const today = state.currentDate;
   const dateKey = formatDateKey(today);
+  if(!state.user){ try{ state.user = await api.getUser(); }catch(e){} }
+  const name = (((state.user && (state.user.nickname || state.user.name)) || '성도')+'').replace(/\s*님+$/,'');
 
-  // 스켈레톤
+  // v1.7 — 인사말: ○○님 오늘도 말씀으로 승리하세요!
   const greet = greetByHour();
-  view.innerHTML = `
+  const greetHtml = `
     <div class="today-greeting">
       <div style="flex:1;min-width:0">
         <div class="today-date">${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일 ${['일','월','화','수','목','금','토'][today.getDay()]}요일</div>
-        <div class="today-hello">${todayTitleLine(dateKey)}</div>
+        <div class="today-hello">${escapeHtml(name)}님 <span class="hello-sub">오늘도 <em>말씀으로 승리</em>하세요!</span></div>
       </div>
       <div class="greet-illust">${greet.art}</div>
-    </div>
-    <div style="margin:18px 16px"><div class="skeleton" style="height:180px;border-radius:24px"></div></div>
+    </div>`;
+
+  // 스켈레톤
+  view.innerHTML = `
+    ${greetHtml}
+    <div style="margin:16px 16px"><div class="skeleton" style="height:190px;border-radius:24px"></div></div>
     <div style="margin:0 16px 12px"><div class="skeleton" style="height:90px;border-radius:16px"></div></div>
   `;
 
-  const [devotional, lectio, columns, monthProg, counts, myRooms] = await Promise.all([
+  const [devotional, columns, myRooms] = await Promise.all([
     api.getDevotional(dateKey),
-    api.getLectio(dateKey),
     api.listColumns(),
-    api.getMonthProgress(2026, 7),
-    api.getPrayerCounts(),
     api.listMyRooms(),
   ]);
-
-  const simpleMode = getMedMethod()==='simple';
-  const s0 = lectio.lectio_read==='yes';
-  const s1 = (lectio.meditatio1||'').trim() && (lectio.meditatio2||'').trim() && (lectio.meditatio3||'').trim();
-  const s2 = (lectio.oratio||'').trim();
-  const s3 = (lectio.contemplatio||'').trim();
-  const s4 = !!scriboText(lectio).trim();
-  /* v1.6 — 간편 묵상이면 3단계(말씀먹기·말씀기도·말씀살기) 기준으로 표시 */
-  const stepsDone = simpleMode
-    ? [!!(lectio.meditatio1||'').trim(), !!s2, !!s3]
-    : [s0, !!s1, !!s2, !!s3, s4];
-  const stepLabels = simpleMode
-    ? ['말씀먹기','말씀기도','말씀살기']
-    : ['말씀읽기','말씀먹기','말씀기도','말씀살기','말씀기록'];
-  const doneCount = stepsDone.filter(Boolean).length;
-  const pct = Math.round(doneCount/stepsDone.length*100);
-
-  // 이번 주 (오늘 기준 일~토)
-  const weekStart = new Date(today);
-  weekStart.setDate(today.getDate() - today.getDay());
-  const dows = ['일','월','화','수','목','금','토'];
-  const weekHtml = Array.from({length:7}).map((_,i)=>{
-    const d = new Date(weekStart); d.setDate(weekStart.getDate()+i);
-    const key = formatDateKey(d);
-    const isToday = key===formatDateKey(today);
-    const isSun = i===0;
-    const prog = monthProg[key];
-    const dots = Array.from({length:5}).map((_,j)=>{
-      const on = prog && (prog[`s${j+1}`]===1);
-      return `<span class="dt ${on?'on':''}"></span>`;
-    }).join('');
-    return `
-      <div class="week-day ${isToday?'today':''} ${isSun?'sunday':''}" onclick="goToDay('${key}')">
-        <div class="dow">${dows[i]}</div>
-        <div class="dnum">${d.getDate()}</div>
-        <div class="dots">${dots}</div>
-      </div>
-    `;
-  }).join('');
 
   // v1.6 — 칼럼 기본값: 우리 교회 담임목사 글만
   const pastorCols = columns.filter(c=>(c.role||'담임목사')==='담임목사' && (c.church||getChurchName())===getChurchName());
   const latestCol = pastorCols[0];
-  if(typeof state.todaySel!=='number' || state.todaySel>3) state.todaySel = 0;  /* v0.98: 패널 4개 */
-  const todaySelectorHtml = buildTodaySelector({ devotional, lectio, columns:pastorCols, counts, doneCount, pct, dateKey, today });
+
+  // v1.7 — 오늘의 말씀 사진 박스 (제목 + 본문, 누르면 말씀 탭으로)
+  const wTitle = devotional ? (devotional.subtitle || devotional.theme || '오늘의 묵상') : ISSUE.bookKor;
+  const wRange = devotional
+    ? (devotional.sunday ? '주일 · 통독 ' + (TONGDOK[dateKey]||[]).join(' · ') : devotional.range)
+    : '오늘의 본문';
+  const wordBoxHtml = `
+    <div class="word-photo-card" onclick="switchTab('word')" style="position:relative;margin:16px 16px 4px;height:190px;border-radius:24px;overflow:hidden;cursor:pointer;background-image:linear-gradient(to top, rgba(14,25,19,.80) 6%, rgba(14,25,19,.30) 52%, rgba(14,25,19,.10) 100%), url('${getHomePhotoUrl()}');background-size:cover;background-position:center;box-shadow:0 10px 26px rgba(20,40,30,.18)">
+      <div style="position:absolute;top:15px;left:18px;font-family:var(--en);font-size:0.6562rem;font-weight:700;letter-spacing:1.6px;color:rgba(255,255,255,.88)">TODAY'S WORD</div>
+      <div style="position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;color:#fff">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </div>
+      <div style="position:absolute;left:18px;right:18px;bottom:16px">
+        <div style="font-family:var(--serif);font-size:1.25rem;font-weight:600;color:#fff;letter-spacing:-0.4px;line-height:1.35;text-shadow:0 1px 8px rgba(0,0,0,.3)">${escapeHtml(wTitle)}</div>
+        <div style="margin-top:5px;font-size:0.8125rem;color:rgba(255,255,255,.9);text-shadow:0 1px 6px rgba(0,0,0,.3)">${escapeHtml(wRange)}</div>
+      </div>
+    </div>`;
 
   view.innerHTML = `
-    <div class="today-greeting">
-      <div style="flex:1;min-width:0">
-        <div class="today-date">${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일 ${['일','월','화','수','목','금','토'][today.getDay()]}요일</div>
-        <div class="today-hello">${(devotional && (devotional.subtitle || devotional.theme)) ? escapeHtml(devotional.subtitle || devotional.theme) : todayTitleLine(dateKey)}</div>
-      </div>
-      <div class="greet-illust">${greet.art}</div>
-    </div>
+    ${greetHtml}
 
     ${renderHomeBanner()}
 
-    ${todaySelectorHtml}
+    ${wordBoxHtml}
 
-    <div class="hero-card" hidden onclick="switchTab('word')">
-      <div class="hero-issue">2026 · Vol.07 · ${ISSUE.monthEn}</div>
-      <div class="hero-passage">${devotional ? (devotional.sunday ? '주일 · 통독 ' + (TONGDOK[dateKey]||[]).join(' · ') : devotional.range) : ISSUE.bookKor}</div>
-      <div class="hero-title">${devotional ? (devotional.subtitle || devotional.theme) : ISSUE.bookKor}</div>
-      <div class="hero-meta">
-        <span>${devotional ? (devotional.theme || '오늘의 묵상') : '오늘의 묵상'}</span>
-        <span class="dot"></span>
-        <span>약 5~7분 묵상</span>
-      </div>
-      <div class="hero-cta">
-        <span>오늘의 말씀 시작하기</span>
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </div>
-    </div>
-
-    <div class="progress-card" onclick="goToLectio()" style="cursor:pointer">
-      <div class="progress-row">
-        <div class="progress-label">
-          <svg width="16" height="16" fill="none" stroke="var(--sage)" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
-          ${simpleMode ? '오늘의 간편 묵상' : '오늘의 묵상 5단계'}
-        </div>
-        <div class="progress-pct">${doneCount}/${stepsDone.length} · ${pct}%</div>
-      </div>
-      <div class="progress-dots">
-        ${stepsDone.map(x=>`<div class="progress-dot ${x?'done':''}"></div>`).join('')}
-      </div>
-      <div class="progress-steps">
-        ${stepLabels.map(l=>`<span>${l}</span>`).join('')}
-      </div>
-    </div>
-
-    <div class="quick-grid">
-      <button class="quick-card" onclick="switchTab('word')">
-        <div class="ic sage">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-        </div>
-        <div>
-          <div class="ttl">오늘의 말씀</div>
-          <div class="sub">${devotional ? devotional.range : '본문 없음'}</div>
-        </div>
-      </button>
-      <button class="quick-card" onclick="state.togetherTab='rooms';switchTab('pray')">
-        <div class="ic terra">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 11 L12 4 L21 11"/><path d="M5 10v10h14V10"/></svg>
-        </div>
-        <div>
-          <div class="ttl">우리 ${tierLabel('cell')||'목장'}</div>
-          <div class="sub">${(myRooms && myRooms.length) ? `나눔방 ${myRooms.length}곳` : '묵상·기도 나눔'}</div>
-        </div>
-      </button>
-      <button class="quick-card" onclick="switchTab('calendar')">
-        <div class="ic cream">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-        </div>
-        <div>
-          <div class="ttl">묵상 캘린더</div>
-          <div class="sub">이번 달 ${Object.keys(monthProg).filter(k=>monthProg[k].total>0).length}일 묵상</div>
-        </div>
-      </button>
-      <button class="quick-card" onclick="switchTab('column')">
-        <div class="ic plum">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        </div>
-        <div>
-          <div class="ttl">목양 칼럼</div>
-          <div class="sub">${pastorCols.filter(c=>!c.read).length}편 새 글</div>
-        </div>
-      </button>
-    </div>
-
-    <div class="section-head">
-      <div class="section-title">이번 주 묵상 <span class="en">This Week</span></div>
-    </div>
-    <div class="week-strip">${weekHtml}</div>
+    ${renderMyWordRecords()}
 
     ${(myRooms && myRooms.length) ? (()=>{
       const tr = myRooms.slice().sort((a,b)=>b.lastTime-a.lastTime)[0];
@@ -6694,7 +6763,6 @@ async function renderToday(){
       </div>
     </div>` : ''}
   `;
-  bindTodaySelector();
 }
 
 function goToDay(dateKey){
@@ -7203,55 +7271,30 @@ function fmtMin(m){
 }
 
 async function renderTrackPanel(){
-  const el = document.getElementById('trackPanel');
-  if(!el) return;
   if(!state.user){ try{ state.user = await api.getUser(); }catch(e){} }
   const u = state.user || {};
-  const name = (u.nickname || u.name || '성도') + '님';
-  const ics = api.getDailyIntercession();
+  const name = ((u.nickname || u.name || '성도')+'').replace(/\s*님+$/,'') + '님';
   const t = await api.getPrayerTracking();
 
   const now = new Date();
   const dows=['일','월','화','수','목','금','토'];
   const dateLine = `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 ${dows[now.getDay()]}요일`;
-  const icsCode = `${String(now.getFullYear()).slice(2)}.${now.getMonth()+1}.${now.getDate()}`;
 
-  const expanded = state.icsExpanded;
-  const shown = expanded ? ics.items : ics.items.slice(0,2);
-  const rest = ics.items.length - 2;
-
-  const pct = t.movePct;
-  const pctLabel = pct < 0.1 ? pct.toFixed(1) : (pct < 10 ? pct.toFixed(2) : pct.toFixed(1));
-  const mvHoursLabel = t.moveHours >= 10000
-    ? `${(t.moveHours/10000).toFixed(1)}만 시간`
-    : `${t.moveHours.toLocaleString()}시간`;
-
-  el.innerHTML = `
+  /* v1.7 — 날짜만 중보기도 화면 맨 위로 (이름·내 기록 버튼·설정 아이콘 제거) */
+  const greetEl = document.getElementById('prayGreet');
+  if(greetEl){
+    greetEl.innerHTML = `
     <div class="track-greet">
       <div class="track-greet-l">
         <div class="tg-date">${dateLine}</div>
-        <div class="tg-name">${escapeHtml(name)}</div>
       </div>
-      <div class="track-greet-r">
-        <button class="tg-btn" onclick="openMyRecord()">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-          내 기록
-        </button>
-        <button class="tg-btn icon" onclick="switchTab('settings')" title="설정">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        </button>
-      </div>
-    </div>
+    </div>`;
+  }
 
-    <div class="track-card">
-      <div class="tc-eyebrow">오늘의 중보기도</div>
-      <div class="tc-title">${escapeHtml(ics.title)}(${icsCode})</div>
-      <div class="ics-list">
-        ${shown.map((it,i)=>`<div class="ics-item"><div class="ics-num">${i+1}</div><div class="ics-text">${escapeHtml(it)}</div></div>`).join('')}
-      </div>
-      ${rest>0 ? `<button class="ics-more" onclick="toggleIntercession()">${expanded ? '접기 ↑' : `외 ${rest}개 기도 제목 더보기 →`}</button>` : ''}
-    </div>
-
+  /* v1.7 — 기도했어요 + 이번달·누적 (연속 삭제)은 화면 맨 아래로 */
+  const el = document.getElementById('trackPanel');
+  if(!el) return;
+  el.innerHTML = `
     <button class="pray-now-btn" onclick="prayNow()">
       <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
       기도했어요
@@ -7264,10 +7307,9 @@ async function renderTrackPanel(){
       </button>` : ''}
     </div>
 
-    <div class="track-stats">
+    <div class="track-stats" style="grid-template-columns:repeat(2,1fr)">
       <div class="tstat"><div class="tstat-lbl">이번달</div><div class="tstat-num">${fmtMin(t.monthMin)}</div></div>
       <div class="tstat"><div class="tstat-lbl">누적</div><div class="tstat-num">${fmtMin(t.totalMin)}</div></div>
-      <div class="tstat"><div class="tstat-lbl">연속</div><div class="tstat-num">${t.streak}<em>일</em></div></div>
     </div>
 
   `;
@@ -7377,8 +7419,9 @@ async function renderPray(){
   const view = document.getElementById('view-pray');
   view.innerHTML = `<div id="togetherContent"></div>`;
   updateFab();
-  if(state.togetherTab==='rooms') renderRooms();
-  else renderPrayBody();
+  /* v1.7 — 렌더 완료를 기다릴 수 있게 promise 반환 (keepScroll 스크롤 유지용) */
+  if(state.togetherTab==='rooms') return renderRooms();
+  return renderPrayBody();
 }
 
 /* 홈 배너 → 7만시간 기도운동(중보기도 페이지 최상단) 바로가기 */
@@ -7878,10 +7921,8 @@ function getPwj(){
 function togglePwj(k){
   state.pwjExpanded = state.pwjExpanded || {};
   state.pwjExpanded[k] = !state.pwjExpanded[k];
-  const inp = document.getElementById('mypInput');
-  const keep = inp ? inp.value : '';
   const el = document.getElementById('pwjSection');
-  if(el){ el.innerHTML = renderPwjSection(); const i2=document.getElementById('mypInput'); if(i2) i2.value = keep; }
+  if(el) el.innerHTML = renderPwjSection();
 }
 function getMyPrayerItems(){ return _read(STORAGE_KEYS.myPrayerItems, []); }
 function addMyPrayerItem(){
@@ -7891,14 +7932,14 @@ function addMyPrayerItem(){
   const items = getMyPrayerItems();
   items.unshift({ id:'mp_'+Date.now(), text:text, time:Date.now() });
   _write(STORAGE_KEYS.myPrayerItems, items);
-  const el = document.getElementById('pwjSection');
-  if(el) el.innerHTML = renderPwjSection();
+  const el = document.getElementById('mypSection');
+  if(el) el.innerHTML = renderMyPrayerBox();
   toast('나의 기도제목에 담았습니다 🙏');
 }
 function delMyPrayerItem(id){
   _write(STORAGE_KEYS.myPrayerItems, getMyPrayerItems().filter(function(m){ return m.id!==id; }));
-  const el = document.getElementById('pwjSection');
-  if(el) el.innerHTML = renderPwjSection();
+  const el = document.getElementById('mypSection');
+  if(el) el.innerHTML = renderMyPrayerBox();
 }
 function renderPwjSection(){
   const d = getPwj();
@@ -7921,7 +7962,7 @@ function renderPwjSection(){
 
     <div class="pwj-card">
       <div class="pwj-head">
-        <span class="pwj-badge">대한민국을 위한 기도</span>
+        <span class="pwj-badge">나라를 위한 기도</span>
         <a class="pwj-src" href="${PWJ_LINKS.korea}" target="_blank" rel="noopener">예수동행기도 ↗</a>
       </div>
       ${items.map(function(it,i){
@@ -7939,8 +7980,13 @@ function renderPwjSection(){
           ${on ? `<div class="pwj-item-body">${escapeHtml(it.body||'').replace(/\n/g,'<br/>')}</div>` : ''}
         </div>`;
       }).join('')}
-    </div>
+    </div>`;
+}
 
+/* v1.7 — 나의 기도제목 박스 (중보기도 화면 맨 아래) */
+function renderMyPrayerBox(){
+  const my = getMyPrayerItems();
+  return `
     <div class="pwj-card">
       <div class="pwj-head">
         <span class="pwj-badge my">🙏 나의 기도제목</span>
@@ -7957,13 +8003,14 @@ function renderPwjSection(){
 }
 
 /* ── 기존 중보기도 화면 (함께 탭 내부) ───────────────────────── */
+/* v1.7 — 순서: 날짜 → 긴급기도제목 → 나라를 위한 기도 → 중보기도 나눔
+        → 긴급 화살기도 요청 → 나의 기도제목 → 기도했어요(이번달·누적) */
 async function renderPrayBody(){
   const view = document.getElementById('togetherContent');
   if(!view) return;
   view.innerHTML = `
+    <div id="prayGreet"></div>
     <div id="pwjSection">${renderPwjSection()}</div>
-    <div id="trackPanel"></div>
-    <div class="track-divider">함께 올려드리는 기도</div>
     <div class="pray-header">
       <div class="pray-h-title">중보기도 나눔</div>
       <div class="pray-h-sub">${getChurchName()} 공동체가 함께 올려드리는 기도</div>
@@ -7974,13 +8021,16 @@ async function renderPrayBody(){
         <div class="pray-count-card"><div class="pcc-num">···</div><div class="pcc-lbl">공동체</div></div>
       </div>
     </div>
-    <div id="urgentSection"></div>
     <div id="prayList">
       ${Array.from({length:3}).map(()=>`<div style="margin:0 16px 10px"><div class="skeleton" style="height:140px;border-radius:16px"></div></div>`).join('')}
     </div>
+    <div id="urgentSection"></div>
+    <div id="mypSection">${renderMyPrayerBox()}</div>
+    <div id="trackPanel"></div>
+    <div class="breath">${BREATH_LEAF}</div>
   `;
 
-  renderTrackPanel();
+  await renderTrackPanel();
 
   const [counts, prayers, urgentAll] = await Promise.all([
     api.getPrayerCounts(),
@@ -8234,10 +8284,6 @@ async function renderColumn(){
           <div class="column-h-title">목양 칼럼</div>
           <div class="column-h-sub">목회자들이 전하는 한 편의 글</div>
         </div>
-        <button class="col-write-btn" onclick="openColumnSubmit()">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15" height="15"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
-          기고하기
-        </button>
       </div>
     </div>
     <div id="columnReview"></div>
@@ -8881,7 +8927,7 @@ async function _renderMypageBody(view){
     </div>
 
     <div style="text-align:center;padding:14px;font-family:var(--en);font-size:0.6562rem;color:var(--ink-4);letter-spacing:1px">
-      말씀함께 v1.6.2 · DEMO
+      말씀함께 v1.7.1 · DEMO
     </div>
   `;
 }
@@ -9237,7 +9283,7 @@ async function renderSettings(){
       <div class="menu-row" style="cursor:default">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
         <div class="menu-text"><div class="menu-ttl">버전</div></div>
-        <div class="menu-right" style="font-family:var(--en);font-weight:600;color:var(--ink-3)">v1.6.2 · DEMO</div>
+        <div class="menu-right" style="font-family:var(--en);font-weight:600;color:var(--ink-3)">v1.7.1 · DEMO</div>
       </div>
       <div class="menu-row" onclick="toast('이용약관 (실제 앱에서 제공)')">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>

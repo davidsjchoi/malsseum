@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>말씀함께 · 관리자 v1.7.1</title>
+<title>말씀함께 · 관리자 v1.7.2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -206,7 +206,7 @@ a{color:inherit}
       <div class="side-mark">함</div>
       <div>
         <div class="side-brand-text">말씀함께</div>
-        <div class="side-brand-sub en">ADMIN · v1.7.1</div>
+        <div class="side-brand-sub en">ADMIN · v1.7.2</div>
       </div>
     </div>
     <nav class="side-nav" id="sideNav"></nav>
@@ -624,7 +624,22 @@ function addPrayer({who,scope,body,urgent,committee,district,grove,cell}){
   all.unshift({ id:newId, scope:urgent?'urgent':(scope||'church'), _origScope:scope||'church', who:who||'관리자', avatar:(who||'관').charAt(0), time:Date.now(), body:body||'', count:0, urgent:!!urgent, district:district||null, grove:grove||null, cell:cell||null, committee:committee||null });
   _write(STORAGE_KEYS.prayers,all);
 }
-function urgentCount(){ return rawPrayers().filter(p=>p.urgent).length; }
+function urgentCount(){ return rawPrayers().filter(p=>p.urgent&&!p.pending).length; }
+
+/* ── v1.7.2: 담당교역자 승인 대기 (앱에서 우리 교구·교회 전체·긴급 화살기도 제출 시) ── */
+function pendingPrayers(){ return rawPrayers().filter(p=>p.pending).sort((a,b)=>(b.time||0)-(a.time||0)); }
+function approvePrayer(id){
+  const all=rawPrayers(); const p=all.find(x=>x.id===id);
+  if(p){ delete p.pending; _write(STORAGE_KEYS.prayers,all); }
+  toast('승인되었습니다 — 사용자 앱에 게시됩니다 🙏');
+  RENDERERS.prayer(); buildNav(); markActive();
+}
+function rejectPrayer(id){
+  let all=rawPrayers(); all=all.filter(x=>x.id!==id);
+  _write(STORAGE_KEYS.prayers,all);
+  toast('반려 처리했습니다 — 게시되지 않습니다');
+  RENDERERS.prayer(); buildNav(); markActive();
+}
 
 /* ===== 목장방 ===== */
 function listRooms(){ return _read(STORAGE_KEYS.rooms,[])||[]; }
@@ -643,7 +658,7 @@ const NAV=[
   {id:'column', name:'칼럼 검수', en:'Columns', badge:()=>listSubmissions().filter(c=>c.status==='review').length, icon:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/>'},
   {id:'devotional', name:'묵상 본문', en:'Devotionals', icon:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>'},
   {id:'pdf', name:'책자 PDF 업로드', en:'PDF Import', icon:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6M9 15l3 3 3-3"/>'},
-  {id:'prayer', name:'중보기도', en:'Prayers', icon:'<path d="M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="2.2"/>'},
+  {id:'prayer', name:'중보기도', en:'Prayers', badge:()=>pendingPrayers().length, icon:'<path d="M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="2.2"/>'},
   {id:'pwj', name:'예수동행기도 콘텐츠', en:'PrayWithJesus', icon:'<circle cx="12" cy="12" r="9"/><path d="M3.6 9h16.8M3.6 15h16.8M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/>'},
   {id:'rooms', name:'목장방', en:'Rooms', icon:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>'},
   {group:'정책'},
@@ -1147,17 +1162,36 @@ function val(id){ return document.getElementById(id).value.trim(); }
 
 /* ====================== 뷰: 중보기도 ====================== */
 RENDERERS.prayer=function(){
-  const hidden=hiddenPrayers(); const list=listPrayers(); const uc=urgentCount();
+  const hidden=hiddenPrayers(); const listAll=listPrayers(); const uc=urgentCount();
+  const pend=pendingPrayers(); const list=listAll.filter(p=>!p.pending);
+  const SCOPE_KO={zone:'우리 교구',church:'교회 전체',cell:'목장',self:'개인'};
   document.getElementById('view-prayer').innerHTML=`
     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:4px">
       <p class="hint" style="margin:0">중보기도 제목을 관리합니다. 긴급 화살기도는 사용자 앱 중보기도 탭 <b>'긴급 화살기도 요청' 섹션</b>에 🔥 표시로 고정 노출됩니다. 부적절한 제목은 숨길 수 있습니다.</p>
       <button class="btn btn-primary btn-sm" style="flex-shrink:0;background:var(--terra);border-color:var(--terra)" onclick="openPrayerForm()">🔥 긴급기도 등록</button>
     </div>
     <div class="stat-grid" style="margin:16px 0 4px">
-      ${statCard('terra','긴급 기도',uc,'건','M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z')}
+      ${statCard('warn','승인 대기',pend.length,'건','M12 8v4l3 3 M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z')}
+      ${statCard('terra','긴급 화살기도',uc,'건','M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z')}
       ${statCard('sage','전체 노출',list.length-hidden.length,'건','M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z M12 9a3 3 0 1 0 0 6')}
       ${statCard('warn','숨김',hidden.length,'건','M17.94 17.94A10 10 0 0 1 12 20C5 20 1 12 1 12a18 18 0 0 1 5.06-5.94 M1 1l22 22')}
     </div>
+    <div class="section-title">담당교역자 승인 대기 <small style="font-weight:400;color:var(--ink-3)">— 우리 교구 · 교회 전체 · 🔥 긴급 화살기도 요청은 승인 후 앱에 게시됩니다</small></div>
+    ${pend.length===0 ? emptyBox('승인 대기 중인 기도제목이 없습니다.') : pend.map(p=>`
+      <div class="lrow" style="border-color:#EAD9A8;background:linear-gradient(135deg,#FDF9EE,var(--bg-card))">
+        <div class="lrow-av" style="background:#F6EEDD;color:#8A6D3B">${p.urgent?'🔥':esc(p.avatar||'성')}</div>
+        <div class="lrow-main">
+          <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+            <span class="scope-pill" style="background:#F6EEDD;color:#8A6D3B">${p.urgent?'🔥 긴급 화살기도':'나눔 요청'}</span>
+            <span class="scope-pill">${SCOPE_KO[p.scope]||esc(p.scope||'')}</span>
+            <span class="lrow-title">${esc(p.who)}</span>
+            <span style="font-size:11.5px;color:var(--ink-3)">${relTime(p.time||Date.now())}</span></div>
+          <div class="lrow-sub">${esc(p.body)}</div></div>
+        <div class="lrow-actions">
+          <button class="btn btn-sm btn-primary" onclick="approvePrayer(${p.id})">승인 · 게시</button>
+          <button class="btn btn-sm btn-ghost" style="color:#A8412F" onclick="rejectPrayer(${p.id})">반려</button>
+        </div>
+      </div>`).join('')}
     <div class="section-title">중보기도 목록</div>
     ${list.map(p=>{ const h=hidden.includes(p.id);
       return `<div class="lrow ${h?'is-hidden':''}" style="${p.urgent?'border-color:#F0D5C0;background:linear-gradient(135deg,#FDF6F1,var(--bg-card))':''}">
@@ -1260,7 +1294,7 @@ RENDERERS.settings=function(){
         <div class="switch-info"><h4>데모 데이터 초기화</h4><p>관리자·앱이 공유하는 모든 로컬 데이터를 삭제합니다</p></div>
         <button class="btn btn-bad" onclick="resetAll()">초기화</button></div>
     </div>
-    <div class="note" style="margin-top:18px"><b>연동 안내</b> — 이 관리자는 사용자 앱(말씀함께_데모_v1.7.1.html)과 동일한 브라우저 localStorage 키를 공유합니다. 같은 브라우저에서 두 파일을 열면 변경 사항이 즉시 반영됩니다.</div>`;
+    <div class="note" style="margin-top:18px"><b>연동 안내</b> — 이 관리자는 사용자 앱(말씀함께_데모_v1.7.2.html)과 동일한 브라우저 localStorage 키를 공유합니다. 같은 브라우저에서 두 파일을 열면 변경 사항이 즉시 반영됩니다.</div>`;
 };
 function saveChurch(v){ setPrefs({churchName:(v||'').trim()||'우리 교회'}); document.getElementById('sideChurch').textContent=getChurchName(); toast('저장되었습니다'); }
 function resetAll(){ if(confirm('정말 모든 데모 데이터를 초기화할까요?')){ Object.values(STORAGE_KEYS).forEach(k=>localStorage.removeItem(k)); toast('초기화되었습니다'); ensureSubmissionSeed(); init(); } }

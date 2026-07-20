@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="말씀함께">
-<title>말씀함께 · 데모 v1.7.1</title>
+<title>말씀함께 · 데모 v1.7.2</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -3659,9 +3659,30 @@ body,button,input,textarea,select{ font-family:var(--font-body); }
 }
 .today-hello{ white-space:normal; font-size:1.25rem; line-height:1.45; word-break:keep-all; }
 
-/* v1.7.1 — 홈: 맨 위 날짜 줄과 인사말 뒷부분('오늘도 말씀으로 승리하세요!')만 살짝 축소 */
-.today-date{ font-size:0.875rem; }
+/* v1.7.1 — 홈: 인사말 뒷부분('오늘도 말씀으로 승리하세요!')만 살짝 축소 */
 .today-hello .hello-sub{ font-size:0.85em; }
+
+/* v1.7.2 — 홈: 날짜는 살짝 키우고 요일은 살짝 줄임 */
+.today-date{ font-size:0.9688rem; }
+.today-date .td-dow{ font-size:0.7812rem; font-weight:600; color:var(--ink-3); }
+
+/* v1.7.2 — 말씀탭 날짜: 중보기도 탭 날짜(tg-date)와 동일한 폰트·색 */
+.word-date-plain{
+  font-size:0.7812rem; color:var(--ink-3); font-weight:500;
+  margin-bottom:12px; cursor:pointer;
+}
+
+/* v1.7.2 — 중보기도 현황 박스: 누르면 목록 필터 */
+.pray-count-card{ cursor:pointer; transition:border-color .15s, background .15s, box-shadow .15s; }
+.pray-count-card.on{ border-color:var(--sage); background:var(--sage-pale, #E9F0EA); box-shadow:0 0 0 1px var(--sage) inset; }
+
+/* v1.7.2 — 상단바 알림 배지 */
+.notif-dot{
+  position:absolute; top:3px; right:3px;
+  min-width:15px; height:15px; padding:0 4px; border-radius:99px;
+  background:#C0492C; color:#fff; font-size:0.5625rem; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+}
 </style>
 
 <!-- ============================================================================
@@ -3748,8 +3769,9 @@ body,button,input,textarea,select{ font-family:var(--font-body); }
       <button class="icon-btn" onclick="switchTab('calendar')" title="묵상 캘린더">
         <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
       </button>
-      <button class="icon-btn" onclick="openSettings()" title="알림">
+      <button class="icon-btn" id="notifBell" onclick="openNotifCenter()" title="알림" style="position:relative">
         <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+        <span class="notif-dot" id="notifDot" style="display:none"></span>
       </button>
     </div>
   </div>
@@ -5150,6 +5172,7 @@ const STORAGE_KEYS = {
   pwj:'mh_v05_pwj_content',              // v1.6.1 — 예수동행기도 콘텐츠(긴급기도·나라를 위한 기도) 관리자 편집본
   myPrayerItems:'mh_v05_my_prayer_items',// v1.6.1 — 나의 기도제목 (내 기기)
   homePhoto:'mh_v05_home_photo',         // v1.7 — 홈 '오늘의 말씀' 박스 배경 사진 (관리자 업로드)
+  alertsSeen:'mh_v05_alerts_seen',       // v1.7.2 — 담당교역자가 확인한 승인 요청 id (알림 배지 해제용)
 };
 
 /* ============================================================================
@@ -5497,10 +5520,13 @@ const api = {
 
     // 사용자 소속 확인
     const user = _normalizeUser(_read(STORAGE_KEYS.user, null) || {});
-    const isOwn = (p) => user && p.who && (p.who===user.name || p.who===user.nickname);
+    /* v1.7.2 — owner(작성자 id)도 함께 확인: 표시 이름을 다르게 적어도 내 글로 인식 */
+    const isOwn = (p) => !!(user && ((p.owner && user.id && p.owner===user.id) || (p.who && (p.who===user.name || p.who===user.nickname))));
 
     // 1) 가시성 필터 — 사용자 소속이 일치하는 항목만
     const accessFiltered = visible.filter(p=>{
+      // v1.7.2 — 승인 대기 건은 작성자 본인에게만 보임 (담당교역자 승인 후 공개)
+      if(p.pending && !isOwn(p)) return false;
       // 교회 전체 공지 / 긴급 — 모두 노출
       if(p.scope==='church') return true;
       if(p.urgent) return true;
@@ -5538,7 +5564,7 @@ const api = {
     return filtered.map(p=>({ ...p, prayed:prayedIds.includes(p.id) }));
   },
 
-  async createPrayer({ scope, who, body, urgent=false, committee=null }){
+  async createPrayer({ scope, who, body, urgent=false, committee=null, pending=false }){
     showSync(true);
     await _delay(300,500);
     const all = _read(STORAGE_KEYS.prayers, PRAYERS_SEED);
@@ -5552,6 +5578,8 @@ const api = {
       grove: u.grove || null,
       cell: u.cell || null,
       committee: committee || null,
+      owner: u.id || null,                    /* v1.7.2 — 작성자 식별(승인 대기 글 본인 표시용) */
+      ...(pending ? { pending:true } : {}),   /* v1.7.2 — 담당교역자 승인 전 게시 보류 */
     };
     all.unshift(item);
     _write(STORAGE_KEYS.prayers, all);
@@ -6340,6 +6368,7 @@ function switchTab(tab){
 
   render();
   applyI18n();
+  try{ updateNotifBadge(); }catch(e){}   /* v1.7.2 — 담당교역자 알림 배지 */
 }
 
 function updateFab(){
@@ -6680,7 +6709,7 @@ async function renderToday(){
   const greetHtml = `
     <div class="today-greeting">
       <div style="flex:1;min-width:0">
-        <div class="today-date">${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일 ${['일','월','화','수','목','금','토'][today.getDay()]}요일</div>
+        <div class="today-date">${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일 <span class="td-dow">${['일','월','화','수','목','금','토'][today.getDay()]}요일</span></div>
         <div class="today-hello">${escapeHtml(name)}님 <span class="hello-sub">오늘도 <em>말씀으로 승리</em>하세요!</span></div>
       </div>
       <div class="greet-illust">${greet.art}</div>
@@ -6817,10 +6846,7 @@ async function renderWord(){
   if(!devotional){
     view.innerHTML = `
       <div class="word-header">
-        <div class="word-date-pill" onclick="switchTab('calendar')">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-          ${formatKorDate(today)}
-        </div>
+        <div class="word-date-plain" onclick="switchTab('calendar')">${formatKorDate(today)}</div>
       </div>
       <div style="margin:24px 16px;padding:24px;text-align:center;background:var(--bg-card);border:1px solid var(--line);border-radius:16px">
         <p style="color:var(--ink-3);font-size:0.8125rem;line-height:1.7">${formatKorDate(today)}의 묵상 본문이<br/>아직 등록되지 않았습니다.<br/><br/><strong style="color:var(--ink)">7월호는 1일~31일</strong><br/>시편 94~106편, 미가·나훔·하박국입니다.</p>
@@ -6834,10 +6860,7 @@ async function renderWord(){
   if(devotional.sunday){
     view.innerHTML = `
       <div class="word-header">
-        <div class="word-date-pill" onclick="switchTab('calendar')">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-          ${formatKorDate(today)} · 주일
-        </div>
+        <div class="word-date-plain" onclick="switchTab('calendar')">${formatKorDate(today)} · 주일</div>
         <div class="word-title">${devotional.subtitle}</div>
         <div class="word-nav">
           <button class="word-nav-btn" onclick="changeDay(-1)"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> 어제</button>
@@ -6891,10 +6914,7 @@ async function renderWord(){
   // 평일 묵상
   view.innerHTML = `
     <div class="word-header">
-      <div class="word-date-pill" onclick="switchTab('calendar')">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-        ${formatKorDate(today)}
-      </div>
+      <div class="word-date-plain" onclick="switchTab('calendar')">${formatKorDate(today)}</div>
       <div class="word-passage-ref">${devotional.range}</div>
       <div class="word-title">${devotional.subtitle}</div>
       <div class="word-nav">
@@ -8003,53 +8023,60 @@ function renderMyPrayerBox(){
 }
 
 /* ── 기존 중보기도 화면 (함께 탭 내부) ───────────────────────── */
-/* v1.7 — 순서: 날짜 → 긴급기도제목 → 나라를 위한 기도 → 중보기도 나눔
-        → 긴급 화살기도 요청 → 나의 기도제목 → 기도했어요(이번달·누적) */
+/* v1.7.2 — 순서: 날짜 → [나라와 열방을 위한 기도] 긴급기도제목·나라를 위한 기도
+        → 중보기도 나눔(현황 박스 필터) → 긴급 화살기도 요청 → 기도했어요(이번달·누적) */
 async function renderPrayBody(){
   const view = document.getElementById('togetherContent');
   if(!view) return;
   view.innerHTML = `
     <div id="prayGreet"></div>
+    <div class="pray-header" style="padding-bottom:0">
+      <div class="pray-h-title">나라와 열방을 위한 기도</div>
+    </div>
     <div id="pwjSection">${renderPwjSection()}</div>
-    <div class="pray-header">
+    <div class="pray-header" style="margin-top:26px">
       <div class="pray-h-title">중보기도 나눔</div>
       <div class="pray-h-sub">${getChurchName()} 공동체가 함께 올려드리는 기도</div>
       <div class="pray-counts" id="prayCounts">
         <div class="pray-count-card"><div class="pcc-num">···</div><div class="pcc-lbl">전체</div></div>
-        <div class="pray-count-card"><div class="pcc-num">···</div><div class="pcc-lbl">긴급</div></div>
+        <div class="pray-count-card"><div class="pcc-num">···</div><div class="pcc-lbl">화살</div></div>
         <div class="pray-count-card"><div class="pcc-num">···</div><div class="pcc-lbl">내 중보</div></div>
         <div class="pray-count-card"><div class="pcc-num">···</div><div class="pcc-lbl">공동체</div></div>
       </div>
+      <div style="margin-top:7px;font-size:0.6875rem;color:var(--ink-4)">박스를 누르면 아래 목록이 해당 항목으로 바뀝니다</div>
     </div>
     <div id="prayList">
       ${Array.from({length:3}).map(()=>`<div style="margin:0 16px 10px"><div class="skeleton" style="height:140px;border-radius:16px"></div></div>`).join('')}
     </div>
     <div id="urgentSection"></div>
-    <div id="mypSection">${renderMyPrayerBox()}</div>
     <div id="trackPanel"></div>
     <div class="breath">${BREATH_LEAF}</div>
   `;
 
   await renderTrackPanel();
 
-  const [counts, prayers, urgentAll] = await Promise.all([
+  const [counts, prayers, urgentRaw] = await Promise.all([
     api.getPrayerCounts(),
-    api.listPrayers(state.prayerScope),
+    api.listPrayers('all'),
     api.listPrayers('urgent'),
   ]);
+  /* v1.7.2 — 승인 대기(pending) 긴급은 승인 전까지 상단 섹션에 노출하지 않음 */
+  const urgentAll = urgentRaw.filter(p=>!p.pending);
 
   // v1.6 — 중보기도 화면을 열면 긴급 기도를 '확인함' 처리 → 홈 버블 숫자 해제
   try{ _write(STORAGE_KEYS.urgentSeen, urgentAll.map(p=>p.id)); }catch(e){}
 
+  /* v1.7.2 — 현황 박스 = 목록 필터 (전체/화살/내 중보/공동체) */
+  const f = state.prayFilter || 'all';
   document.getElementById('prayCounts').innerHTML = `
-    <div class="pray-count-card"><div class="pcc-num">${counts.total}</div><div class="pcc-lbl">전체</div></div>
-    <div class="pray-count-card"><div class="pcc-num" style="color:#A45A3F">${counts.urgent}</div><div class="pcc-lbl">긴급</div></div>
-    <div class="pray-count-card"><div class="pcc-num" style="color:var(--sage)">${counts.myPrayed}</div><div class="pcc-lbl">내 중보</div></div>
-    <div class="pray-count-card"><div class="pcc-num">${counts.community}</div><div class="pcc-lbl">공동체</div></div>
+    <div class="pray-count-card ${f==='all'?'on':''}" onclick="setPrayFilter('all')"><div class="pcc-num">${counts.total}</div><div class="pcc-lbl">전체</div></div>
+    <div class="pray-count-card ${f==='urgent'?'on':''}" onclick="setPrayFilter('urgent')"><div class="pcc-num" style="color:#A45A3F">${counts.urgent}</div><div class="pcc-lbl">화살</div></div>
+    <div class="pray-count-card ${f==='mine'?'on':''}" onclick="setPrayFilter('mine')"><div class="pcc-num" style="color:var(--sage)">${counts.myPrayed}</div><div class="pcc-lbl">내 중보</div></div>
+    <div class="pray-count-card ${f==='community'?'on':''}" onclick="setPrayFilter('community')"><div class="pcc-num">${counts.community}</div><div class="pcc-lbl">공동체</div></div>
   `;
 
-  // 긴급 기도 전용 상단 섹션 — 필터와 무관하게 항상 노출(긴급 탭 제외)
-  const showUrgentSec = urgentAll.length>0 && state.prayerScope!=='urgent';
+  // 긴급 기도 전용 상단 섹션 — 화살 필터가 아닐 때만 별도 노출
+  const showUrgentSec = urgentAll.length>0 && f!=='urgent';
   const usEl = document.getElementById('urgentSection');
   if(usEl){
     usEl.innerHTML = showUrgentSec ? `
@@ -8062,19 +8089,39 @@ async function renderPrayBody(){
       </div>` : '';
   }
 
-  // 전체 탭에서는 긴급 항목을 상단 섹션으로 분리하여 명단에서 제외
-  const mainPrayers = state.prayerScope==='all' ? prayers.filter(p=>!p.urgent) : prayers;
+  /* 필터별 목록 구성 */
+  let mainPrayers, emptyMsg;
+  if(f==='urgent'){
+    mainPrayers = prayers.filter(p=>p.urgent);
+    emptyMsg = '아직 긴급 화살기도 요청이 없습니다.';
+  }else if(f==='mine'){
+    mainPrayers = prayers.filter(p=>p.prayed);
+    emptyMsg = "'함께 기도하기'를 누른 제목이 여기에 모입니다.";
+  }else if(f==='community'){
+    mainPrayers = prayers.slice().sort((a,b)=>(b.count||0)-(a.count||0));
+    emptyMsg = '아직 함께 기도 중인 제목이 없습니다.';
+  }else{
+    // 전체: 승인된 긴급은 상단 섹션에 있으므로 목록에서 제외 (내 승인 대기 건은 표시)
+    mainPrayers = prayers.filter(p=>!p.urgent || p.pending);
+    emptyMsg = '이 영역의 기도제목이 아직 없습니다.<br/>+ 버튼으로 첫 번째 기도제목을 나눠 보세요.';
+  }
 
   if(mainPrayers.length===0){
-    document.getElementById('prayList').innerHTML = showUrgentSec ? '' : `
+    document.getElementById('prayList').innerHTML = (f==='all' && showUrgentSec) ? '' : `
       <div style="margin:24px 16px;padding:32px 20px;text-align:center;color:var(--ink-3);background:var(--bg-card);border:1px solid var(--line);border-radius:16px">
-        <p style="font-size:0.8125rem;line-height:1.7">이 영역의 기도제목이 아직 없습니다.<br/>+ 버튼으로 첫 번째 기도제목을 나눠 보세요.</p>
+        <p style="font-size:0.8125rem;line-height:1.7">${emptyMsg}</p>
       </div>
     `;
     return;
   }
 
   document.getElementById('prayList').innerHTML = mainPrayers.map(p=>prayerCardHTML(p)).join('');
+}
+
+/* v1.7.2 — 현황 박스 필터 전환 */
+function setPrayFilter(s){
+  state.prayFilter = s;
+  keepScroll(()=>renderPray());
 }
 
 function prayerCardHTML(p){
@@ -8088,7 +8135,8 @@ function prayerCardHTML(p){
             <div class="pcard-time">${formatRelTime(p.time)}</div>
           </div>
         </div>
-        <span class="pcard-scope ${p.scope}">${
+        ${p.pending ? `<span class="pcard-scope" style="background:#F6EEDD;color:#8A6D3B">${p.urgent?'🔥 ':''}승인 대기</span>` : ''}
+        <span class="pcard-scope ${p.scope}" ${p.pending?'style="display:none"':''}>${
           p.urgent?'🔥 긴급':
           p.scope==='church'?'교회':
           p.scope==='zone'?(p.district||tierLabel('zone')||'교구'):
@@ -8150,7 +8198,11 @@ function openWriteModal(){
         <label class="${hasDistrict?'':'dim'}" onclick="${hasDistrict?'pickScope(this,\'zone\')':'toast(\'먼저 교구를 등록해 주세요\')'}"><input type="radio" name="wf-scope" value="zone" ${hasDistrict?'':'disabled'}><span class="lbl">우리 교구${hasDistrict?'':' · 잠김'}</span></label>
         <label onclick="pickScope(this,'church')"><input type="radio" name="wf-scope" value="church"><span class="lbl">교회 전체</span></label>
       </div>
-      <label><input type="checkbox" id="wf-urgent" style="margin-right:6px;vertical-align:middle"> 긴급 기도제목 (상단 노출)</label>
+      <div style="margin:2px 0 10px;padding:9px 12px;background:#F8F4E9;border:1px solid #EADFC4;border-radius:10px;font-size:0.7188rem;line-height:1.6;color:#7A6A48">
+        <strong>우리 교구·교회 전체</strong> 나눔과 <strong>🔥 긴급 화살기도(상단 노출)</strong>는
+        담당교역자(목사님·전도사님)의 <strong>승인 후 게시</strong>됩니다.
+      </div>
+      <label><input type="checkbox" id="wf-urgent" style="margin-right:6px;vertical-align:middle"> 🔥 긴급 화살기도 요청 (상단 노출 · 담당교역자 승인 필요)</label>
       <label>기도 내용</label>
       <textarea id="wf-body" rows="6" placeholder="구체적인 기도제목을 나눠 주세요."></textarea>
       <button class="btn btn-block" style="margin-top:16px" onclick="submitPrayer()">
@@ -8168,11 +8220,59 @@ async function submitPrayer(){
   const urgent = document.getElementById('wf-urgent').checked;
   const body = document.getElementById('wf-body').value.trim();
   if(!body){ toast('기도 내용을 적어 주세요'); return; }
-  await api.createPrayer({ scope, who, body, urgent, committee:null });
+  /* v1.7.2 — 우리 교구·교회 전체·긴급 화살기도는 담당교역자 승인 전까지 게시 보류 */
+  const needsApproval = urgent || scope==='zone' || scope==='church';
+  await api.createPrayer({ scope, who, body, urgent, committee:null, pending:needsApproval });
   closeModal();
-  toast('기도제목이 공유되었습니다 🙏');
-  state.prayerScope = scope==='self' ? 'self' : 'all';
+  toast(needsApproval
+    ? '접수되었습니다. 담당교역자 승인 후 게시됩니다 🙏'
+    : '기도제목이 공유되었습니다 🙏');
+  state.prayFilter = 'all';
+  updateNotifBadge();
   renderPray();
+}
+
+/* ── v1.7.2: 담당교역자 알림 (긴급 화살기도 승인 요청) ─────────────── */
+function getPendingApprovals(){
+  try{ return (_read(STORAGE_KEYS.prayers, [])||[]).filter(p=>p.pending); }catch(e){ return []; }
+}
+function updateNotifBadge(){
+  const el = document.getElementById('notifDot');
+  if(!el) return;
+  const seen = _read(STORAGE_KEYS.alertsSeen, []);
+  const n = getPendingApprovals().filter(p=>p.urgent && !seen.includes(p.id)).length;
+  if(n>0){ el.style.display='flex'; el.textContent = n>99?'99+':n; }
+  else{ el.style.display='none'; }
+}
+function openNotifCenter(){
+  const pend = getPendingApprovals();
+  const SCOPE_KO = { zone:'우리 교구', church:'교회 전체', cell:'우리 목장', self:'나의 기도' };
+  const rows = pend.length ? pend.map(p=>`
+    <div style="display:flex;gap:10px;padding:12px 2px;border-bottom:1px solid var(--line-soft)">
+      <div style="flex-shrink:0;width:34px;height:34px;border-radius:50%;background:${p.urgent?'#F8E8DD':'var(--sage-pale, #E9F0EA)'};display:flex;align-items:center;justify-content:center;font-size:0.9375rem">${p.urgent?'🔥':'🙏'}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:0.7969rem;font-weight:700;color:var(--ink)">${p.urgent?'긴급 화살기도 승인 요청':'나눔 승인 대기'} <span style="font-weight:600;color:var(--ink-3)">· ${SCOPE_KO[p.scope]||p.scope}</span></div>
+        <div style="font-size:0.75rem;color:var(--ink-2);margin-top:3px;line-height:1.6">${escapeHtml(p.who)} · ${escapeHtml((p.body||'').slice(0,60))}${(p.body||'').length>60?'…':''}</div>
+        <div style="font-size:0.6875rem;color:var(--ink-4);margin-top:2px">${formatRelTime(p.time)}</div>
+      </div>
+    </div>`).join('')
+    : `<div style="padding:28px 10px;text-align:center;color:var(--ink-3);font-size:0.8125rem;line-height:1.7">새 알림이 없습니다.</div>`;
+  document.getElementById('modalContent').innerHTML = `
+    <div style="padding:8px 22px 14px">
+      <h3 style="font-family:var(--serif);font-size:1.1875rem;font-weight:600;margin-bottom:2px">알림</h3>
+      <p style="font-size:0.7812rem;color:var(--ink-3);margin-bottom:8px">담당교역자 승인 요청 ${pend.length}건</p>
+      ${rows}
+      ${pend.length ? `<div style="margin-top:12px;font-size:0.7188rem;color:var(--ink-4);line-height:1.6">담당교역자가 관리자 페이지 → 중보기도에서 승인하면 앱에 게시됩니다.</div>` : ''}
+    </div>
+  `;
+  /* 긴급 요청 확인 처리 → 배지 해제 */
+  try{
+    const seen = _read(STORAGE_KEYS.alertsSeen, []);
+    pend.filter(p=>p.urgent).forEach(p=>{ if(!seen.includes(p.id)) seen.push(p.id); });
+    _write(STORAGE_KEYS.alertsSeen, seen);
+  }catch(e){}
+  updateNotifBadge();
+  openModal();
 }
 
 /* ============================================================================
@@ -8927,7 +9027,7 @@ async function _renderMypageBody(view){
     </div>
 
     <div style="text-align:center;padding:14px;font-family:var(--en);font-size:0.6562rem;color:var(--ink-4);letter-spacing:1px">
-      말씀함께 v1.7.1 · DEMO
+      말씀함께 v1.7.2 · DEMO
     </div>
   `;
 }
@@ -9283,7 +9383,7 @@ async function renderSettings(){
       <div class="menu-row" style="cursor:default">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
         <div class="menu-text"><div class="menu-ttl">버전</div></div>
-        <div class="menu-right" style="font-family:var(--en);font-weight:600;color:var(--ink-3)">v1.7.1 · DEMO</div>
+        <div class="menu-right" style="font-family:var(--en);font-weight:600;color:var(--ink-3)">v1.7.2 · DEMO</div>
       </div>
       <div class="menu-row" onclick="toast('이용약관 (실제 앱에서 제공)')">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>

@@ -7824,7 +7824,9 @@ async function renderWord(){
 
   const devotional = await api.getDevotional(dateKey);
   const lectio = await api.getLectio(dateKey);
-  const isFuture = today > new Date(2026, 6, 31) || today < new Date(2026, 6, 1);
+  /* v1.7.5 — 등록된 콘텐츠 범위 기준으로 '내일' 버튼 활성화 (7월 하드코딩 제거) */
+  const _cr = contentDateRange();
+  const isFuture = formatDateKey(today) >= formatDateKey(_cr.end) || today < _cr.start;
 
   if(!devotional){
     view.innerHTML = `

@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="말씀함께">
-<title>말씀함께 · 데모 v1.7.5</title>
+<title>말씀함께 · 데모 v1.8</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -368,7 +368,8 @@ body{
   padding:10px 16px; background:#FFF7EC; color:#8A6A3B;
   font-size:0.7188rem; line-height:1.6; border-bottom:1px solid #F2E4CE;
 }
-.addr-embed{ flex:1; min-height:0; }
+.addr-embed{ flex:1; min-height:0; width:100%; overflow:auto; }
+.addr-embed > div{ width:100% !important; left:0 !important; }  /* v1.8 — 좌측 잘림 픽스 */
 .addr-embed > div{ height:100% !important; }
 .addr-fallback{
   padding:20px 18px; font-size:0.8125rem; color:var(--ink-2); line-height:1.7;
@@ -897,7 +898,7 @@ body{
 .fw-card-title{ font-size:0.875rem; font-weight:700; color:var(--ink); letter-spacing:-.3px;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .fw-card-sub{ font-size:0.7188rem; color:var(--ink-3); margin-top:2px; }
-.fw-modal{ padding:4px 2px 8px; }
+.fw-modal{ padding:4px 16px 12px; }
 .fw-modal-badge{ display:inline-block; font-size:0.6875rem; font-weight:800; color:var(--sage);
   background:rgba(46,79,63,.1); border-radius:99px; padding:5px 12px; }
 .fw-modal-title{ font-family:var(--serif); font-size:1.25rem; font-weight:800; color:var(--ink);
@@ -1621,10 +1622,12 @@ body{
 .cal-cell.outside{ color:var(--ink-4); opacity:0.45; }
 .cal-cell.sunday{ color:var(--terra); }
 .cal-cell.today{
-  background:var(--sage-dark); color:#fff;
+  background:#fff; color:var(--sage-dark); font-weight:800;
+  box-shadow:inset 0 0 0 2.5px var(--sage-dark);
 }
-.cal-cell.today .cal-dots .ct{ background:rgba(255,255,255,0.25); }
-.cal-cell.today .cal-dots .ct.on{ background:var(--sage-soft); }
+.cal-cell.today.complete{ background:var(--sage); color:#fff; }
+.cal-cell.today.complete .cal-dots .ct{ background:rgba(255,255,255,0.3); }
+.cal-cell.today.complete .cal-dots .ct.on{ background:#fff; }
 .cal-cell.complete{
   background:var(--sage); color:#fff;
 }
@@ -1643,6 +1646,30 @@ body{
 }
 .cal-dots .ct.on{ background:var(--sage); }
 
+/* v1.8 — 이달의 말씀함께(책자 칼럼) */
+.bcol-list{ margin:0 16px 6px; background:var(--bg-card); border:1px solid var(--line); border-radius:16px; overflow:hidden; }
+.bcol-card{ display:flex; align-items:center; gap:12px; width:100%; text-align:left; border:none; background:transparent;
+  cursor:pointer; padding:13px 16px; border-bottom:1px solid var(--line-soft); color:var(--ink-3); }
+.bcol-card:last-child{ border-bottom:none; }
+.bcol-cat{ flex-shrink:0; font-size:0.6562rem; font-weight:800; color:var(--sage-deep); background:var(--sage-pale);
+  border-radius:99px; padding:5px 10px; letter-spacing:-0.2px; max-width:96px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.bcol-main{ flex:1; min-width:0; }
+.bcol-ttl{ font-family:var(--serif); font-size:0.9062rem; font-weight:700; color:var(--ink); letter-spacing:-0.3px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.bcol-author{ font-size:0.7188rem; color:var(--ink-3); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.bcol-modal{ padding:4px 16px 12px; }
+.bcol-h{ font-size:0.9062rem; font-weight:800; color:var(--sage-deep); letter-spacing:-0.3px; margin:20px 0 6px; }
+.bcol-p{ font-size:0.875rem; color:var(--ink-2); line-height:1.85; letter-spacing:-0.2px; margin:10px 0; }
+.bcol-quote{ font-family:var(--serif); font-size:0.875rem; color:var(--sage-deep); line-height:1.8; background:var(--sage-pale);
+  border-radius:12px; padding:14px 16px; margin:12px 0; }
+.bcol-meta{ font-size:0.7188rem; color:var(--ink-4); line-height:1.7; margin:14px 0 4px; padding-top:12px; border-top:1px dashed var(--line); }
+.bcol-li{ display:flex; gap:10px; font-size:0.8438rem; color:var(--ink-2); line-height:1.75; margin:8px 0; }
+.bcol-li .n{ flex-shrink:0; width:20px; height:20px; border-radius:50%; background:var(--sage-pale); color:var(--sage-deep);
+  font-family:var(--en); font-weight:700; font-size:0.6875rem; display:flex; align-items:center; justify-content:center; margin-top:2px; }
+
+/* v1.8 — 묵상질문 메모 · 자동저장 표시 */
+.qmemo-input{ margin-top:12px; min-height:52px; font-size:0.8438rem; }
+.autosave-stamp{ flex:1; font-size:0.6875rem; color:var(--ink-4); font-family:var(--en); letter-spacing:0.2px; align-self:center; }
 .cal-legend{
   display:flex; gap:14px; padding:0 20px 24px;
   flex-wrap:wrap; justify-content:center;
@@ -2114,7 +2141,7 @@ body{
 }
 .step-illust svg{ width:100%; height:100%; display:block; }
 .lectio-step{ border-radius:22px; }
-.lectio-step .lectio-step-head{ justify-content:center; text-align:center; }
+.lectio-step .lectio-step-head{ justify-content:flex-start; text-align:left; }  /* v1.8 — 제목 좌측 정렬(우측 쏠림 픽스) */
 
 /* ── '함께' 탭 — 세그먼트 토글 ─────────────────────────────── */
 .seg-wrap{
@@ -3148,6 +3175,7 @@ svg[data-lucide],.lucide{ width:18px; height:18px; stroke-width:1.8; }
   .tab-btn:hover{ background:var(--bg-soft); }
   .tab-btn.active{ background:var(--sage-pale); }
   .tab-btn.active .tab-label{ font-weight:700; }
+  .tab-btn::after{ display:none; }   /* v1.8 — 사이드바에서는 하단 점 제거 */
 
   /* FAB — 콘텐츠 우하단 고정 */
   .write-btn{ right:40px; bottom:40px; }
@@ -3816,7 +3844,7 @@ body,button,input,textarea,select{ font-family:var(--font-body); }
       <span class="tab-label">말씀</span>
     </button>
     <button class="tab-btn" data-tab="pray" onclick="state.togetherTab='pray';switchTab('pray')">
-      <svg fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="2.2"/></svg>
+      <svg fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M12 2.6c-1.3 2.2-2.7 4.9-2.7 7.4v6l2.7 2.5 2.7-2.5v-6c0-2.5-1.4-5.2-2.7-7.4z"/><path d="M9.3 11 5.7 14.4a2.1 2.1 0 0 0-.2 2.8l2.6 3.3"/><path d="M14.7 11l3.6 3.4a2.1 2.1 0 0 1 .2 2.8l-2.6 3.3"/></svg>
       <span class="tab-label">중보기도</span>
     </button>
     <button class="tab-btn" data-tab="column" onclick="switchTab('column')">
@@ -3939,6 +3967,9 @@ const FAMILY_WORSHIP = {
   ]
 };
 
+
+/* v1.8 — 책자 월간 칼럼 (매월 6개, 검수 없이 발행 콘텐츠) */
+const BOOK_COLUMNS = { '2026-08': [{"cat": "이달의 책", "title": "본회퍼의 함께 사는 삶", "author": "편집부", "parts": [{"t": "meta", "x": "디트리히 본회퍼(Dietrich Bonhoeffer) 지음 · 최종훈·문성모 역 · 두란노"}, {"t": "p", "x": "「말씀함께」 독자 여러분, 무더운 여름에 건강하신지요? 주님 안에서 평안을 전합니다. 8월 말이 되면 더위와 여름 사역으로 인해 잠시 쉬었던 속회와 목장, 소그룹이 하나둘 다시 모이기 시작합니다. 그런데 솔직히 다시 모인다는 소식이 설렘보다는 부담으로 다가오는 분도 계시지 않을까 합니다. “혼자 예배드리거나 유튜브로 말씀 들으면 되지, 굳이 사람들과 부대끼며 힘들게 모일 필요가 있나요?” 실제로 한국 교회 성도들의 신앙은 급속도로 ‘개인화’되고 있습니다. 제도적 교회에 대한 피로감이 쌓이고, 혼자만의 영성을 추구하는 이들이 늘고 있습니다. 그런데 이 고립된 영성이 과연 성경이 말하는 신앙일까요? 혼자서도 충분히 그리스도인이 될 수 있다는 것은 축복일까요, 착각일까요? 다시 모이는 이 계절에, 우리가 왜 함께 모여야 하는지 근본적인 이유를 묻는 한 권의 책을 소개합니다."}, {"t": "h", "x": "나치의 폭풍 속에서 피어난 공동체"}, {"t": "p", "x": "지난해인 2025년은 디트리히 본회퍼 서거 80주년이었습니다. 1906년에 태어나 39세의 나이로 나치에 의해 교수형을 당한 이 젊은 신학자는 독일 교회 대다수가 히틀러에게 침묵하거나 동조할 때 홀로 저항의 길을 걸었습니다. 그는 나치와 타협하기를 거부한 고백 교회 소속 핑켄발데 신학교의 책임자로서, 신학생들과 함께 ‘형제의 집’이라는 전위적인 공동체를 일구었습니다. 이는 20세기 개신교 역사상 최초의 수도 생활 공동체라 불릴 만큼 급진적인 신앙 실험이었습니다."}, {"t": "p", "x": "『본회퍼의 함께 사는 삶』은 바로 이 공동체의 경험에서 태어났습니다. 1937년 게슈타포가 핑켄발데 신학교를 폐쇄한 뒤, 본회퍼는 이듬해 가을 불과 4주 만에 이 책을 써냈습니다. 쌍둥이 누이 가족이 유대인 박해를 피해 영국으로 망명한 직후, 히틀러 암살 모의가 은밀히 진행되던 바로 그 시기였습니다. 정치적으로, 교회적으로, 개인적으로 극도로 긴장된 상황에서 쏟아 낸 글이기에, 이 책은 관념이 아니라 실존적 절박함으로 가득합니다."}, {"t": "h", "x": "함께 있다는 것은 은혜다"}, {"t": "p", "x": "본회퍼는 이 책의 첫 장에서 선언합니다. 성도들이 물리적으로 얼굴을 마주하고 함께 모여 하나님 말씀과 성찬을 나눌 수 있다는 것 자체가 하나님의 은혜이며 특권이라고. 그러면서 감옥에 갇히거나 질병으로 격리된 자들, 타지에서 고립된 채 복음을 전하는 이들의 외로움을 떠올려 보라고 합니다. 우리가 매 주일 당연하게 여기는 예배 공동체가 사실은 마지막 날을 예표하는 기적 같은 선물이라는 것입니다. 여름 방학 뒤 다시 모이는 소그룹에서 이 첫 장만이라도 함께 읽어 보시기를 권합니다. 우리가 다시 모여야 하는 이유를 의무가 아닌 은혜로 깨닫게 될 것입니다."}, {"t": "h", "x": "거짓된 공동체를 해체하라"}, {"t": "p", "x": "이 책에서 가장 예리한 통찰은 ‘영적 공동체’와 ‘인간적 공동체’를 구별하는 것입니다. 본회퍼는 인간적인 공감대, 감정적 융화, 심리적 만족을 동력으로 삼는 모임을 경계합니다. 겉보기에 따뜻한 교제가 일어나는 듯하지만, 그 이면에는 상대방을 자신의 입맛에 맞게 통제하고 뜯어고치려는 은밀한 폭력이 작동한다는 것입니다. 참된 공동체는 오직 예수 그리스도를 중심으로 세워집니다. 상대의 삶에 부당하게 간섭해 억지로 변화시키려 하기보다, 그가 하나님의 말씀 앞에 단독자로 서도록 돕고 그의 삶을 그리스도의 주권에 맡기는 자기 비움의 태도를 취하는 것입니다. 내 기호에 맞는 사람들끼리의 친목, 교회 성장을 위한 도구로 전락한 소그룹이 사실은 그리스도를 밀어낸 ‘인간적 공동체’에 불과할 수 있다는 지적은 오늘날 한국 교회에 깊은 반성을 요구합니다."}, {"t": "h", "x": "홀로 서야 함께 설 수 있다"}, {"t": "p", "x": "본회퍼는 역설적인 진리를 제시합니다. 참된 교제는 오직 하나님 앞에 홀로 설 수 있는 사람만이 이룰 수 있다고. 홀로 하나님 앞에 단독자로 서는 침묵의 시간 없이 공동체의 소음에만 매몰되는 자는 공허함 속에서 자신을 잃게 됩니다. “그리스도인의 공동체는 정신 요양소가 아니다”라는 그의 말이 상당히 날카롭습니다. 각 성도는 하나님 말씀과 독대하고 자신의 궁핍한 내면을 직시하며 영적으로 자립해야 합니다. 그래야 비로소 타인에게 의존하지 않고 타인을 섬길 수 있습니다."}, {"t": "h", "x": "형제의 짐을 지고, 죄를 고백하라"}, {"t": "p", "x": "이 책의 마지막 장들은 개신교 전통에서 거의 실종되어 버린 ‘죄 고백’의 중요성을 복원합니다. 경건한 척하며 위선적인 교제만 나누고, 정작 철저한 죄인으로서 서로에게 다가가지 못하는 그리스도인은 본질적으로 고독한 외톨이라고 본회퍼는 일갈합니다. 형제에게 구체적으로 나의 죄를 발설하는 고통스러운 과정을 통과할 때, 비로소 자기 합리화의 장벽이 무너지고 십자가를 향한 영적 돌파가 일어납니다. 이 화해와 사죄의 선포는 성만찬에 참여하기 위한 가장 훌륭한 준비이며, 이를 통해 공동체의 기쁨은 완전해집니다."}, {"t": "h", "x": "세상을 향한 전초기지"}, {"t": "p", "x": "잊지 말아야 할 것이 있습니다. 본회퍼의 공동체는 세상에서 도피하기 위한 안전한 피난처가 아니었습니다. 나치라는 거대한 폭력 기계 앞에서 그리스도인의 정체성을 잃지 않기 위해 영적 근육을 단련하는 베이스캠프였습니다. 실제로 본회퍼는 이 공동체 훈련의 결과로 히틀러 암살 모의에 가담해 결국 자신의 생명으로 ‘행동하는 양심’의 가치를 증명했습니다. 교회는 끼리끼리 모여 위로를 나누는 도피처가 아닙니다. 본회퍼가 말했듯이, 교회는 ‘타자를 위해 존재하는 공동체’일 때 비로소 진정한 교회가 됩니다."}, {"t": "h", "x": "편안한 고립의 소파에서 일어나라"}, {"t": "p", "x": "이번 80주년 특별판은 최종훈 번역가와 문성모 목사의 공동 번역으로 현대적 가독성을 높였고, 독일의 실천신학자 페터 치머링의 해설이 핑켄발데의 생활상을 입체적으로 조명해 줍니다. 그런 만큼 이 한 권으로 본회퍼의 공동체 영성 전모를 만날 수 있습니다."}, {"t": "p", "x": "8월, 다시 모이는 소그룹과 속회, 목장의 첫 모임에서 이 책을 함께 펼쳐 보시기를 권합니다. 우리가 왜 다시 모여야 하는지에 관한 답이 의무가 아니라 은혜에 있음을 발견하게 될 것입니다. 80여 년 전 핑켄발데의 작은 형제 공동체에서 흘러나온 시편의 찬양과 침묵의 기도는 미약해 보였으나 가장 강력한 영적 저항이었습니다. 이 책은 편안한 고립의 소파에서 일어나 불편하지만 생명이 약동하는 십자가 아래의 공동체로 뛰어들라는 초청장입니다. 「말씀함께」 독자 여러분을 그 거룩한 불편함의 여정에 초대합니다."}]}, {"cat": "교리학교 ⑧", "title": "주(Lord), 예수 그리스도!", "author": "김인수 · 감리교신학대학교 조직신학 교수", "parts": [{"t": "p", "x": "누구에게나 소중히 여기는 가치가 있습니다. 중요하게 생각하는 것이 선택의 기준이 됩니다. 그런데 때로 소중하게 생각하는 가치, 사람, 물건이 오히려 ‘나’라는 존재를 대체하거나 나의 주인이 되고, 나는 도리어 종이 되는 경우를 빈번히 봅니다. 내 존재와 삶을 이끌며 주인 노릇을 하는 것은 무엇인지 생각해 봐야 할 때입니다."}, {"t": "p", "x": "예수님의 부활을 믿지 못했던 제자 도마는 직접 예수님 손의 못 자국을 보거나 만져 보지 않고는 믿을 수 없다고 단정 지었습니다(요 20:25). 그의 가치가 판단의 기준으로 작동한 것입니다. 그러나 부활하신 예수님을 본 후 도마는 “나의 주님이시요 나의 하나님이시니이다”(요 20:28)라고 고백했습니다. 예수님의 제자 베드로도 예수 그리스도를 주님으로 불렀습니다(행 2:36). 사도 바울 역시 여러 편지에서 ‘우리 주 예수 그리스도’의 이름으로 성도들에게 안부를 전하고 바른 신앙의 길을 가르쳤습니다."}, {"t": "p", "x": "사도 바울은 서신에서 ‘주’(Lord)라는 표현을 200차례 넘게 사용합니다. 부활하신 그리스도께서 참된 하나님이심을 강조하기 위함입니다. 바울은 다음과 같이 말합니다. “하나님이 그를 지극히 높여 모든 이름 위에 뛰어난 이름을 주사 … 모든 무릎을 예수의 이름에 꿇게 하시고”(빌 2:9~10). 따라서 예수님을 주님이라 고백한다면, 그분께 헌신하고 순종하는 삶을 살아야 합니다."}, {"t": "p", "x": "한편, 예수 그리스도께서 주님이 되신다는 것은 나의 존재가 더는 내 소유가 아니라는 뜻입니다. 예수님의 십자가와 부활을 통해 속량받은 우리는 이제 삶의 염려에 매여 살 필요가 없습니다. 우리는 예수님을 통해 주어지는 은혜 안에서 삶의 기쁨과 슬픔, 사랑과 미움까지 모두 그분께 맡겨야 합니다. 예수 그리스도께서 우리에게 참된 자유를 주시기 때문입니다."}, {"t": "p", "x": "일반적으로 종에게는 자유가 없습니다. 바울 시대에 노예나 종에게는 스스로 선택할 권리나 혼인할 권리, 재산권 등이 없었습니다. 모든 권리와 권한은 주인에게 있었습니다. 그러나 주인이 그리스도인일 경우에는 상황이 달랐습니다. 그들은 종들에게 필요한 양식을 제공하고 글을 가르쳤으며, 일정한 나이가 되면 자유인이 될 수 있도록 경제적 보상도 마련해 주었습니다. 왜냐하면 그들 역시 죄에 종노릇했지만 예수 그리스도를 통해 참된 자유를 누리게 되었고, 다른 차원에서 예수 그리스도를 주님이라 부르는 종임을 고백했기 때문입니다."}, {"t": "p", "x": "또 다른 편지들에서 바울은 예수 그리스도를 ‘하나님 형상’이라고 부릅니다. “그 중에 이 세상의 신이 믿지 아니하는 자들의 마음을 혼미하게 하여 그리스도의 영광의 복음의 광채가 비치지 못하게 함이니 그리스도는 하나님의 형상이니라”(고후 4:4). “그는 보이지 아니하는 하나님의 형상이시요 모든 피조물보다 먼저 나신 이시니”(골 1:15). 이처럼 예수 그리스도는 온전한 하나님 형상입니다. 따라서 인간 창조의 원리였던 하나님 형상을 회복하고 존재를 새롭게 하시는 분은 우리의 주님 되시는 예수 그리스도입니다. 나아가 예수님은 만물의 근원이요 동시에 주인이십니다(고전 8:6)."}, {"t": "p", "x": "우리의 주님 되시는 예수 그리스도께서는 우리 안에 있는 손상된 하나님 형상을 회복시키고, 우리의 존재를 새롭게 하십니다. 주님은 온 우주의 근원이자 기반이실 뿐 아니라, 지금도 만물을 새롭게 하며 구원에 합당한 삶으로 이끄십니다. 그러므로 우리의 주님 되시는 예수 그리스도를 온전히 신뢰하며 그분께 순종하고 헌신함으로써 온갖 근심과 걱정과 중독에서 해방되어 참된 자유와 평화를 누리는 우리가 되기를 소망합니다."}]}, {"cat": "신앙과 건강 ⑧", "title": "자연 치유력, 하나님이 주신 선물", "author": "이계호 · 충남대학교 화학과 명예교수·태초먹거리 학교장", "parts": [{"t": "quote", "x": "\"여호와여 주는 나의 찬송이시오니 나를 고치소서 그리하시면 내가 낫겠나이다 나를 구원하소서 그리하시면 내가 구원을 얻으리이다\"(렘 17:14)"}, {"t": "p", "x": "하나님은 우리를 그분의 형상대로 창조하셨습니다. 그러나 인간은 자만과 교만으로 말미암아 죄에 빠져, 하나님의 성전인 몸을 제대로 관리하지 못하게 되었습니다. 그럼에도 불구하고 하나님은 자연 치유력을 모든 사람에게 주셨으므로, 필요할 때 하나님께 구할 수 있습니다."}, {"t": "p", "x": "지금과 달리 예전에는 연필을 칼로 깎아서 사용했습니다. 비싼 고급 연필은 잘 깎이고, 싼 연필은 나무질이 나빠 잘 깎이지 않았습니다. 연필을 억지로 깎으려다가 손가락을 베는 경우도 종종 있었습니다. 배어 나오는 피를 다른 손으로 누르며 양호실로 뛰어갔던 경험이 있습니다. 그러면 양호 선생님이 빨간색 소독약을 바르고 반창고를 붙여 주었지요."}, {"t": "p", "x": "그러나 칼에 베인 피부가 아무는 것은 하나님이 주신 치유력 때문이지, 소독약이나 반창고가 상처를 아물게 하는 것이 아닙니다. 우리 신체 내부에 문제가 발생하면 자연 치유력이 스스로 작동하기 시작합니다. 그런데 손가락 상처가 다 아물기 전에 상처 부위를 비비고 헤집는 등 방해하면 상처가 아물지 않는 것과 마찬가지로, 신체 내부에 자연 치유가 되는 과정을 방해하는 요인이 있으면 회복될 수 없습니다."}, {"t": "p", "x": "우리 몸에 문제가 생겨 병원에 가면 일반적으로 혈액검사와 조직검사를 합니다. 검사 결과가 나쁘면 병원 치료를 시작합니다. 그런데 우리의 혈액과 조직을 만드는 재료가 무엇입니까? 매일매일 우리 입과 코로 들어오는 음식, 물, 공기입니다. 신체의 혈액과 조직이 나빠졌는데, 혈액과 조직을 만드는 재료를 바꾸지 않고 어떻게 건강을 근본적으로 회복할 수 있겠습니까? 따라서 병원 치료와 더불어 혈액과 조직을 건강하게 만드는 좋은 재료를 함께 공급해야 합니다. 나쁜 재료가 계속 몸에 들어오면 신체 내부의 자연 치유 과정이 제대로 진행되지 못하고 방해를 받습니다."}, {"t": "p", "x": "신체의 건강을 회복하고 유지하려면 ‘채움’과 ‘비움’의 원리에 따라 관리해야 합니다. 우리 몸은 입과 코로 들어오는 음식, 공기, 물로 채워집니다. 그리고 이 과정에서 생성된 폐기물은 호흡, 땀, 소변, 대변을 통해 비워집니다. ‘채움’과 ‘비움’의 균형이 깨지면 건강에 문제가 발생합니다. 의학의 아버지 히포크라테스는 다음과 같이 말했습니다."}, {"t": "p", "x": "- 병을 낫게 하는 것은 자연이다."}, {"t": "p", "x": "- 음식물로 고치지 못하는 병은 의사도 못 고친다."}, {"t": "p", "x": "- 지나치게 먹으면 안 된다. 병의 힘이 최고조에 도달하지 않는 한, 오히려 공복인 채로 있는 것이 치료에 더 도움이 된다."}, {"t": "p", "x": "- 인간은 병을 치료하는 힘을 갖고 있다. 만일 육체가 대청소되지 않은 채 먹을 수 있는 만큼 먹으면, 그만큼 몸에 해가 된다. 병자가 너무 많이 먹으면 병을 키울 수 있다."}, {"t": "p", "x": "- 병을 고치는 것은 환자 자신이 갖는 자연 치유력이다. 의사가 그것을 방해하는 일이 있어서는 안 된다."}, {"t": "p", "x": "스스로 병에서 회복할 수 있는 자연 치유력은 하나님이 주신 선물입니다."}]}, {"cat": "중독 없는 대한민국 ⑧", "title": "숏폼 중독, 공공의 대처가 필요하다", "author": "김지연 · 한국가족보건협회 대표·두란노 바이블칼리지 강사", "parts": [{"t": "p", "x": "숏폼은 어디서나 짬짬이 즐길 수 있기에 중독성이 음란물이나 게임 중독과는 또 다른 양상으로 나타납니다. 숏폼 중독을 개인의 의지나 치료의 영역으로 남겨 둘 것인지, 아니면 사회 구조의 문제로 인식할 것인지에 대한 고민이 세계 곳곳에서 진행되고 있습니다."}, {"t": "p", "x": "실제로 많은 국가에서 이 문제를 더 이상 개인의 책임 영역으로 보지 않습니다. 숏폼 플랫폼이 청소년의 주의력 저하와 중독, 우울, 업무 수행 능력 저하를 가속화한다는 연구가 축적되면서, 이에 대한 규제가 입법으로 이어지고 있습니다. 30초 이내에 도파민이 터지는 매체에 익숙해지면 30분짜리 설교 또는 수업에 집중하거나, 30일짜리 프로젝트를 설계하거나, 300일이 걸릴 수도 있는 박사 논문 작성하는 일을 해내지 못하는 등 뇌의 집중력과 지구력이 심각하게 저하됩니다. 특히 뇌가 미성숙한 청소년기를 숏폼 중독으로 보내는 사람이 증가할수록 국력은 떨어지고 개인의 삶도 피폐해집니다."}, {"t": "p", "x": "미국 유타주에서는 「유타주 소셜미디어 규제법」(Social Media Regulation Act, 2023)을 통해 미성년자의 SNS 이용을 부모 동의하에 제한하고, 야간 시간대 사용을 차단하도록 법제화했습니다. 몬태나주에서는 「틱톡 금지법」(TikTok Ban, 2023)을 통해 특정 플랫폼 자체를 제한하고자 시도했습니다. 이 법의 명분은 국가 안보와 데이터 보호였지만, 동시에 해당 플랫폼이 청소년과 사회에 미치는 영향에 대한 우려 역시 중요한 논의 배경으로 제기되었습니다."}, {"t": "p", "x": "유럽연합 역시 같은 흐름을 보입니다. 「디지털 서비스법」(Digital Services Act, 2022)은 알고리즘 투명성과 유해 콘텐츠 통제를 법적 의무로 규정하고, 특히 청소년 보호를 핵심 정책 목표로 설정했습니다. 이는 플랫폼 기업의 자율에 맡기던 시대가 종료되고, 공공의 안전을 위한 규제 체계가 본격화되었음을 의미합니다."}, {"t": "p", "x": "또한 호주에서는 숏폼, 음란물, 게임, 도박 등 각종 중독적인 콘텐츠가 공유되는 주요 플랫폼으로 ‘SNS’를 지목하고, 16세 미만 미성년자의 SNS 이용을 금지하는 법을 만들었습니다. 해당 법에 따르면, SNS를 제공하는 기업은 미성년자의 계정 생성을 차단해야 하며, 이를 위반하면 약 450억 원의 벌금이 부과됩니다. 이러한 조치는 중독적 매체의 영향에 대해 국가가 직접 개입한 대표적인 사례입니다. 마치 술, 담배를 미성년자에게 판매하지 못하게 하듯이 SNS도 청소년에게 판매하지 못하게 한 것입니다."}, {"t": "p", "x": "도파민을 과잉 자극하도록 정교하게 설계된 숏폼 콘텐츠를 개인의 의지에만 의존해 절제를 요구하는 것은 구조적 한계를 가질 수밖에 없습니다. 따라서 이를 직면하고, 국가가 최소한의 보호 장치를 마련하는 것이 전 지구적 과업이 되고 있습니다. 숏폼처럼 접근성이 강한 매체의 중독을 예방하기 위한 법적 장치가 필요합니다."}, {"t": "p", "x": "우리나라 역시 더는 늦출 수 없습니다. 특히 성장기에 있는 청소년은 자기 통제력이 충분히 발달하지 않은 상태이기 때문에 숏폼 중독 설계에 그대로 노출될 경우 그 피해는 더 심각해집니다. 그런 만큼 청소년의 숏폼 이용 시간 제한, 야간 사용 차단, 중독 유도 알고리즘에 대한 규제, 부모 통제 권한 강화 등은 선택이 아니라 공중 보건 차원의 필수 정책입니다. 이는 표현의 자유를 제한하는 것이 아니라, 건강한 성장 환경을 보호하기 위한 최소한의 사회적 장치입니다. 그리스도인은 하나님의 형상대로 지음받은 이웃들을 ‘숏폼 중독’이라는 노예 상태로부터 구하기 위해 구체적 입법을 요구하고 이를 이루어 가야 합니다."}]}, {"cat": "선교지 소식", "title": "V국 김○희 선교사 — 소수 민족 청년을 세우는 제자훈련", "author": "김○희 선교사 · V국 IMTC 제자·선교 훈련센터", "parts": [{"t": "p", "x": "안녕하세요. V국 북부 흥○엔성에 있는 IMTC(Indo-china Mission Training Center) 제자·선교 훈련센터에서 사역하는 김○희 선교사입니다. 1999년 하나님의 부르심을 받아 선교사로 첫발을 내디딘 지 어느덧 27년이 되었습니다. 처음에는 인도에서 사역하다가, V국 하○퐁에서 유치원 사역과 길거리 치유 사역을 감당했습니다. 이후 한국에서 신학을 공부하고 선교사 훈련을 받은 뒤 V국 하동 지역에서 다문화 학교 교사와 교회 어린이 사역으로 다음 세대를 섬겼습니다. 그리고 2021년 V국 북부 흥○엔성에서 소수 민족 청년들을 위한 제자훈련과 선교사 훈련센터 사역을 시작했습니다."}, {"t": "p", "x": "V국에는 54개 종족이 있으며, 그중 킨족(Kinh)이 약 85~86%로 사회의 중심을 이루고 있습니다. 반면 다수의 소수 민족은 사회적·교육적 기회에서 소외되고, 청년들은 정체성의 혼란과 미래에 대한 불안을 경험하고 있습니다. 이런 상황 속에서 복음 안에 정체성을 세우고 사명을 발견하도록 돕는 제자훈련은 매우 중요한 사역입니다."}, {"t": "p", "x": "제자훈련은 예수님의 지상 명령(마 28:19~20), 곧 모든 민족을 제자로 삼으라는 말씀에 근거합니다. 이 훈련은 말씀 중심의 삶을 세우고, 예수님을 닮아 가는 인격 변화를 이루며, 공동체 안에서 믿음으로 성장하고, 복음 전하는 사명을 세우는 과정입니다. 특히 소수 민족 청년들을 대상으로 하는 제자훈련은 단순한 지식 교육을 넘어 그들의 문화와 삶에 복음이 실제로 나타나도록 돕는 전인적인 양육 과정입니다."}, {"t": "p", "x": "V국 소수 민족 공동체는 국경 지역과 해외 디아스포라 지역에 널리 분포해 있는데, 인도차이나반도에 있는 나라들은 정치적으로는 다른 국가지만 종족적으로 연결된 경우가 많습니다. 예를 들어 북서부 산악 지역은 라오스와 중국과 이어져 있고, 남서부 지역은 캄보디아와 연결되어 있습니다. 이러한 종족 네트워크는 국경을 넘어 복음이 확장될 수 있는 중요한 선교의 통로가 됩니다."}, {"t": "p", "x": "훈련센터에서는 1기부터 5기까지 총 다섯 명의 사역자를 배출했습니다. 몽족, 산찌족, 킨족 등 다양한 배경을 가진 이들은 라오까이 국경 지역과 하노이 도시 사역, 캄보디아 학교 사역, 디엔비엔 지역 사역, 한국 디아스포라 사역, 비즈니스 사역 등 여러 영역에서 복음을 전하며 공동체를 섬기고 있습니다. 그리고 현재 훈련센터에서 6기 훈련생 여섯 명이 열심히 훈련받고 있습니다. 이들이 훈련을 잘 마치고 하나님의 일꾼, 강한 용사로 세워지도록 기도 부탁드립니다."}, {"t": "p", "x": "소수 민족 사역자 한 사람은 공동체와 지역에 큰 영향을 미칠 수 있는 귀한 선교 자원입니다. 소수 민족 청년들이 다른 소수 민족 공동체에 복음을 전할 경우, 외부인보다 문화적 공감과 관계 형성이 자연스러운 만큼 듣는 이들이 복음을 ‘외부 종교’가 아니라 ‘같은 배경을 가진 이웃의 간증’으로 받아들일 가능성이 높기 때문입니다. 앞으로도 제자훈련 사역을 통해 V국과 국경 디아스포라 공동체, 인도차이나반도에 복음이 계속 확장되기를 소망합니다."}, {"t": "h", "x": "기도 제목"}, {"t": "li", "x": "\u0007현지 소수 민족 교회와 청년들이 6개월 공동체 합숙 훈련을 통해 선교의 본질을 깨닫고 예수님의 지상 명령에 동참하게 하소서."}, {"t": "li", "x": "\u0007소수 민족 교회가 자립적이고 역동적인 선교적 공동체로 성장하게 하소서."}, {"t": "li", "x": "\u0007훈련생들이 부르심을 따라 포기하지 않고 사역하며, 개인 후원자가 연결되게 하소서."}, {"t": "li", "x": "\u0007IMTC 제자·선교 훈련센터가 V국과 국경 디아스포라와 인도차이나 선교의 기지로 세워지고, 모든 사역이 주님의 뜻 가운데 안전하게 이루어지게 하소서."}]}, {"cat": "어떻게 기도해야 하나요? ⑳", "title": "모든 순간 하나님을 의지하길 기도합니다", "author": "편집부", "parts": [{"t": "h", "x": "상황"}, {"t": "p", "x": "계속되는 재정의 어려움으로 인해 하나님을 신뢰하지 못하는 지체를 위해 어떻게 기도해야 할까요?"}, {"t": "h", "x": "말씀"}, {"t": "quote", "x": "\"어떤 사람은 병거, 어떤 사람은 말을 의지하나 우리는 여호와 우리 하나님의 이름을 자랑하리로다\"(시 20:7)"}, {"t": "h", "x": "해설"}, {"t": "p", "x": "대부분 왕은 군대의 규모와 힘을 의지해 나라를 지키려 했습니다. 이는 매우 자연스러운 일이었습니다. 그러나 다윗은 다른 선택을 했습니다. 그는 자신의 능력이나 군사력이 아니라, 모든 백성을 지키시는 참된 왕이신 하나님을 신뢰했습니다. 하나님은 기름 부으신 자를 반드시 구원하시고, 하늘에서 응답하사 오른손의 능력으로 도우신다는 사실을 확신했습니다."}, {"t": "p", "x": "우리는 이스라엘의 많은 왕처럼 하나님이 아닌 다른 것에서 안전함을 찾으려 할 때가 많습니다. 재산이나 보험처럼 눈에 보이는 보호 장치에서 안정감을 얻으려 하거나 자기 계발, 능력, 설득력, 타고난 재능을 의지하기도 합니다. 그런 것들이 우리를 지켜 줄 것처럼 느껴지기 때문입니다."}, {"t": "p", "x": "그러나 하나님을 따르는 사람은 삶의 근본적인 안전을 하나님 안에서 찾습니다. 우리의 미래가 세상이 제공하는 해결책이 아닌 하나님께 달려 있음을 믿기 때문입니다. 우리의 보호와 소망이 우리가 마련한 조건이나 기회가 아니라 하나님께 있다는 것을 알기 때문입니다."}, {"t": "p", "x": "따라서 우리는 하나님 여호와의 이름을 의지하며 살아야 합니다. 지금까지 쌓아 온 재산이나 대비책보다 우리의 공급자이신 하나님을 신뢰해야 합니다. 우리의 계획이나 노력이 아닌 하나님이 우리 삶을 준비하시고 인도하신다는 사실을 믿어야 합니다."}, {"t": "p", "x": "그러나 이런 믿음은 우리의 힘만으로는 가질 수 없습니다. 주님의 도움이 있어야만 가능합니다. 그래서 하나님께 우리 삶을 온전히 맡길 수 있는 믿음을 달라고 기도해야 합니다. 우리가 이루어 낸 것보다 예수 그리스도께서 우리를 위해 이루신 일을 더 신뢰할 수 있는 믿음을 구해야 합니다."}, {"t": "h", "x": "기도문"}, {"t": "p", "x": "하나님, 우리가 볼 수 없는 하나님보다 보고 만질 수 있는 세상의 것들을 신뢰하는 것은 너무나 자연스러운 일입니다. 하지만 주님만이 불확실하고 불안으로 가득한 이 세상에서 참되고 영원한 우리의 반석이 되십니다. ○○○에게 믿음의 눈을 주셔서 하나님이 얼마나 신뢰할 만한 분인지 보게 하여 주옵소서. 눈에 보이는 것에 소망을 두지 않게 하시고, 영원하지 않은 것들을 의지하고 싶은 유혹을 이길 수 있도록 도와주옵소서. 매 순간 ○○○을 주님의 임재 안으로 초대해 주시고, 모든 것을 주님에게 맡길 수 있도록 믿음을 더하여 주옵소서. 예수님의 이름으로 기도합니다. 아멘."}, {"t": "meta", "x": "'어떻게 기도해야 하나요?'는 낸시 거스리의 『무엇을 위해 기도할까?』(유하림 역, 구름이머무는동안) 내용을 발췌·편집한 것으로, 고통받는 지체를 위해 40개의 성경 구절을 붙잡고 기도한 실제 기도문을 수록합니다."}]}] };
 const ISSUE = { year:2026, month:8, bookKor:'시편 107~122편 · 스바냐 · 빌레몬서', bookEn:'Psalms · Zephaniah · Philemon', monthEn:'AUGUST' };
 
 const TONGDOK = {
@@ -7229,6 +7260,17 @@ function toast(msg){
    시간대·단계마다 바뀌며, 톤앤매너(세이지/크림)를 그대로 따른다
    ============================================================================ */
 const ILLUST = {
+  // v1.8 — 1단계 말씀읽기 전용: 펼친 책 위 촛불 빛
+  step0:`<svg viewBox="0 0 120 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="60" cy="82" rx="40" ry="7" fill="var(--sage-pale)"/>
+    <path d="M24 64 Q42 54 60 64 L60 80 Q42 70 24 80 Z" fill="#fff" stroke="var(--sage-mid)" stroke-width="2"/>
+    <path d="M96 64 Q78 54 60 64 L60 80 Q78 70 96 80 Z" fill="#fff" stroke="var(--sage-mid)" stroke-width="2"/>
+    <rect x="56.6" y="38" width="6.8" height="16" rx="3" fill="var(--sage-mid)"/>
+    <path d="M60 24 q5 7 0 12 q-5 -5 0 -12 Z" fill="var(--sage)"/>
+    <path d="M60 29 q2.4 4 0 6.4 q-2.4 -2.6 0 -6.4 Z" fill="#EAD9A0"/>
+    <path d="M42 34 L47 39 M78 34 L73 39 M60 14 V20" stroke="var(--sage-soft)" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M32 68 h18 M32 73 h14 M70 68 h18 M74 73 h14" stroke="var(--sage-soft)" stroke-width="2" stroke-linecap="round"/>
+  </svg>`,
   // 아침 — 언덕 위로 떠오르는 해
   morning:`<svg viewBox="0 0 120 96" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="62" cy="46" r="18" fill="#F2D9A0"/>
@@ -7801,8 +7843,8 @@ function hymnSectionHTML(devotional){
         <div class="w-section-label">오늘의 찬양</div>
         <div class="w-section-en">Hymn</div>
       </div>
-      ${h.no ? `<div class="hymn-line"><span class="hymn-k">찬송가</span><span class="hymn-v">${escapeHtml(h.no)}</span></div>` : ''}
       ${h.title ? `<div class="hymn-line"><span class="hymn-k">복음성가</span><span class="hymn-v">${escapeHtml(h.title)}</span></div>` : ''}
+      ${h.no ? `<div class="hymn-line"><span class="hymn-k">찬송가</span><span class="hymn-v">${escapeHtml(h.no)}</span></div>` : ''}
       ${lyrics ? `<div class="hymn-lyrics">${escapeHtml(lyrics).replace(/\n/g,'<br/>')}</div>` : ''}
     </div>`;
 }
@@ -7827,6 +7869,9 @@ async function renderWord(){
   /* v1.7.5 — 등록된 콘텐츠 범위 기준으로 '내일' 버튼 활성화 (7월 하드코딩 제거) */
   const _cr = contentDateRange();
   const isFuture = formatDateKey(today) >= formatDateKey(_cr.end) || today < _cr.start;
+  /* v1.8 — 어제/내일 대신 실제 날짜 표기 */
+  const isPast = formatDateKey(today) <= formatDateKey(_cr.start) || today > _cr.end;
+  const _nav = function(delta){ const d=new Date(today); d.setDate(d.getDate()+delta); return (d.getMonth()+1)+'월 '+d.getDate()+'일'; };
 
   if(!devotional){
     view.innerHTML = `
@@ -7848,8 +7893,8 @@ async function renderWord(){
         <div class="today-date word-date-plain" onclick="switchTab('calendar')">${dateLineHtml(today, '· 주일')}</div>
         <div class="word-title">${devotional.subtitle}</div>
         <div class="word-nav">
-          <button class="word-nav-btn" onclick="changeDay(-1)"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> 어제</button>
-          <button class="word-nav-btn" onclick="changeDay(1)" ${isFuture?'disabled':''}>내일 <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+          <button class="word-nav-btn" onclick="changeDay(-1)" ${isPast?'disabled':''}><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> ${_nav(-1)}</button>
+          <button class="word-nav-btn" onclick="changeDay(1)" ${isFuture?'disabled':''}>${_nav(1)} <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
         </div>
       </div>
       ${hymnSectionHTML(devotional)}
@@ -7903,8 +7948,8 @@ async function renderWord(){
       <div class="word-passage-ref">${devotional.range}</div>
       <div class="word-title">${devotional.subtitle}</div>
       <div class="word-nav">
-        <button class="word-nav-btn" onclick="changeDay(-1)"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> 어제</button>
-        <button class="word-nav-btn" onclick="changeDay(1)" ${isFuture?'disabled':''}>내일 <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+        <button class="word-nav-btn" onclick="changeDay(-1)" ${isPast?'disabled':''}><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> ${_nav(-1)}</button>
+        <button class="word-nav-btn" onclick="changeDay(1)" ${isFuture?'disabled':''}>${_nav(1)} <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
       </div>
     </div>
 
@@ -7949,6 +7994,7 @@ async function renderWord(){
         <div class="w-section-en">Application</div>
       </div>
       <div class="question-text">${devotional.question}</div>
+      <textarea class="lectio-input qmemo-input" data-field="qmemo" rows="2" placeholder="이 질문에 대한 나의 생각을 간단히 메모해 보세요. (자동 저장)">${escapeHtml(lectio.qmemo||'')}</textarea>
     </div>
 
     <div class="w-section">
@@ -7966,6 +8012,8 @@ async function renderWord(){
     </div>
 
     ${renderLectioForm(dateKey, lectio)}
+
+    ${renderFamilyWorshipSection(today.getFullYear(), today.getMonth()+1, Math.ceil(today.getDate()/7))}
   `;
 
   bindLectioInputs(dateKey);
@@ -8038,7 +8086,7 @@ function renderLectioFormFull(key, d){
           <div class="lectio-step-name">말씀읽기<span class="latin">Lectio</span></div>
           <div class="lectio-check">✓</div>
         </div>
-        <div class="step-illust">${ILLUST.step1}</div>
+        <div class="step-illust">${ILLUST.step0}</div>
         <div class="lectio-hint">거룩한 독서의 첫걸음 — 본문을 소리 내어, 천천히, 반복해서 읽습니다.</div>
         <div class="lectio-q"><span class="qn">·</span> 마음을 정돈하고, 말씀을 세 번 이상 천천히 읽어보셨나요?</div>
         <div class="lectio-yn">
@@ -8123,16 +8171,13 @@ function renderLectioFormFull(key, d){
       <label class="sp-opt"><input type="radio" name="sharePrivacy" value="private" ${d.share_private?'checked':''}/><span><strong>비공개</strong> — 기록했다는 표시만 되고, 내용은 나만 볼 수 있습니다</span></label>
     </div>
     <div class="lectio-save-bar">
-      <button class="btn btn-secondary" id="lectioDraftBtn" onclick="saveLectioNow('${key}', true)">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M4 21h16"/></svg>
-        임시저장
-      </button>
+      <span class="autosave-stamp" id="autoSaveStamp"></span>
       <button class="btn" id="lectioSaveBtn" onclick="saveLectioNow('${key}')">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/></svg>
         저장
       </button>
     </div>
-    <div class="save-hint">임시저장은 내 기기에만 저장되고 나눔되지 않습니다.<br/>저장 후 다시 수정해 저장하면 나눔 글도 함께 갱신됩니다.</div>
+    <div class="save-hint">입력하는 내용은 수시로 내 기기에 자동 저장됩니다.<br/>'저장'을 누르면 나눔 설정에 따라 목장방에 게시(갱신)됩니다.</div>
   `;
 }
 
@@ -8196,16 +8241,13 @@ function renderLectioFormSimple(key, d){
       <label class="sp-opt"><input type="radio" name="sharePrivacy" value="private" ${d.share_private?'checked':''}/><span><strong>비공개</strong> — 기록했다는 표시만 되고, 내용은 나만 볼 수 있습니다</span></label>
     </div>
     <div class="lectio-save-bar">
-      <button class="btn btn-secondary" id="lectioDraftBtn" onclick="saveLectioNow('${key}', true)">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M4 21h16"/></svg>
-        임시저장
-      </button>
+      <span class="autosave-stamp" id="autoSaveStamp"></span>
       <button class="btn" id="lectioSaveBtn" onclick="saveLectioNow('${key}')">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/></svg>
         저장
       </button>
     </div>
-    <div class="save-hint">임시저장은 내 기기에만 저장되고 나눔되지 않습니다.<br/>저장 후 다시 수정해 저장하면 나눔 글도 함께 갱신됩니다.</div>
+    <div class="save-hint">입력하는 내용은 수시로 내 기기에 자동 저장됩니다.<br/>'저장'을 누르면 나눔 설정에 따라 목장방에 게시(갱신)됩니다.</div>
   `;
 }
 
@@ -8215,10 +8257,39 @@ function bindLectioInputs(key){
       // 자동 높이 조정
       el.style.height = 'auto';
       el.style.height = (el.scrollHeight + 2) + 'px';
+      autoSaveLectio(key);          /* v1.8 — 입력 즉시 자동 임시저장 */
     });
     // 초기 높이
     setTimeout(()=>{ el.style.height='auto'; el.style.height=(el.scrollHeight+2)+'px'; },0);
   });
+  /* v1.8 — 라디오(말씀읽기 예/아니오, 나눔 설정) 변경도 자동 저장 */
+  document.querySelectorAll('#view-word input[name="lectioRead"], #view-word input[name="sharePrivacy"]').forEach(r=>{
+    r.addEventListener('change', ()=>autoSaveLectio(key));
+  });
+}
+
+/* v1.8 — 자동 임시저장 (디바운스 1초). 내 기기에만 저장하며,
+   이미 '저장(나눔)'된 기록의 나눔 글은 건드리지 않는다 — 나눔 갱신은 '저장' 버튼으로만. */
+let _autoSaveTimer = null;
+function autoSaveLectio(key){
+  clearTimeout(_autoSaveTimer);
+  _autoSaveTimer = setTimeout(async ()=>{
+    try{
+      const prev = (_read(STORAGE_KEYS.lectio, {})[key]) || SEED_LECTIO[key] || {};
+      const data = Object.assign({}, prev);
+      document.querySelectorAll('#view-word .lectio-input').forEach(el=>{
+        const f = el.dataset.field; if(f) data[f] = el.value;
+      });
+      const rd = document.querySelector('#view-word input[name="lectioRead"]:checked');
+      if(rd) data.lectio_read = rd.value;
+      const pv = document.querySelector('#view-word input[name="sharePrivacy"]:checked');
+      if(pv) data.share_private = pv.value==='private';
+      if(prev.draft === undefined || prev.draft === null) data.draft = true;  // 새 기록은 임시(내 기기) 상태
+      await api.saveLectio(key, data);
+      const el = document.getElementById('autoSaveStamp');
+      if(el){ const n=new Date(); el.textContent = '자동 저장됨 · '+String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0'); }
+    }catch(e){}
+  }, 1000);
 }
 
 async function saveLectioNow(key, draftOnly){
@@ -9369,6 +9440,51 @@ async function rejectSubmission(id){
   renderColumn();
 }
 
+/* v1.8 — 이달의 말씀함께(책자) 칼럼 6종 */
+function _bookColKey(){
+  const keys = Object.keys(BOOK_COLUMNS).sort();
+  return keys[keys.length-1];
+}
+function renderBookColumnsSection(){
+  const key = _bookColKey();
+  const list = BOOK_COLUMNS[key] || [];
+  if(!list.length) return '';
+  const mm = parseInt(key.slice(5));
+  return `
+    <div class="section-title" style="margin:6px 20px 10px">이달의 말씀함께 <span class="en" style="font-size:0.6562rem;color:var(--ink-4);letter-spacing:1px">· ${mm}월호</span></div>
+    <div class="bcol-list">
+      ${list.map((c,i)=>`
+        <button class="bcol-card" onclick="openBookColumn(${i})">
+          <div class="bcol-cat">${escapeHtml(c.cat)}</div>
+          <div class="bcol-main">
+            <div class="bcol-ttl">${escapeHtml(c.title)}</div>
+            <div class="bcol-author">${escapeHtml(c.author)}</div>
+          </div>
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+        </button>`).join('')}
+    </div>`;
+}
+function openBookColumn(i){
+  const c = (BOOK_COLUMNS[_bookColKey()]||[])[i];
+  if(!c) return;
+  let li = 0;
+  const body = c.parts.map(p=>{
+    if(p.t==='h')    return `<div class="bcol-h">${escapeHtml(p.x)}</div>`;
+    if(p.t==='quote')return `<div class="bcol-quote">${escapeHtml(p.x)}</div>`;
+    if(p.t==='meta') return `<div class="bcol-meta">${escapeHtml(p.x)}</div>`;
+    if(p.t==='li'){ li++; return `<div class="bcol-li"><span class="n">${li}</span>${escapeHtml(p.x)}</div>`; }
+    return `<p class="bcol-p">${escapeHtml(p.x)}</p>`;
+  }).join('');
+  document.getElementById('modalContent').innerHTML = `
+    <div class="bcol-modal">
+      <div class="fw-modal-badge">이달의 말씀함께 · ${escapeHtml(c.cat)}</div>
+      <h3 class="fw-modal-title">${escapeHtml(c.title)}</h3>
+      <div class="fw-modal-sub">${escapeHtml(c.author)}</div>
+      ${body}
+    </div>`;
+  openModal();
+}
+
 async function renderColumn(){
   const view = document.getElementById('view-column');
   view.innerHTML = `
@@ -9380,7 +9496,9 @@ async function renderColumn(){
         </div>
       </div>
     </div>
+    <div id="bookColumns">${renderBookColumnsSection()}</div>
     <div id="columnReview"></div>
+    <div class="section-title" style="margin:18px 20px 10px">목회자 칼럼</div>
     <div id="columnList">
       ${Array.from({length:2}).map(()=>`<div style="margin:0 16px 14px"><div class="skeleton" style="height:240px;border-radius:16px"></div></div>`).join('')}
     </div>
@@ -9605,15 +9723,15 @@ async function renderCalendar(){
     </div>
     <div class="cal-legend">
       <div class="cal-leg-item"><div class="cal-leg-sw" style="background:var(--sage)"></div>묵상한 날</div>
-      <div class="cal-leg-item"><div class="cal-leg-sw" style="background:var(--sage-dark)"></div>오늘</div>
+      <div class="cal-leg-item"><div class="cal-leg-sw" style="background:#fff;box-shadow:inset 0 0 0 2px var(--sage-dark)"></div>오늘</div>
       <div class="cal-leg-item"><div class="cal-leg-sw" style="background:var(--bg-soft);border:1px solid var(--line)"></div>미시작</div>
     </div>
     ${renderFamilyWorshipSection(year, month)}
   `;
 
   const prog = await api.getMonthProgress(year, month);
-  const today = state.currentDate;
-  const todayKey = formatDateKey(today);
+  /* v1.8 — 달력의 '오늘'은 항상 실제 오늘 (보던 날짜 표시는 제거) */
+  const todayKey = formatDateKey(realToday());
 
   // 통계
   const dayKeys = Object.keys(prog);
@@ -9670,9 +9788,9 @@ async function renderCalendar(){
         var p = c.prog;
         var total = p ? p.total : 0;
         var cls = '';
-        if(isToday) cls = 'today';
-        else if(total>0) cls = 'complete';   /* v1.6 — 하나라도 저장하면 '묵상한 날' */
-        if(isSun && !isToday && !cls) cls = 'sunday';
+        if(total>0) cls = 'complete';        /* v1.6 — 하나라도 저장하면 '묵상한 날' */
+        if(isToday) cls = (cls?cls+' ':'') + 'today';   /* v1.8 — 오늘은 테두리로 구분(묵상과 중첩 가능) */
+        if(isSun && !cls) cls = 'sunday';
         var dots = '';
         for(var i=1;i<=4;i++){
           dots += '<span class="ct '+(p && p['s'+i]===1?'on':'')+'"></span>';
@@ -9698,6 +9816,8 @@ function changeMonth(delta){
   renderCalendar();
 }
 function goToToday(){
+  /* v1.8 — 항상 '실제 오늘'로 복귀 (보던 날짜가 아니라) */
+  state.currentDate = realToday();
   state.calMonth = new Date(state.currentDate);
   renderCalendar();
 }
@@ -9879,11 +9999,12 @@ async function _renderMypageBody(view){
   const started = dayKeys.filter(function(k){ return prog[k].total>0; }).length;
   const avgStage = started ? (dayKeys.reduce(function(s,k){return s+prog[k].total;},0)/started).toFixed(1) : '0';
 
-  // 이번 달 미니 캘린더
-  const year = 2026, month = 1;
+  // 이번 달 미니 캘린더 — v1.8: 실제 이번 달 (1월 하드코딩 버그 픽스)
+  const _rt = realToday();
+  const year = _rt.getFullYear(), month = _rt.getMonth()+1;
   const firstDay = new Date(year, month-1, 1);
   const lastDay = new Date(year, month, 0);
-  const todayKey = formatDateKey(state.currentDate);
+  const todayKey = formatDateKey(_rt);
   const cells = [];
   for(let i=0; i<firstDay.getDay(); i++) cells.push({outside:true});
   for(let d=1; d<=lastDay.getDate(); d++){
@@ -10038,7 +10159,7 @@ async function _renderMypageBody(view){
     </div>
 
     <div style="text-align:center;padding:14px;font-family:var(--en);font-size:0.6562rem;color:var(--ink-4);letter-spacing:1px">
-      말씀함께 v1.7.5 · DEMO
+      말씀함께 v1.8 · DEMO
     </div>
   `;
 }
@@ -10237,7 +10358,7 @@ function openAddressSearch(){
         if(detailEl){ detailEl.focus(); }
       },
       onclose: function(state){ if(state === 'FORCE_CLOSE') closeAddressSearch(); }
-    }).embed(embed, { autoClose: false });
+    }).embed(embed, { autoClose: false, width:'100%', height:'100%' });
   }).catch(function(){
     // 오프라인/차단 폴백 — 직접 입력 허용
     useManualAddress();
@@ -10394,7 +10515,7 @@ async function renderSettings(){
       <div class="menu-row" style="cursor:default">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
         <div class="menu-text"><div class="menu-ttl">버전</div></div>
-        <div class="menu-right" style="font-family:var(--en);font-weight:600;color:var(--ink-3)">v1.7.5 · DEMO</div>
+        <div class="menu-right" style="font-family:var(--en);font-weight:600;color:var(--ink-3)">v1.8 · DEMO</div>
       </div>
       <div class="menu-row" onclick="toast('이용약관 (실제 앱에서 제공)')">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>

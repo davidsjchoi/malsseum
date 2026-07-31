@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>말씀함께 · 관리자 v1.7.5</title>
+<title>말씀함께 · 관리자 v1.8</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -206,7 +206,7 @@ a{color:inherit}
       <div class="side-mark">함</div>
       <div>
         <div class="side-brand-text">말씀함께</div>
-        <div class="side-brand-sub en">ADMIN · v1.7.5</div>
+        <div class="side-brand-sub en">ADMIN · v1.8</div>
       </div>
     </div>
     <nav class="side-nav" id="sideNav"></nav>
@@ -853,6 +853,24 @@ RENDERERS.dashboard=function(){
       ${statCard('terra','노출 중 중보기도',prayCnt,'건','M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z')}
       ${statCard('sky','목장방',roomCnt,'개','M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2 M9 7a4 4 0 1 0 0 0')}
     </div>
+    <div class="section-title">묵상 참여 통계 <span style="font-size:11px;color:var(--ink-3);font-weight:600">· 이 브라우저 기준</span></div>
+    ${(function(){
+      const lec=_read('mh_v05_lectio',{})||{};
+      const now=new Date(); const ym=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+      const isFilled=d=>!!(d&&((d.lectio_read==='yes')||(d.meditatio1||'').trim()||(d.meditatio2||'').trim()||(d.meditatio3||'').trim()||(d.oratio||'').trim()||(d.contemplatio||'').trim()||(d.scribo||'').trim()));
+      const keys=Object.keys(lec).filter(k=>/^\d{4}-\d{2}-\d{2}$/.test(k)&&isFilled(lec[k]));
+      const month=keys.filter(k=>k.slice(0,7)===ym);
+      const stage=d=>[(d.lectio_read==='yes'),((d.meditatio1||'').trim()&&(d.meditatio2||'').trim()&&(d.meditatio3||'').trim()),(d.oratio||'').trim(),(d.contemplatio||'').trim(),(d.scribo||'').trim()].filter(Boolean).length;
+      const full=month.filter(k=>stage(lec[k])>=5).length;
+      const wk=(function(){let c=0;for(let i=0;i<7;i++){const dd=new Date(now);dd.setDate(dd.getDate()-i);const kk=dd.getFullYear()+'-'+String(dd.getMonth()+1).padStart(2,'0')+'-'+String(dd.getDate()).padStart(2,'0');if(keys.indexOf(kk)>=0)c++;}return c;})();
+      return '<div class="stat-grid">'
+        + statCard('sage','이번 달 묵상한 날',month.length,'일','M4 19.5A2.5 2.5 0 0 1 6.5 17H20 M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z')
+        + statCard('plum','이번 달 5단계 완주',full,'일','M9 12l2 2 4-4 M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z')
+        + statCard('sky','최근 7일 묵상',wk,'일','M12 8v4l3 3 M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z')
+        + statCard('warn','전체 기록 일수',keys.length,'일','M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6')
+        + '</div>'
+        + '<p class="hint" style="margin-top:-4px">데모 모드는 이 브라우저의 사용자 앱 기록만 집계합니다. 전체 사용자 통계는 Firebase 연동 후 제공됩니다.</p>';
+    })()}
     <div class="section-title">검수 대기 현황</div>
     ${pendCnt===0? emptyBox('검수 대기 중인 칼럼이 없습니다.') : subs.filter(c=>c.status==='review').slice(0,3).map(c=>`
       <div class="lrow">
@@ -1369,7 +1387,7 @@ RENDERERS.settings=function(){
         <div class="switch-info"><h4>데모 데이터 초기화</h4><p>관리자·앱이 공유하는 모든 로컬 데이터를 삭제합니다</p></div>
         <button class="btn btn-bad" onclick="resetAll()">초기화</button></div>
     </div>
-    <div class="note" style="margin-top:18px"><b>연동 안내</b> — 이 관리자는 사용자 앱(말씀함께_데모_v1.7.5.html)과 동일한 브라우저 localStorage 키를 공유합니다. 같은 브라우저에서 두 파일을 열면 변경 사항이 즉시 반영됩니다.</div>`;
+    <div class="note" style="margin-top:18px"><b>연동 안내</b> — 이 관리자는 사용자 앱(말씀함께_데모_v1.8.html)과 동일한 브라우저 localStorage 키를 공유합니다. 같은 브라우저에서 두 파일을 열면 변경 사항이 즉시 반영됩니다.</div>`;
 };
 function saveChurch(v){ setPrefs({churchName:(v||'').trim()||'우리 교회'}); document.getElementById('sideChurch').textContent=getChurchName(); toast('저장되었습니다'); }
 function resetAll(){ if(confirm('정말 모든 데모 데이터를 초기화할까요?')){ Object.values(STORAGE_KEYS).forEach(k=>localStorage.removeItem(k)); toast('초기화되었습니다'); ensureSubmissionSeed(); init(); } }

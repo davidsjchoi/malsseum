@@ -1651,7 +1651,7 @@ body{
 .my-btn{ font-family:var(--en); font-size:0.625rem; font-weight:800; letter-spacing:0.08em; color:var(--sage-deep);
   background:var(--sage-pale); border:1px solid var(--sage-soft); }
 .share-head{ padding:14px 16px 0; }
-.share-chips{ display:flex; gap:6px; align-items:center; margin-bottom:12px; }
+.share-chips{ display:flex; gap:6px; align-items:center; margin-bottom:12px; flex-wrap:wrap; }
 .schip{ font-size:0.75rem; font-weight:600; color:var(--ink-3); background:var(--bg-card); border:1px solid var(--line);
   border-radius:99px; padding:7px 14px; cursor:pointer; }
 .schip.on{ background:var(--sage-dark); border-color:var(--sage-dark); color:#fff; font-weight:700; }
@@ -10097,7 +10097,6 @@ function saveShareOverlay(o){ _write(STORAGE_KEYS.shareFeed, o); }
 function upsertMySharePost(dateKey, lectio, scope){
   const o = getShareOverlay();
   o.myPosts = o.myPosts || {};
-  if(scope==='private'){ delete o.myPosts[dateKey]; saveShareOverlay(o); return; }
   const w = WORD_DATA[dateKey] || {};
   const body = [(lectio.meditatio3||'').trim(), (lectio.scribo||'').trim(), (lectio.oratio||'').trim(), (lectio.contemplatio||'').trim()]
     .filter(Boolean).join('\n');
@@ -10127,8 +10126,10 @@ function listSharePosts(filter){
   /* 댓글 오버레이 병합 */
   const cm = o.comments || {};
   posts.forEach(p=>{ if(cm[p.id]) p.comments = (p.comments||[]).concat(cm[p.id]); });
-  if(filter==='friend') posts = posts.filter(p=>p.group==='friend'||p.mine);
+  if(filter==='mine') posts = posts.filter(p=>p.mine);
+  else if(filter==='friend') posts = posts.filter(p=>p.group==='friend'||(p.mine&&p.scope!=='private'));
   else if(filter==='cell') posts = posts.filter(p=>p.group==='cell'||(p.mine&&p.scope==='friends_cell'));
+  else posts = posts.filter(p=>!(p.mine&&p.scope==='private'));   /* 전체: 내 비공개 글 제외 */
   posts.sort((a,b)=>b.time-a.time);
   return posts;
 }
@@ -10163,6 +10164,7 @@ async function renderShare(){
         <button class="schip ${filter==='all'?'on':''}" onclick="state.shareFilter='all';renderShare()">전체</button>
         <button class="schip ${filter==='friend'?'on':''}" onclick="state.shareFilter='friend';renderShare()">친구</button>
         <button class="schip ${filter==='cell'?'on':''}" onclick="state.shareFilter='cell';renderShare()">우리 ${tierLabel('cell')||'목장'}</button>
+        <button class="schip ${filter==='mine'?'on':''}" onclick="state.shareFilter='mine';renderShare()">나의 글</button>
         <span style="flex:1"></span>
         <button class="frd-mng" onclick="openFriendsModal()" style="position:relative">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -10178,11 +10180,15 @@ async function renderShare(){
       </div>
     </div>
     <div class="share-feed">
-      ${posts.length ? posts.map(p=>sharePostCardHTML(p)).join('') : `
+      ${posts.length ? posts.map(p=>sharePostCardHTML(p)).join('') : (filter==='mine' ? `
+        <div style="margin:20px 16px;padding:30px 20px;text-align:center;color:var(--ink-3);background:var(--bg-card);border:1px solid var(--line);border-radius:16px;font-size:0.8125rem;line-height:1.8">
+          아직 나의 나눔 글이 없어요.<br/>말씀 탭에서 묵상을 기록하고 저장하면 이곳에 쌓입니다.
+          <div style="margin-top:12px"><button class="btn btn-secondary" onclick="goToLectio()">오늘 묵상 기록하기</button></div>
+        </div>` : `
         <div style="margin:20px 16px;padding:30px 20px;text-align:center;color:var(--ink-3);background:var(--bg-card);border:1px solid var(--line);border-radius:16px;font-size:0.8125rem;line-height:1.8">
           아직 표시할 나눔이 없어요.<br/>친구를 맺으면 친구의 묵상 나눔이 이곳에 흐릅니다.
           <div style="margin-top:12px"><button class="btn btn-secondary" onclick="openFriendsModal()">친구 관리 열기</button></div>
-        </div>`}
+        </div>`)}
     </div>
     <div class="share-note">아멘과 친구 수는 서로에게 숫자로 표시되지 않습니다 · 나눔은 시간순으로만 보여집니다</div>
   `;

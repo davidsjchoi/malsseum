@@ -1705,6 +1705,10 @@ body{
 /* 친구 모달 */
 .frd-modal{ padding:6px 16px 14px; }
 .frd-hint{ font-size:0.7188rem; color:var(--ink-3); line-height:1.7; margin-bottom:6px; }
+.frd-search{ display:flex; align-items:center; gap:8px; background:var(--bg-soft); border:1px solid var(--line);
+  border-radius:12px; padding:9px 13px; margin:10px 0 4px; }
+.frd-search input{ flex:1; border:none; background:transparent; outline:none; font-size:0.8125rem;
+  font-family:var(--sans); color:var(--ink); }
 .frd-sec{ font-size:0.75rem; font-weight:800; color:var(--sage-deep); margin:16px 0 6px; }
 .frd-row{ display:flex; align-items:center; gap:10px; padding:9px 2px; border-bottom:1px solid var(--line-soft); }
 .frd-row:last-child{ border-bottom:none; }
@@ -10303,6 +10307,55 @@ function addShareComment(id){
   toast('댓글을 남겼습니다');
 }
 
+/* ── 친구 검색 (목장편성표 실데이터 기반 데모) ── */
+let _frdSearchQ = '';
+function searchFriendCandidates(q){
+  q = (q||'').trim();
+  if(q.length < 1) return [];
+  const fr = getFriendsState();
+  const known = {};
+  fr.list.forEach(f=>known[f.name.replace(/\s*(권사|집사|성도|청년|목자)$/,'')]=1);
+  fr.reqIn.forEach(f=>known[f.name]=1);
+  fr.reqOut.forEach(f=>known[f.name]=1);
+  const u = state.user || {};
+  known[((u.nickname||u.name||'')+'').replace(/\s*님+$/,'')]=1;
+  const res = [];
+  try{
+    ORG_DATA.districts.forEach(d=>{
+      (d.groves||[]).forEach(g=>{
+        (g.cells||[]).forEach(c=>{
+          const nm = c.replace(/\s*목장$/,'');
+          if(nm.indexOf(q)>=0 && !known[nm]){
+            res.push({ name:nm, cell:d.name+' · '+g.name+' · '+c });
+          }
+        });
+      });
+    });
+  }catch(e){}
+  ROOM_MEMBER_POOL.forEach(n=>{
+    const nm = n.replace(/\s*(권사|집사|성도|청년)$/,'');
+    if(n.indexOf(q)>=0 && !known[n] && !known[nm] && !res.some(r=>r.name===n)){
+      res.push({ name:n, cell:'우리 '+(tierLabel('cell')||'목장') });
+    }
+  });
+  return res.slice(0,8);
+}
+function doFriendSearch(){
+  const inp = document.getElementById('frdSearchInput');
+  _frdSearchQ = (inp && inp.value || '').trim();
+  const box = document.getElementById('frdSearchResults');
+  if(!box) return;
+  if(!_frdSearchQ){ box.innerHTML=''; return; }
+  const res = searchFriendCandidates(_frdSearchQ);
+  box.innerHTML = res.length ? res.map(r=>`
+    <div class="frd-row">
+      <div class="sp-av" style="background:${shareAvatarColor(r.name)}">${escapeHtml(r.name.charAt(0))}</div>
+      <div class="frd-info"><div class="frd-nm">${escapeHtml(r.name)}</div><div class="frd-sub">${escapeHtml(r.cell)}</div></div>
+      <button class="btn btn-sm btn-secondary" onclick="requestFriend('${r.name.replace(/'/g,"\\'")}', '${r.cell.replace(/'/g,"\\'")}')">친구 요청</button>
+    </div>`).join('')
+    : '<p class="frd-empty">"'+escapeHtml(_frdSearchQ)+'" 검색 결과가 없어요. 같은 교회에 등록된 성도만 검색됩니다.</p>';
+}
+
 /* ── 친구 관리 모달 ── */
 function openFriendsModal(){
   const fr = getFriendsState();
@@ -10312,6 +10365,13 @@ function openFriendsModal(){
     <div class="frd-modal">
       <h3 style="font-family:var(--serif);font-size:1.125rem;font-weight:700;margin-bottom:2px">친구 관리</h3>
       <p class="frd-hint">같은 교회 성도끼리만 친구를 맺을 수 있어요 · 끊기와 요청 무시는 상대에게 알려지지 않습니다</p>
+
+      <div class="frd-search">
+        <svg width="15" height="15" fill="none" stroke="var(--ink-3)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="frdSearchInput" placeholder="이름으로 성도 검색 (예: 김재기)" maxlength="20"
+          value="${escapeHtml(_frdSearchQ)}" oninput="doFriendSearch()" onkeydown="if(event.key==='Enter')doFriendSearch()"/>
+      </div>
+      <div id="frdSearchResults"></div>
 
       ${fr.reqIn.length?`
       <div class="frd-sec">받은 요청</div>
@@ -10350,6 +10410,7 @@ function openFriendsModal(){
         </div>`).join('')}`:''}
     </div>`;
   openModal();
+  setTimeout(doFriendSearch, 60);
 }
 function acceptFriend(id){
   const fr = getFriendsState();
@@ -10371,11 +10432,12 @@ function unfriend(id){
   saveFriendsState(fr); toast('친구를 끊었습니다');
   openFriendsModal(); if(state.tab==='share') renderShare();
 }
-function requestFriend(name){
+function requestFriend(name, cell){
   const fr = getFriendsState();
-  fr.reqOut.push({ id:'out_'+Date.now(), name, cell:'우리 '+(tierLabel('cell')||'목장') });
+  fr.reqOut.push({ id:'out_'+Date.now(), name, cell: cell || ('우리 '+(tierLabel('cell')||'목장')) });
   saveFriendsState(fr); toast('친구 요청을 보냈습니다 · 승인하면 서로의 나눔이 보여요');
   openFriendsModal();
+  setTimeout(doFriendSearch, 60);   /* 검색 결과 갱신(요청 보낸 사람 제외) */
 }
 
 /* ── 홈 미리보기 ── */

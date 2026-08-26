@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>말씀함께 · 관리자 v1.8</title>
+<title>말씀함께 · 관리자 v1.9</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -206,7 +206,7 @@ a{color:inherit}
       <div class="side-mark">함</div>
       <div>
         <div class="side-brand-text">말씀함께</div>
-        <div class="side-brand-sub en">ADMIN · v1.8</div>
+        <div class="side-brand-sub en">ADMIN · v1.9</div>
       </div>
     </div>
     <nav class="side-nav" id="sideNav"></nav>
@@ -243,6 +243,7 @@ a{color:inherit}
       <div class="view" id="view-prayer"></div>
       <div class="view" id="view-pwj"></div>
       <div class="view" id="view-rooms"></div>
+      <div class="view" id="view-share"></div>
       <div class="view" id="view-settings"></div>
     </div>
   </main>
@@ -266,6 +267,7 @@ const STORAGE_KEYS = {
   homePhoto:'mh_v05_home_photo',     // v1.7 — 홈 '오늘의 말씀' 박스 배경 사진
   familyWorship:'mh_v05_family_worship',
   pwj:'mh_v05_pwj_content',   // v1.6.1 — 예수동행기도 콘텐츠(앱 중보기도 탭 상단)
+  shareFeed:'mh_v19_share_feed', friends:'mh_v19_friends',   // v1.9 — 나눔(친구 피드)
   rooms:'mh_v06_rooms', roomPosts:'mh_v06_room_posts', roomPostsHidden:'mh_v06_room_posts_hidden',
 };
 function _read(k,f){ try{ const r=localStorage.getItem(k); return r?JSON.parse(r):(f!==undefined?f:null);}catch(e){return f!==undefined?f:null;} }
@@ -697,6 +699,7 @@ const NAV=[
   {id:'prayer', name:'중보기도', en:'Prayers', badge:()=>pendingPrayers().length, icon:'<path d="M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="2.2"/>'},
   {id:'pwj', name:'예수동행기도 콘텐츠', en:'PrayWithJesus', icon:'<circle cx="12" cy="12" r="9"/><path d="M3.6 9h16.8M3.6 15h16.8M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/>'},
   {id:'rooms', name:'목장방', en:'Rooms', icon:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>'},
+  {id:'share', name:'나눔 관리', en:'Sharing', icon:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>'},
   {group:'정책'},
   {id:'tiers', name:'모임 단계', en:'Group Tiers', icon:'<path d="M3 3v18h18"/><rect x="7" y="13" width="3" height="5"/><rect x="12" y="9" width="3" height="9"/><rect x="17" y="5" width="3" height="13"/>'},
   {id:'method', name:'묵상 방식', en:'Method', icon:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'},
@@ -729,6 +732,78 @@ function go(id){
 }
 function openUserApp(){ window.open('index.html','_blank'); }
 
+
+
+/* ── v1.9: 나눔 관리 (친구 승인 기반 개인 피드) ── */
+function shareScopeLabel(v){ return v==='private'?'나만 보기':(v==='friends'?'친구':'친구+목장'); }
+function getShareOverlayAdmin(){ return _read(STORAGE_KEYS.shareFeed, {}) || {}; }
+function setShareDefaultScope(v){ setPrefs({shareDefaultScope:v}); toast('기본 공개범위: '+shareScopeLabel(v)+' — 새 묵상 기록부터 적용됩니다'); RENDERERS.share(); }
+function setShareFriendLimit(){ const v=parseInt(document.getElementById('sh-limit').value)||100; setPrefs({shareFriendLimit:Math.max(10,Math.min(350,v))}); toast('친구 상한이 저장되었습니다'); }
+function toggleSharePostHidden(id){
+  const o=getShareOverlayAdmin(); o.removed=o.removed||{};
+  if(o.removed[id]) delete o.removed[id]; else o.removed[id]=true;
+  _write(STORAGE_KEYS.shareFeed,o); toast(o.removed[id]?'글을 숨겼습니다 — 앱 피드에서 제외됩니다':'글을 복원했습니다');
+  RENDERERS.share();
+}
+function adminSharePosts(){
+  const o=getShareOverlayAdmin(); const list=[];
+  const my=o.myPosts||{};
+  Object.keys(my).forEach(dk=>{ const p=my[dk]; list.push({id:'my_'+dk, who:'사용자(이 브라우저)', scope:p.scope, time:p.time, body:p.body||'', range:p.range||''}); });
+  /* 데모 시드 글 — 앱과 동일한 아이디 */
+  [
+    {id:'sp1', who:'김은혜', scope:'friends'},
+    {id:'sp2', who:'박준영', scope:'friends_cell'},
+    {id:'sp3', who:'김은혜 권사', scope:'friends_cell'},
+    {id:'sp4', who:'이정숙', scope:'friends'},
+    {id:'sp5', who:'박믿음 집사', scope:'friends_cell'},
+  ].forEach(p=>list.push(Object.assign({time:0, body:'(데모 시드 글)', range:''},p)));
+  return list;
+}
+RENDERERS.share=function(){
+  const p=getPrefs();
+  const def=p.shareDefaultScope||'friends_cell';
+  const limit=p.shareFriendLimit||100;
+  const o=getShareOverlayAdmin(); const removed=o.removed||{};
+  const posts=adminSharePosts();
+  const fr=_read(STORAGE_KEYS.friends,null);
+  const frCnt=fr?fr.list.length:3;
+  document.getElementById('view-share').innerHTML=`
+    <p class="hint">사용자 앱의 <b>나눔 탭(친구 승인 기반 개인 피드)</b> 정책과 게시물을 관리합니다. 데모 모드는 이 브라우저의 데이터만 반영됩니다.</p>
+
+    <div class="section-title">나눔 정책</div>
+    <div class="card" style="padding:16px 18px">
+      <div style="font-size:12.5px;font-weight:700;color:var(--ink-3);margin-bottom:8px">새 묵상 기록의 기본 공개범위</div>
+      ${['private','friends','friends_cell'].map(v=>`
+        <label style="display:flex;align-items:center;gap:8px;padding:6px 2px;cursor:pointer;font-size:13.5px">
+          <input type="radio" name="shDef" ${def===v?'checked':''} onchange="setShareDefaultScope('${v}')"/>
+          <b>${shareScopeLabel(v)}</b>
+          <span style="color:var(--ink-3);font-size:12px">${v==='private'?'— 기록 표시만, 내용 비공개':(v==='friends'?'— 승인한 친구에게만':'— 친구와 목장 식구 모두에게')}</span>
+        </label>`).join('')}
+      <div style="display:flex;align-items:center;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line-soft)">
+        <div style="font-size:12.5px;font-weight:700;color:var(--ink-3)">친구 상한</div>
+        <input class="input" id="sh-limit" type="number" min="10" max="350" value="${limit}" style="width:90px"/>
+        <button class="btn btn-sm" onclick="setShareFriendLimit()">저장</button>
+        <span style="font-size:11.5px;color:var(--ink-3)">깊은 나눔을 위한 상한 (YouVersion 250명 참고)</span>
+      </div>
+      <div style="font-size:11.5px;color:var(--ink-3);margin-top:10px;line-height:1.7">
+        고정 정책: 같은 교회 인증 사용자만 친구 요청 · 아멘/친구 수 비공개 · 시간순 피드만 · 끊기/무시는 상대에게 무알림</div>
+    </div>
+
+    <div class="section-title" style="margin-top:26px">나눔 게시물 <span style="font-size:11px;color:var(--ink-3);font-weight:600">· 이 브라우저 기준 ${posts.length}건 · 친구 관계 ${frCnt}명</span></div>
+    ${posts.map(pp=>`
+      <div class="lrow" style="${removed[pp.id]?'opacity:.45':''}">
+        <div class="lrow-av" style="background:var(--sage-pale);color:var(--sage-dark)">${esc(pp.who.charAt(0))}</div>
+        <div class="lrow-main">
+          <div class="lrow-title">${esc(pp.who)} <span class="scope-pill church">${shareScopeLabel(pp.scope)}</span>${removed[pp.id]?' <span style="font-size:11px;color:#A0522D;font-weight:700">숨김</span>':''}</div>
+          <div class="lrow-sub">${esc((pp.range?pp.range+' · ':'')+(pp.body||'').slice(0,60))}</div>
+        </div>
+        <div class="lrow-actions">
+          <button class="btn btn-sm ${removed[pp.id]?'btn-primary':'btn-ghost'}" onclick="toggleSharePostHidden('${pp.id}')">${removed[pp.id]?'복원':'숨김'}</button>
+        </div>
+      </div>`).join('')}
+    <p class="hint" style="margin-top:8px">숨김 처리한 글은 사용자 앱 피드에서 즉시 제외됩니다(작성자에게 알림 없음).</p>
+  `;
+};
 
 /* ── v0.98: 홈 배너 관리 (사용자 앱 첫 화면 상단 배너, 외부 안내 페이지 연결) ── */
 function getHomeBannerAdmin(){ return _read(STORAGE_KEYS.homeBanner, null) || {on:false, title:'', sub:'', url:''}; }
@@ -883,6 +958,7 @@ RENDERERS.dashboard=function(){
     <div class="card" style="padding:6px 0">
       ${policyRow('모임 단계',tiers,'tiers')}
       ${policyRow('묵상 방식',method,'method')}
+      ${policyRow('나눔 기본 공개범위', shareScopeLabel(p.shareDefaultScope||'friends_cell')+' · 친구 상한 '+(p.shareFriendLimit||100)+'명','share')}
       ${policyRow('구독 정책','책자 구독자 무료 · PRO 자동 적용 · 데모 사용자 '+(u.subscribed?'구독 중':'미구독'),'subscription')}
       ${policyRow('교회 이름',getChurchName(),'settings')}
     </div>
@@ -1387,7 +1463,7 @@ RENDERERS.settings=function(){
         <div class="switch-info"><h4>데모 데이터 초기화</h4><p>관리자·앱이 공유하는 모든 로컬 데이터를 삭제합니다</p></div>
         <button class="btn btn-bad" onclick="resetAll()">초기화</button></div>
     </div>
-    <div class="note" style="margin-top:18px"><b>연동 안내</b> — 이 관리자는 사용자 앱(말씀함께_데모_v1.8.html)과 동일한 브라우저 localStorage 키를 공유합니다. 같은 브라우저에서 두 파일을 열면 변경 사항이 즉시 반영됩니다.</div>`;
+    <div class="note" style="margin-top:18px"><b>연동 안내</b> — 이 관리자는 사용자 앱(말씀함께_데모_v1.9.html)과 동일한 브라우저 localStorage 키를 공유합니다. 같은 브라우저에서 두 파일을 열면 변경 사항이 즉시 반영됩니다.</div>`;
 };
 function saveChurch(v){ setPrefs({churchName:(v||'').trim()||'우리 교회'}); document.getElementById('sideChurch').textContent=getChurchName(); toast('저장되었습니다'); }
 function resetAll(){ if(confirm('정말 모든 데모 데이터를 초기화할까요?')){ Object.values(STORAGE_KEYS).forEach(k=>localStorage.removeItem(k)); toast('초기화되었습니다'); ensureSubmissionSeed(); init(); } }

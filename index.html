@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="말씀함께">
-<title>말씀함께 · 데모 v1.8</title>
+<title>말씀함께 · 데모 v1.9</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -1645,6 +1645,78 @@ body{
   background:var(--line);
 }
 .cal-dots .ct.on{ background:var(--sage); }
+
+
+/* ═══ v1.9 — 나눔 탭 ═══ */
+.my-btn{ font-family:var(--en); font-size:0.625rem; font-weight:800; letter-spacing:0.08em; color:var(--sage-deep);
+  background:var(--sage-pale); border:1px solid var(--sage-soft); }
+.share-head{ padding:14px 16px 0; }
+.share-chips{ display:flex; gap:6px; align-items:center; margin-bottom:12px; }
+.schip{ font-size:0.75rem; font-weight:600; color:var(--ink-3); background:var(--bg-card); border:1px solid var(--line);
+  border-radius:99px; padding:7px 14px; cursor:pointer; }
+.schip.on{ background:var(--sage-dark); border-color:var(--sage-dark); color:#fff; font-weight:700; }
+.frd-mng{ display:flex; align-items:center; gap:5px; font-size:0.7188rem; font-weight:700; color:var(--sage-deep);
+  background:var(--sage-pale); border:none; border-radius:99px; padding:7px 12px; cursor:pointer; }
+.frd-req-dot{ position:absolute; top:-4px; right:-4px; min-width:16px; height:16px; border-radius:99px; background:var(--terra);
+  color:#fff; font-size:0.5938rem; font-weight:800; display:flex; align-items:center; justify-content:center; padding:0 4px; }
+.share-mystrip{ display:flex; align-items:center; gap:10px; background:linear-gradient(135deg,#35573F,#223E30);
+  border-radius:16px; padding:13px 15px; color:#fff; cursor:pointer; }
+.share-mystrip.done{ background:linear-gradient(135deg,#4A7059,#2E4F3F); }
+.share-mystrip .sm-t1{ font-size:0.7812rem; font-weight:700; }
+.share-mystrip .sm-t2{ font-size:0.6875rem; opacity:.75; margin-top:2px; }
+.share-mystrip .sm-go{ font-size:0.6875rem; font-weight:700; background:rgba(255,255,255,.16); border-radius:99px; padding:6px 11px; white-space:nowrap; }
+.share-feed{ padding:12px 16px 4px; }
+.spost{ background:var(--bg-card); border:1px solid var(--line); border-radius:16px; padding:14px 15px; margin-bottom:10px;
+  box-shadow:0 1px 4px rgba(26,31,29,.04); }
+.spost.mine{ border-color:var(--sage-soft); background:linear-gradient(180deg,#FDFEFD, var(--bg-card)); }
+.spost-h{ display:flex; align-items:center; gap:9px; cursor:pointer; }
+.sp-av{ width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:0.8125rem; color:#fff; flex-shrink:0; }
+.sp-av.sm{ width:26px; height:26px; font-size:0.6875rem; }
+.sp-nm{ font-size:0.8125rem; font-weight:700; color:var(--ink); }
+.sp-mt{ font-size:0.6562rem; color:var(--ink-4); margin-top:1px; }
+.scope-badge{ font-size:0.625rem; font-weight:700; border-radius:99px; padding:3px 9px; letter-spacing:-0.2px; flex-shrink:0; }
+.scope-badge.f{ background:var(--sage-pale); color:var(--sage-deep); }
+.scope-badge.c{ background:#F0EBE4; color:var(--terra); }
+.scope-badge.p{ background:var(--bg-soft); color:var(--ink-3); }
+.sp-pill{ display:inline-block; font-family:var(--en); font-size:0.625rem; font-weight:600; color:var(--sage-deep);
+  background:var(--sage-pale); border-radius:7px; padding:4px 9px; margin:10px 0 7px; cursor:pointer; }
+.sp-body{ font-size:0.8125rem; color:var(--ink-2); line-height:1.75; letter-spacing:-0.2px; cursor:pointer;
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+.sp-body.full{ display:block; -webkit-line-clamp:unset; overflow:visible; cursor:default; }
+.sp-foot{ display:flex; gap:8px; margin-top:11px; padding-top:10px; border-top:1px solid var(--line); }
+.sp-act{ border:none; background:none; font-size:0.75rem; font-weight:600; color:var(--ink-3); cursor:pointer; padding:4px 8px; border-radius:9px; }
+.sp-act.on{ color:var(--sage-deep); background:var(--sage-pale); font-weight:700; }
+.sp-cmt{ display:flex; gap:8px; margin-top:10px; background:var(--bg-soft); border-radius:12px; padding:9px 11px; cursor:pointer; }
+.sp-cmt-tx{ font-size:0.7188rem; color:var(--ink-2); line-height:1.6; }
+.sp-cmt-tx b{ font-weight:700; color:var(--ink); margin-right:3px; }
+.sp-cmt-t{ font-size:0.625rem; color:var(--ink-4); margin-top:2px; }
+.share-note{ text-align:center; font-size:0.6562rem; color:var(--ink-4); padding:8px 20px 26px; line-height:1.7; }
+.spost-modal{ padding:6px 16px 14px; }
+.spost-modal .sp-cmts{ margin-top:12px; }
+.spost-modal .sp-cmt{ cursor:default; }
+.sp-cmt-input{ display:flex; gap:8px; margin-top:14px; }
+.sp-cmt-input input{ flex:1; border:1px solid var(--line); border-radius:12px; padding:10px 13px; font-size:0.8125rem;
+  font-family:var(--sans); background:var(--bg-card); color:var(--ink); outline:none; }
+.sp-cmt-input input:focus{ border-color:var(--sage); }
+/* 친구 모달 */
+.frd-modal{ padding:6px 16px 14px; }
+.frd-hint{ font-size:0.7188rem; color:var(--ink-3); line-height:1.7; margin-bottom:6px; }
+.frd-sec{ font-size:0.75rem; font-weight:800; color:var(--sage-deep); margin:16px 0 6px; }
+.frd-row{ display:flex; align-items:center; gap:10px; padding:9px 2px; border-bottom:1px solid var(--line-soft); }
+.frd-row:last-child{ border-bottom:none; }
+.frd-info{ flex:1; min-width:0; }
+.frd-nm{ font-size:0.8125rem; font-weight:700; color:var(--ink); }
+.frd-sub{ font-size:0.6875rem; color:var(--ink-3); margin-top:1px; }
+.frd-wait{ font-size:0.6875rem; font-weight:700; color:var(--ink-4); background:var(--bg-soft); border-radius:99px; padding:5px 11px; }
+.frd-empty{ font-size:0.7812rem; color:var(--ink-3); padding:8px 2px; }
+/* 홈 미리보기 */
+.share-mini{ display:flex; gap:10px; align-items:flex-start; margin:0 16px 8px; background:var(--bg-card);
+  border:1px solid var(--line); border-radius:14px; padding:12px 14px; cursor:pointer; }
+.smini-top{ display:flex; align-items:center; gap:7px; font-size:0.7188rem; color:var(--ink-4); }
+.smini-top b{ font-size:0.7812rem; color:var(--ink); font-weight:700; }
+.smini-body{ font-size:0.75rem; color:var(--ink-2); line-height:1.65; margin-top:3px;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 
 /* v1.8 — 이달의 말씀함께(책자 칼럼) */
 .bcol-list{ margin:0 16px 6px; background:var(--bg-card); border:1px solid var(--line); border-radius:16px; overflow:hidden; }
@@ -3787,10 +3859,6 @@ body,button,input,textarea,select{ font-family:var(--font-body); }
       <span class="logo-h" role="img" aria-label="말씀함께"></span>
     </button>
     <div class="appbar-right">
-      <div class="sync-pill" id="syncPill" title="데모: 가짜 API 동기화 상태">
-        <span class="dot"></span>
-        <span id="syncText">동기화됨</span>
-      </div>
       <button class="icon-btn" onclick="switchTab('calendar')" title="묵상 캘린더">
         <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
       </button>
@@ -3798,6 +3866,7 @@ body,button,input,textarea,select{ font-family:var(--font-body); }
         <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
         <span class="notif-dot" id="notifDot" style="display:none"></span>
       </button>
+      <button class="icon-btn my-btn" onclick="switchTab('mypage')" title="마이 페이지" aria-label="마이 페이지">MY</button>
     </div>
   </div>
 
@@ -3805,6 +3874,7 @@ body,button,input,textarea,select{ font-family:var(--font-body); }
   <div class="view-container" id="viewContainer">
     <div class="view active" id="view-today"></div>
     <div class="view" id="view-word"></div>
+    <div class="view" id="view-share"></div>
     <div class="view" id="view-pray"></div>
     <div class="view" id="view-column"></div>
     <div class="view" id="view-calendar"></div>
@@ -3839,6 +3909,10 @@ body,button,input,textarea,select{ font-family:var(--font-body); }
       <svg fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/></svg>
       <span class="tab-label">홈</span>
     </button>
+    <button class="tab-btn" data-tab="share" onclick="switchTab('share')">
+      <svg fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span class="tab-label">나눔</span>
+    </button>
     <button class="tab-btn" data-tab="word" onclick="switchTab('word')">
       <svg fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
       <span class="tab-label">말씀</span>
@@ -3850,10 +3924,6 @@ body,button,input,textarea,select{ font-family:var(--font-body); }
     <button class="tab-btn" data-tab="column" onclick="switchTab('column')">
       <svg fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
       <span class="tab-label">칼럼</span>
-    </button>
-    <button class="tab-btn" data-tab="mypage" onclick="switchTab('mypage')">
-      <svg fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
-      <span class="tab-label">마이</span>
     </button>
   </div>
 </div>
@@ -6151,6 +6221,8 @@ const STORAGE_KEYS = {
   prayerLog:'mh_v05_prayerlog',     // 개인 기도 트래킹 {YYYY-MM-DD: 분}
   movement:'mh_v05_movement',       // 7만시간 기도운동 공동체 누적 {totalMin, byDate:{}}
   // v0.6 — 목장방/소그룹 방
+  friends:'mh_v19_friends',              // v1.9 — 친구 {list,reqIn,reqOut}
+  shareFeed:'mh_v19_share_feed',         // v1.9 — 나눔 피드 (내 글 + 반응/댓글 오버레이)
   rooms:'mh_v06_rooms',                  // 방 목록 [{id,type,name,...}]
   roomPosts:'mh_v06_room_posts',         // 나눔 피드 [{id,roomId,kind,...}]
   roomPostsHidden:'mh_v06_room_posts_hidden', // 관리자 숨김 게시물 id 배열
@@ -7103,14 +7175,14 @@ function getLang(){ return 'ko'; }   /* v1.6 — 한국어 전용 (언어 설정
 // 구조 결정: 코드 1벌 + 언어 토글로 UI 현지화. 콘텐츠(묵상 본문·칼럼)는 언어별 채널.
 // (앱을 언어별로 따로 개발하지 않음 — 스토어 배포만 언어별 빌드로.)
 const I18N = {
-  ko:{ nav_today:'오늘', nav_word:'말씀', nav_pray:'중보기도', nav_column:'칼럼', nav_my:'마이', synced:'동기화됨' },
-  en:{ nav_today:'Today', nav_word:'Word', nav_pray:'Prayer', nav_column:'Column', nav_my:'My', synced:'Synced' },
-  zh:{ nav_today:'今日', nav_word:'话语', nav_pray:'代祷', nav_column:'专栏', nav_my:'我的', synced:'已同步' },
+  ko:{ nav_today:'오늘', nav_word:'말씀', nav_share:'나눔', nav_pray:'중보기도', nav_column:'칼럼', nav_my:'마이', synced:'동기화됨' },
+  en:{ nav_today:'Today', nav_share:'Share', nav_word:'Word', nav_pray:'Prayer', nav_column:'Column', nav_my:'My', synced:'Synced' },
+  zh:{ nav_today:'今日', nav_share:'分享', nav_word:'话语', nav_pray:'代祷', nav_column:'专栏', nav_my:'我的', synced:'已同步' },
 };
 function t(k){ const l=getLang(); return (I18N[l]&&I18N[l][k]) || I18N.ko[k] || k; }
 function applyI18n(){
   try{ document.documentElement.lang = getLang(); }catch(e){}
-  const map={today:'nav_today',word:'nav_word',pray:'nav_pray',column:'nav_column',mypage:'nav_my'};
+  const map={today:'nav_today',share:'nav_share',word:'nav_word',pray:'nav_pray',column:'nav_column',mypage:'nav_my'};
   document.querySelectorAll('.tab-btn').forEach(function(b){
     const lbl=b.querySelector('.tab-label'); const key=map[b.getAttribute('data-tab')];
     if(lbl && key) lbl.textContent=t(key);
@@ -7781,26 +7853,7 @@ async function renderToday(){
 
     ${wordBoxHtml}
 
-    ${renderMyWordRecords()}
-
-    ${(myRooms && myRooms.length) ? (()=>{
-      const tr = myRooms.slice().sort((a,b)=>b.lastTime-a.lastTime)[0];
-      return `
-      <div class="section-head">
-        <div class="section-title">우리 ${tierLabel('cell')||'목장'} <span class="en">Together</span></div>
-        <button class="section-more" onclick="state.togetherTab='rooms';switchTab('pray')">전체 보기 →</button>
-      </div>
-      <div class="room-card cell" style="margin-top:4px" onclick="openRoom('${tr.id}')">
-        ${tr.freshCount>0 ? `<div class="room-new-dot">새 나눔 ${tr.freshCount}</div>` : ''}
-        <div class="room-card-head">
-          <div class="room-emoji">${tr.emoji||'🌿'}</div>
-          <div style="flex:1;min-width:0">
-            <div class="room-name">${escapeHtml(tr.name)}</div>
-            <div class="room-desc">${tr.postCount>0 ? `나눔 ${tr.postCount}건 · 최근 ${formatRelTime(tr.lastTime)}` : '오늘의 묵상을 나눠 보세요'}</div>
-          </div>
-        </div>
-      </div>`;
-    })() : ''}
+    ${renderSharePreview()}
 
     ${latestCol ? `
     <div class="section-head">
@@ -8166,9 +8219,11 @@ function renderLectioFormFull(key, d){
     </div>
 
     <div class="share-privacy">
-      <div class="sp-head">나눔 설정</div>
-      <label class="sp-opt"><input type="radio" name="sharePrivacy" value="public" ${d.share_private?'':'checked'}/><span><strong>공개</strong> — 저장하면 ${tierLabel('cell')||'목장'}방에 자동으로 나눠집니다</span></label>
-      <label class="sp-opt"><input type="radio" name="sharePrivacy" value="private" ${d.share_private?'checked':''}/><span><strong>비공개</strong> — 기록했다는 표시만 되고, 내용은 나만 볼 수 있습니다</span></label>
+      <div class="sp-head">나눔 설정 <span style="font-weight:600;color:var(--ink-4)">· 글마다 언제든 바꿀 수 있어요</span></div>
+      ${(function(){ const sc=lectioScope(d); return `
+      <label class="sp-opt"><input type="radio" name="shareScope" value="private" ${sc==='private'?'checked':''}/><span><strong>나만 보기</strong> — 기록했다는 표시만 남고, 내용은 나만 볼 수 있습니다</span></label>
+      <label class="sp-opt"><input type="radio" name="shareScope" value="friends" ${sc==='friends'?'checked':''}/><span><strong>친구</strong> — 내가 승인한 친구에게만 나눔 피드로 보입니다</span></label>
+      <label class="sp-opt"><input type="radio" name="shareScope" value="friends_cell" ${sc==='friends_cell'?'checked':''}/><span><strong>친구 + ${tierLabel('cell')||'목장'}</strong> — 친구와 우리 ${tierLabel('cell')||'목장'} 식구 모두에게 나눠집니다</span></label>`;})()}
     </div>
     <div class="lectio-save-bar">
       <span class="autosave-stamp" id="autoSaveStamp"></span>
@@ -8236,9 +8291,11 @@ function renderLectioFormSimple(key, d){
     </div>
 
     <div class="share-privacy">
-      <div class="sp-head">나눔 설정</div>
-      <label class="sp-opt"><input type="radio" name="sharePrivacy" value="public" ${d.share_private?'':'checked'}/><span><strong>공개</strong> — 저장하면 ${tierLabel('cell')||'목장'}방에 자동으로 나눠집니다</span></label>
-      <label class="sp-opt"><input type="radio" name="sharePrivacy" value="private" ${d.share_private?'checked':''}/><span><strong>비공개</strong> — 기록했다는 표시만 되고, 내용은 나만 볼 수 있습니다</span></label>
+      <div class="sp-head">나눔 설정 <span style="font-weight:600;color:var(--ink-4)">· 글마다 언제든 바꿀 수 있어요</span></div>
+      ${(function(){ const sc=lectioScope(d); return `
+      <label class="sp-opt"><input type="radio" name="shareScope" value="private" ${sc==='private'?'checked':''}/><span><strong>나만 보기</strong> — 기록했다는 표시만 남고, 내용은 나만 볼 수 있습니다</span></label>
+      <label class="sp-opt"><input type="radio" name="shareScope" value="friends" ${sc==='friends'?'checked':''}/><span><strong>친구</strong> — 내가 승인한 친구에게만 나눔 피드로 보입니다</span></label>
+      <label class="sp-opt"><input type="radio" name="shareScope" value="friends_cell" ${sc==='friends_cell'?'checked':''}/><span><strong>친구 + ${tierLabel('cell')||'목장'}</strong> — 친구와 우리 ${tierLabel('cell')||'목장'} 식구 모두에게 나눠집니다</span></label>`;})()}
     </div>
     <div class="lectio-save-bar">
       <span class="autosave-stamp" id="autoSaveStamp"></span>
@@ -8263,7 +8320,7 @@ function bindLectioInputs(key){
     setTimeout(()=>{ el.style.height='auto'; el.style.height=(el.scrollHeight+2)+'px'; },0);
   });
   /* v1.8 — 라디오(말씀읽기 예/아니오, 나눔 설정) 변경도 자동 저장 */
-  document.querySelectorAll('#view-word input[name="lectioRead"], #view-word input[name="sharePrivacy"]').forEach(r=>{
+  document.querySelectorAll('#view-word input[name="lectioRead"], #view-word input[name="shareScope"]').forEach(r=>{
     r.addEventListener('change', ()=>autoSaveLectio(key));
   });
 }
@@ -8282,8 +8339,8 @@ function autoSaveLectio(key){
       });
       const rd = document.querySelector('#view-word input[name="lectioRead"]:checked');
       if(rd) data.lectio_read = rd.value;
-      const pv = document.querySelector('#view-word input[name="sharePrivacy"]:checked');
-      if(pv) data.share_private = pv.value==='private';
+      const pv = document.querySelector('#view-word input[name="shareScope"]:checked');
+      if(pv){ data.share_scope = pv.value; data.share_private = pv.value==='private'; }
       if(prev.draft === undefined || prev.draft === null) data.draft = true;  // 새 기록은 임시(내 기기) 상태
       await api.saveLectio(key, data);
       const el = document.getElementById('autoSaveStamp');
@@ -8303,8 +8360,9 @@ async function saveLectioNow(key, draftOnly){
   data.lectio_read = rd ? rd.value : (prev.lectio_read || '');
   // 간편 묵상 화면 등에서 말씀기록 칸이 없으면 기존 기록 유지
   if(!document.querySelector('#view-word .lectio-input[data-field="scribo"]')) data.scribo = prev.scribo || scriboText(prev);
-  const pv = document.querySelector('#view-word input[name="sharePrivacy"]:checked');
-  data.share_private = pv ? pv.value==='private' : !!prev.share_private;
+  const pv = document.querySelector('#view-word input[name="shareScope"]:checked');
+  data.share_scope = pv ? pv.value : lectioScope(prev);
+  data.share_private = data.share_scope==='private';   // 하위 호환
   data.draft = !!draftOnly;   // 임시저장 = 내 기기에만 저장 (나눔 없음)
 
   const btn = document.getElementById(draftOnly ? 'lectioDraftBtn' : 'lectioSaveBtn');
@@ -8318,8 +8376,8 @@ async function saveLectioNow(key, draftOnly){
   }
   if(btn){ btn.disabled = false; }
   if(draftOnly) toast('임시저장되었습니다 · 내 기기에만 저장');
-  else if(shared==='shared') toast(`저장 완료 · ${tierLabel('cell')||'목장'}방에 나눠졌습니다 🌿`);
-  else if(shared==='marked') toast('저장 완료 · 기록 표시만 남고 내용은 비공개입니다 🔒');
+  else if(shared==='shared') toast('저장 완료 · 나눔 설정에 따라 피드에 나눠졌습니다 🌿');
+  else if(shared==='marked') toast('저장 완료 · 나만 보기 — 기록 표시만 남습니다 🔒');
   else toast('저장되었습니다');
   // 단계 도트 갱신 — 스크롤 위치 유지
   setTimeout(()=>keepScroll(()=>renderWord()), 600);
@@ -8327,17 +8385,21 @@ async function saveLectioNow(key, draftOnly){
 
 /* v1.6 — 저장 시 자동 나눔: 내 목장방(없으면 첫 방)에 게시/갱신 */
 async function autoShareLectio(dateKey, lectio){
+  const scope = lectioScope(lectio);
+  /* v1.9 — 나눔 피드에 게시 (나만 보기는 표시만) */
+  try{ upsertMySharePost(dateKey, lectio, scope); }catch(e){}
   const rooms = await api.listMyRooms();
-  if(!rooms.length) return 'noroom';
+  if(!rooms.length) return scope==='private' ? 'marked' : 'shared';
   const room = rooms.find(r=>r.type==='cell') || rooms[0];
-  const parts = lectio.share_private ? null : {
+  const priv = scope!=='friends_cell';   // 목장방 게시는 '친구+목장'일 때만
+  const parts = priv ? null : {
     grace:(lectio.meditatio3||'').trim(),
     oratio:(lectio.oratio||'').trim(),
     oneThing:(lectio.contemplatio||'').trim(),
     record:(lectio.scribo||'').trim(),
   };
-  await api.upsertLectioShare(room.id, dateKey, parts, !!lectio.share_private);
-  return lectio.share_private ? 'marked' : 'shared';
+  await api.upsertLectioShare(room.id, dateKey, parts, priv);
+  return scope==='private' ? 'marked' : 'shared';
 }
 
 /* ============================================================================
@@ -9945,8 +10007,351 @@ function initRevealEngine(){
 /* ============================================================================
    라우터 / 렌더
    ============================================================================ */
+
+/* ============================================================================
+   v1.9 — 나눔(친구 승인 기반 개인 피드) — B안 하이브리드
+   · 친구: 요청 → 승인 → 서로의 '친구 공개' 묵상이 피드에 표시. 끊기·거절 무알림.
+   · 글 단위 공개범위 3단계: private / friends / friends_cell (하위호환: share_private)
+   · 가드레일: 아멘·친구 수치 비공개(상태만), 시간순 피드만, 같은 교회 데모
+   ============================================================================ */
+function lectioScope(d){
+  if(d && d.share_scope) return d.share_scope;
+  if(d && d.share_private === true) return 'private';
+  if(d && d.share_private === false) return 'friends_cell';   /* 기존 '공개' 글은 친구+목장으로 이관 */
+  /* 새 기록 기본값 — 관리자 '나눔 관리' 정책 */
+  const def = (getPrefsSync().shareDefaultScope || 'friends_cell');
+  return (def==='private'||def==='friends'||def==='friends_cell') ? def : 'friends_cell';
+}
+
+const FRIENDS_SEED = {
+  list:[
+    { id:'f1', name:'김은혜', cell:'2교구 3목장', since:'2026-08-20' },
+    { id:'f2', name:'박준영', cell:'우리 목장',   since:'2026-08-21' },
+    { id:'f3', name:'이정숙', cell:'3교구 1목장', since:'2026-08-24' },
+  ],
+  reqIn:[ { id:'f4', name:'최다니엘', cell:'1교구 5목장' } ],
+  reqOut:[]
+};
+function getFriendsState(){
+  const st = _read(STORAGE_KEYS.friends, null);
+  return st || JSON.parse(JSON.stringify(FRIENDS_SEED));
+}
+function saveFriendsState(st){ _write(STORAGE_KEYS.friends, st); }
+
+/* 가상 피드 시드 — 실제 오늘 날짜 기준 상대시각으로 생성 */
+function shareFeedSeed(){
+  const now = Date.now();
+  const td = realToday(); 
+  const k = function(off){ const d=new Date(td); d.setDate(d.getDate()-off); return formatDateKey(d); };
+  const dv = function(key){ const w=WORD_DATA[key]||{}; return { range:w.range||'', title:w.subtitle||'' }; };
+  const d0=dv(k(0)), d1=dv(k(1)), d2=dv(k(2));
+  return [
+    { id:'sp1', who:'김은혜', fid:'f1', cell:'2교구 3목장', group:'friend', scope:'friends', time:now-1000*60*12, dateKey:k(0),
+      range:d0.range, title:d0.title,
+      body:'오늘 본문의 초대가 저에게는 예배의 자리로 돌아오라는 부르심으로 읽혔습니다. 흩어져 있던 마음이 한 곳으로 모이는 평안을 오래 묵상했습니다. 가정과 교회를 위해 기도하는 하루가 되기를 소망합니다.',
+      comments:[{name:'박준영', text:'저도 오늘 같은 구절에 머물렀어요. 주일에 뵙겠습니다 :)', time:now-1000*60*6}] },
+    { id:'sp2', who:'박준영', fid:'f2', cell:'우리 목장', group:'cell', scope:'friends_cell', time:now-1000*60*70, dateKey:k(0),
+      range:d0.range, title:d0.title,
+      body:'말씀을 붙들고 하루를 시작합니다. 해결되지 않는 일 앞에서 자꾸 사람을 바라봤음을 회개했습니다. 지키시는 하나님을 신뢰하는 하루가 되기를 기도합니다. 다음 주 검사 결과를 기다리는 마음이 흔들릴 때마다 이 말씀으로 돌아가려 합니다.',
+      comments:[] },
+    { id:'sp3', who:'김은혜 권사', fid:null, cell:'우리 목장', group:'cell', scope:'friends_cell', time:now-1000*60*60*5, dateKey:k(1),
+      range:d1.range, title:d1.title,
+      body:'하나님이 함께하시면 충분합니다. 두려움 많은 저에게 "내가 반드시 너와 함께 있으리라" 이 한 마디면 충분하다는 걸 다시 새깁니다.',
+      comments:[{name:'이소망 성도', text:'아멘. 함께하심이 능력이지요!', time:now-1000*60*60*4}] },
+    { id:'sp4', who:'이정숙', fid:'f3', cell:'3교구 1목장', group:'friend', scope:'friends', time:now-1000*60*60*26, dateKey:k(1),
+      range:d1.range, title:d1.title,
+      body:'주의 말씀을 사모하며 새벽을 깨운다는 구절이 마음에 남았습니다. 요즘 새벽 시간을 지키기가 참 어려운데, 말씀이 저를 다시 일으켜 세워 주네요.',
+      comments:[] },
+    { id:'sp5', who:'박믿음 집사', fid:null, cell:'우리 목장', group:'cell', scope:'friends_cell', time:now-1000*60*60*30, dateKey:k(2),
+      range:d2.range, title:d2.title,
+      body:'묵상 후 아이들과 함께 암송 구절을 나눴습니다. 가정예배 시간이 조금씩 자리 잡아 가는 것 같아 감사합니다.',
+      comments:[] },
+  ];
+}
+function getShareOverlay(){ return _read(STORAGE_KEYS.shareFeed, {}) || {}; }
+function saveShareOverlay(o){ _write(STORAGE_KEYS.shareFeed, o); }
+
+/* 내 글 게시/갱신 — 저장 버튼에서 호출 */
+function upsertMySharePost(dateKey, lectio, scope){
+  const o = getShareOverlay();
+  o.myPosts = o.myPosts || {};
+  if(scope==='private'){ delete o.myPosts[dateKey]; saveShareOverlay(o); return; }
+  const w = WORD_DATA[dateKey] || {};
+  const body = [(lectio.meditatio3||'').trim(), (lectio.scribo||'').trim(), (lectio.oratio||'').trim(), (lectio.contemplatio||'').trim()]
+    .filter(Boolean).join('\n');
+  o.myPosts[dateKey] = { dateKey, scope, time: (o.myPosts[dateKey]&&o.myPosts[dateKey].firstTime)||Date.now(),
+    firstTime:(o.myPosts[dateKey]&&o.myPosts[dateKey].firstTime)||Date.now(),
+    range:w.range||'', title:w.subtitle||'', body: body||'오늘의 말씀을 묵상했습니다.' };
+  saveShareOverlay(o);
+}
+
+function listSharePosts(filter){
+  const fr = getFriendsState();
+  const fids = {}; fr.list.forEach(f=>{ fids[f.id]=true; });
+  const o = getShareOverlay();
+  const removed = o.removed || {};
+  let posts = shareFeedSeed().filter(p=>!removed[p.id]);
+  /* 친구 글은 친구 관계가 있어야 보임 (fid 없는 글 = 목장 식구) */
+  posts = posts.filter(p=> p.fid ? !!fids[p.fid] : true);
+  /* 내 글 */
+  const u = state.user || {};
+  const myName = ((u.nickname||u.name||'나')+'').replace(/\s*님+$/,'');
+  Object.keys(o.myPosts||{}).forEach(dk=>{
+    if(removed['my_'+dk]) return;   /* 관리자 숨김 반영 */
+    const mp = o.myPosts[dk];
+    posts.push({ id:'my_'+dk, who:myName+' (나)', mine:true, cell:'우리 목장', group:'mine',
+      scope:mp.scope, time:mp.time, dateKey:dk, range:mp.range, title:mp.title, body:mp.body, comments:[] });
+  });
+  /* 댓글 오버레이 병합 */
+  const cm = o.comments || {};
+  posts.forEach(p=>{ if(cm[p.id]) p.comments = (p.comments||[]).concat(cm[p.id]); });
+  if(filter==='friend') posts = posts.filter(p=>p.group==='friend'||p.mine);
+  else if(filter==='cell') posts = posts.filter(p=>p.group==='cell'||(p.mine&&p.scope==='friends_cell'));
+  posts.sort((a,b)=>b.time-a.time);
+  return posts;
+}
+
+function shareScopeBadge(p){
+  if(p.scope==='friends') return '<span class="scope-badge f">친구</span>';
+  if(p.scope==='friends_cell') return '<span class="scope-badge c">친구+'+(tierLabel('cell')||'목장')+'</span>';
+  return '<span class="scope-badge p">나만</span>';
+}
+function shareAvatarColor(name){
+  const cols=['#5B7A68','#8C7A6B','#4A6A8A','#7A5B76','#5E6E52','#8A6B4A'];
+  let h=0; for(let i=0;i<name.length;i++) h=(h*31+name.charCodeAt(i))%997;
+  return cols[h%cols.length];
+}
+
+/* ── 나눔 탭 ── */
+async function renderShare(){
+  const view = document.getElementById('view-share');
+  if(!state.user){ try{ state.user = await api.getUser(); }catch(e){} }
+  const filter = state.shareFilter || 'all';
+  const fr = getFriendsState();
+  const posts = listSharePosts(filter==='all'?null:filter);
+  const todayKey = formatDateKey(realToday());
+  const myLec = (_read(STORAGE_KEYS.lectio,{})[todayKey]) || SEED_LECTIO[todayKey] || {};
+  const hasToday = !!((myLec.meditatio1||'').trim()||(myLec.meditatio2||'').trim()||(myLec.meditatio3||'').trim()||(myLec.oratio||'').trim()||(myLec.contemplatio||'').trim()||(myLec.scribo||'').trim()||myLec.lectio_read==='yes');
+  const w = WORD_DATA[todayKey]||{};
+  const reqBadge = fr.reqIn.length ? '<span class="frd-req-dot">'+fr.reqIn.length+'</span>' : '';
+
+  view.innerHTML = `
+    <div class="share-head">
+      <div class="share-chips">
+        <button class="schip ${filter==='all'?'on':''}" onclick="state.shareFilter='all';renderShare()">전체</button>
+        <button class="schip ${filter==='friend'?'on':''}" onclick="state.shareFilter='friend';renderShare()">친구</button>
+        <button class="schip ${filter==='cell'?'on':''}" onclick="state.shareFilter='cell';renderShare()">우리 ${tierLabel('cell')||'목장'}</button>
+        <span style="flex:1"></span>
+        <button class="frd-mng" onclick="openFriendsModal()" style="position:relative">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          친구${reqBadge}
+        </button>
+      </div>
+      <div class="share-mystrip ${hasToday?'done':''}" onclick="goToLectio()">
+        <div style="flex:1;min-width:0">
+          <div class="sm-t1">${hasToday?'오늘 묵상을 기록했어요 — 나눔 설정을 확인해 보세요':'오늘 묵상을 아직 기록하지 않았어요'}</div>
+          <div class="sm-t2">${escapeHtml(w.range||'')} · ${formatKorDate(realToday())}</div>
+        </div>
+        <div class="sm-go">${hasToday?'열어보기':'기록하기'} →</div>
+      </div>
+    </div>
+    <div class="share-feed">
+      ${posts.length ? posts.map(p=>sharePostCardHTML(p)).join('') : `
+        <div style="margin:20px 16px;padding:30px 20px;text-align:center;color:var(--ink-3);background:var(--bg-card);border:1px solid var(--line);border-radius:16px;font-size:0.8125rem;line-height:1.8">
+          아직 표시할 나눔이 없어요.<br/>친구를 맺으면 친구의 묵상 나눔이 이곳에 흐릅니다.
+          <div style="margin-top:12px"><button class="btn btn-secondary" onclick="openFriendsModal()">친구 관리 열기</button></div>
+        </div>`}
+    </div>
+    <div class="share-note">아멘과 친구 수는 서로에게 숫자로 표시되지 않습니다 · 나눔은 시간순으로만 보여집니다</div>
+  `;
+}
+
+function sharePostCardHTML(p){
+  const amens = getShareOverlay().amens || {};
+  const myAmen = !!amens[p.id];
+  const lastCm = (p.comments||[]).length ? p.comments[p.comments.length-1] : null;
+  return `
+    <div class="spost ${p.mine?'mine':''}">
+      <div class="spost-h" onclick="openSharePost('${p.id}')">
+        <div class="sp-av" style="background:${shareAvatarColor(p.who)}">${escapeHtml(p.who.charAt(0))}</div>
+        <div style="flex:1;min-width:0">
+          <div class="sp-nm">${escapeHtml(p.who)}</div>
+          <div class="sp-mt">${formatRelTime(p.time)} · ${escapeHtml(p.cell)}</div>
+        </div>
+        ${shareScopeBadge(p)}
+      </div>
+      ${p.range?`<div class="sp-pill" onclick="goToDay('${p.dateKey}')">${escapeHtml(p.range)}${p.title?' · '+escapeHtml(p.title):''}</div>`:''}
+      <div class="sp-body" onclick="openSharePost('${p.id}')">${escapeHtml(p.body).replace(/\n/g,'<br/>')}</div>
+      <div class="sp-foot">
+        <button class="sp-act ${myAmen?'on':''}" onclick="toggleShareAmen('${p.id}')">🙏 아멘${myAmen?' ·  함께 기도했어요':''}</button>
+        <button class="sp-act" onclick="openSharePost('${p.id}')">💬 댓글</button>
+      </div>
+      ${lastCm?`
+      <div class="sp-cmt" onclick="openSharePost('${p.id}')">
+        <div class="sp-av sm" style="background:${shareAvatarColor(lastCm.name)}">${escapeHtml(lastCm.name.charAt(0))}</div>
+        <div class="sp-cmt-tx"><b>${escapeHtml(lastCm.name)}</b> ${escapeHtml(lastCm.text)}</div>
+      </div>`:''}
+    </div>`;
+}
+
+function toggleShareAmen(id){
+  const o = getShareOverlay();
+  o.amens = o.amens || {};
+  if(o.amens[id]) delete o.amens[id]; else o.amens[id]=true;
+  saveShareOverlay(o);
+  keepScroll(()=>renderShare());
+}
+
+function openSharePost(id){
+  const p = listSharePosts(null).find(x=>x.id===id);
+  if(!p) return;
+  const amens = getShareOverlay().amens || {};
+  const myAmen = !!amens[id];
+  document.getElementById('modalContent').innerHTML = `
+    <div class="spost-modal">
+      <div class="spost-h">
+        <div class="sp-av" style="background:${shareAvatarColor(p.who)}">${escapeHtml(p.who.charAt(0))}</div>
+        <div style="flex:1;min-width:0">
+          <div class="sp-nm">${escapeHtml(p.who)}</div>
+          <div class="sp-mt">${formatRelTime(p.time)} · ${escapeHtml(p.cell)}</div>
+        </div>
+        ${shareScopeBadge(p)}
+      </div>
+      ${p.range?`<div class="sp-pill" onclick="closeModal();goToDay('${p.dateKey}')">${escapeHtml(p.range)}${p.title?' · '+escapeHtml(p.title):''}</div>`:''}
+      <div class="sp-body full">${escapeHtml(p.body).replace(/\n/g,'<br/>')}</div>
+      <div class="sp-foot" style="border-top:1px solid var(--line);padding-top:10px;margin-top:12px">
+        <button class="sp-act ${myAmen?'on':''}" onclick="toggleShareAmen('${id}');openSharePost('${id}')">🙏 아멘${myAmen?' · 함께 기도했어요':''}</button>
+      </div>
+      <div class="sp-cmts">
+        ${(p.comments||[]).map(c=>`
+          <div class="sp-cmt"><div class="sp-av sm" style="background:${shareAvatarColor(c.name)}">${escapeHtml(c.name.charAt(0))}</div>
+          <div class="sp-cmt-tx"><b>${escapeHtml(c.name)}</b> ${escapeHtml(c.text)}<div class="sp-cmt-t">${formatRelTime(c.time||Date.now())}</div></div></div>`).join('')}
+      </div>
+      <div class="sp-cmt-input">
+        <input type="text" id="spCmtInput" placeholder="따뜻한 댓글로 함께해 주세요" maxlength="200"
+          onkeydown="if(event.key==='Enter')addShareComment('${id}')"/>
+        <button class="btn btn-sm btn-primary" onclick="addShareComment('${id}')">남기기</button>
+      </div>
+    </div>`;
+  openModal();
+}
+
+function addShareComment(id){
+  const inp = document.getElementById('spCmtInput');
+  const text = (inp && inp.value || '').trim();
+  if(!text) return;
+  const u = state.user || {};
+  const myName = ((u.nickname||u.name||'나')+'').replace(/\s*님+$/,'');
+  const o = getShareOverlay();
+  o.comments = o.comments || {};
+  (o.comments[id] = o.comments[id] || []).push({ name:myName, text, time:Date.now() });
+  saveShareOverlay(o);
+  openSharePost(id);
+}
+
+/* ── 친구 관리 모달 ── */
+function openFriendsModal(){
+  const fr = getFriendsState();
+  const known = {}; fr.list.forEach(f=>known[f.name]=1); fr.reqOut.forEach(f=>known[f.name]=1); fr.reqIn.forEach(f=>known[f.name]=1);
+  const suggest = ROOM_MEMBER_POOL.filter(n=>!known[n]).slice(0,3);
+  document.getElementById('modalContent').innerHTML = `
+    <div class="frd-modal">
+      <h3 style="font-family:var(--serif);font-size:1.125rem;font-weight:700;margin-bottom:2px">친구 관리</h3>
+      <p class="frd-hint">같은 교회 성도끼리만 친구를 맺을 수 있어요 · 끊기와 요청 무시는 상대에게 알려지지 않습니다</p>
+
+      ${fr.reqIn.length?`
+      <div class="frd-sec">받은 요청</div>
+      ${fr.reqIn.map(f=>`
+        <div class="frd-row">
+          <div class="sp-av" style="background:${shareAvatarColor(f.name)}">${escapeHtml(f.name.charAt(0))}</div>
+          <div class="frd-info"><div class="frd-nm">${escapeHtml(f.name)}</div><div class="frd-sub">${escapeHtml(f.cell)}</div></div>
+          <button class="btn btn-sm btn-primary" onclick="acceptFriend('${f.id}')">승인</button>
+          <button class="btn btn-sm btn-ghost" onclick="ignoreFriend('${f.id}')">무시</button>
+        </div>`).join('')}`:''}
+
+      <div class="frd-sec">내 친구 <span style="font-weight:600;color:var(--ink-4)">· 서로의 나눔이 보여요</span></div>
+      ${fr.list.length ? fr.list.map(f=>`
+        <div class="frd-row">
+          <div class="sp-av" style="background:${shareAvatarColor(f.name)}">${escapeHtml(f.name.charAt(0))}</div>
+          <div class="frd-info"><div class="frd-nm">${escapeHtml(f.name)}</div><div class="frd-sub">${escapeHtml(f.cell)}</div></div>
+          <button class="btn btn-sm btn-ghost" onclick="unfriend('${f.id}')">끊기</button>
+        </div>`).join('') : '<p class="frd-empty">아직 친구가 없어요. 아래 추천에서 시작해 보세요.</p>'}
+
+      ${fr.reqOut.length?`
+      <div class="frd-sec">보낸 요청 <span style="font-weight:600;color:var(--ink-4)">· 승인을 기다리는 중</span></div>
+      ${fr.reqOut.map(f=>`
+        <div class="frd-row">
+          <div class="sp-av" style="background:${shareAvatarColor(f.name)}">${escapeHtml(f.name.charAt(0))}</div>
+          <div class="frd-info"><div class="frd-nm">${escapeHtml(f.name)}</div><div class="frd-sub">${escapeHtml(f.cell)}</div></div>
+          <span class="frd-wait">대기 중</span>
+        </div>`).join('')}`:''}
+
+      ${suggest.length?`
+      <div class="frd-sec">추천 친구 <span style="font-weight:600;color:var(--ink-4)">· 우리 ${tierLabel('cell')||'목장'} 식구</span></div>
+      ${suggest.map(n=>`
+        <div class="frd-row">
+          <div class="sp-av" style="background:${shareAvatarColor(n)}">${escapeHtml(n.charAt(0))}</div>
+          <div class="frd-info"><div class="frd-nm">${escapeHtml(n)}</div><div class="frd-sub">우리 ${tierLabel('cell')||'목장'}</div></div>
+          <button class="btn btn-sm btn-secondary" onclick="requestFriend('${n.replace(/'/g,"\\'")}')">친구 요청</button>
+        </div>`).join('')}`:''}
+    </div>`;
+  openModal();
+}
+function acceptFriend(id){
+  const fr = getFriendsState();
+  const i = fr.reqIn.findIndex(f=>f.id===id);
+  if(i>=0){ const f=fr.reqIn.splice(i,1)[0]; f.since=formatDateKey(new Date()); fr.list.push(f); }
+  saveFriendsState(fr); toast('친구가 되었습니다 · 서로의 나눔이 보여요 🌿');
+  openFriendsModal(); if(state.tab==='share') renderShare();
+}
+function ignoreFriend(id){
+  const fr = getFriendsState();
+  fr.reqIn = fr.reqIn.filter(f=>f.id!==id);
+  saveFriendsState(fr); toast('요청을 무시했습니다 · 상대에게 알려지지 않아요');
+  openFriendsModal();
+}
+function unfriend(id){
+  if(!confirm('친구를 끊을까요?\n상대에게 알림이 가지 않으며, 서로의 나눔이 더 이상 보이지 않습니다.')) return;
+  const fr = getFriendsState();
+  fr.list = fr.list.filter(f=>f.id!==id);
+  saveFriendsState(fr); toast('친구를 끊었습니다');
+  openFriendsModal(); if(state.tab==='share') renderShare();
+}
+function requestFriend(name){
+  const fr = getFriendsState();
+  fr.reqOut.push({ id:'out_'+Date.now(), name, cell:'우리 '+(tierLabel('cell')||'목장') });
+  saveFriendsState(fr); toast('친구 요청을 보냈습니다 · 승인하면 서로의 나눔이 보여요');
+  openFriendsModal();
+}
+
+/* ── 홈 미리보기 ── */
+function renderSharePreview(){
+  const posts = listSharePosts(null).slice(0,2);
+  return `
+    <div class="section-head">
+      <div class="section-title">나눔 <span class="en">Sharing</span></div>
+      <button class="section-more" onclick="switchTab('share')">전체 보기 →</button>
+    </div>
+    ${posts.length ? posts.map(p=>`
+      <div class="share-mini" onclick="switchTab('share')">
+        <div class="sp-av" style="background:${shareAvatarColor(p.who)}">${escapeHtml(p.who.charAt(0))}</div>
+        <div style="flex:1;min-width:0">
+          <div class="smini-top"><b>${escapeHtml(p.who)}</b><span>${formatRelTime(p.time)}</span>${shareScopeBadge(p)}</div>
+          <div class="smini-body">${escapeHtml(p.body)}</div>
+        </div>
+      </div>`).join('') : `
+      <div style="margin:4px 16px 8px;padding:22px 20px;text-align:center;color:var(--ink-3);background:var(--bg-card);border:1px solid var(--line);border-radius:16px;font-size:0.8125rem;line-height:1.7">
+        친구를 맺으면 이곳에 나눔이 흐릅니다.
+      </div>`}
+    <div style="margin:2px 16px 8px;text-align:center">
+      <button onclick="openAllWordRecords()" style="border:none;background:none;padding:8px 14px;font-size:0.7812rem;font-weight:700;color:var(--ink-3);cursor:pointer">나의 말씀기록 보기 →</button>
+    </div>
+  `;
+}
+
 function render(){
   if(state.tab==='today') renderToday();
+  else if(state.tab==='share') renderShare();
   else if(state.tab==='word') renderWord();
   else if(state.tab==='pray') renderPray();
   else if(state.tab==='column') renderColumn();
@@ -10159,7 +10564,7 @@ async function _renderMypageBody(view){
     </div>
 
     <div style="text-align:center;padding:14px;font-family:var(--en);font-size:0.6562rem;color:var(--ink-4);letter-spacing:1px">
-      말씀함께 v1.8 · DEMO
+      말씀함께 v1.9 · DEMO
     </div>
   `;
 }
@@ -10515,7 +10920,7 @@ async function renderSettings(){
       <div class="menu-row" style="cursor:default">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
         <div class="menu-text"><div class="menu-ttl">버전</div></div>
-        <div class="menu-right" style="font-family:var(--en);font-weight:600;color:var(--ink-3)">v1.8 · DEMO</div>
+        <div class="menu-right" style="font-family:var(--en);font-weight:600;color:var(--ink-3)">v1.9 · DEMO</div>
       </div>
       <div class="menu-row" onclick="toast('이용약관 (실제 앱에서 제공)')">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>

@@ -1692,9 +1692,24 @@ body{
 .sp-cmt-tx b{ font-weight:700; color:var(--ink); margin-right:3px; }
 .sp-cmt-t{ font-size:0.625rem; color:var(--ink-4); margin-top:2px; }
 .share-note{ text-align:center; font-size:0.6562rem; color:var(--ink-4); padding:8px 20px 26px; line-height:1.7; }
+.spost{ transition:border-color .35s ease, box-shadow .35s ease; }
 .spost.expanded{ border-color:var(--sage-soft); box-shadow:0 4px 16px rgba(34,62,48,.08); }
-.spost.expanded .sp-cmts{ margin-top:6px; }
 .spost .sp-cmt.static{ cursor:default; }
+/* 본문: 접힘 3줄 → 펼침 전체 (max-height 트랜지션) */
+.spost .sp-body{ max-height:4.35em; transition:max-height .38s cubic-bezier(.4,0,.2,1); }
+.spost.expanded .sp-body{ max-height:120em; -webkit-line-clamp:unset; display:block; overflow:visible; cursor:default; }
+/* 확장 영역(전체 댓글+입력): grid 0fr→1fr 높이 애니메이션 */
+.sp-x{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .38s cubic-bezier(.4,0,.2,1); }
+.sp-x-in{ overflow:hidden; min-height:0; }
+.spost.expanded .sp-x{ grid-template-rows:1fr; }
+.spost.expanded .sp-x-in{ overflow:visible; }
+.spost .sp-cmts{ margin-top:6px; }
+/* 접힘/펼침 상태별 표시 요소 */
+.spost .exp-only{ display:none; }
+.spost.expanded .exp-only{ display:inline; }
+.spost.expanded .col-only{ display:none; }
+.spost .sp-cmt.col-only{ display:flex; }
+.spost.expanded .sp-cmt.col-only{ display:none; }
 .spost-modal{ padding:6px 16px 14px; }
 .spost-modal .sp-cmts{ margin-top:12px; }
 .spost-modal .sp-cmt{ cursor:default; }
@@ -10173,16 +10188,15 @@ async function renderShare(){
   `;
 }
 
-/* v1.9 — 카드 탭 시 팝업 대신 카드가 아래로 확장되어 전체 내용·댓글 표시 */
+/* v1.9 — 카드 탭 시 팝업 대신 카드가 부드럽게 아래로 확장 (애니메이션) */
 function sharePostCardHTML(p){
   const amens = getShareOverlay().amens || {};
   const myAmen = !!amens[p.id];
   const exp = !!(state.shareExpanded && state.shareExpanded[p.id]);
   const cms = p.comments || [];
   const lastCm = cms.length ? cms[cms.length-1] : null;
-  if(!exp){
-    return `
-    <div class="spost ${p.mine?'mine':''}">
+  return `
+    <div class="spost ${p.mine?'mine':''} ${exp?'expanded':''}" id="spost-${p.id}">
       <div class="spost-h" onclick="toggleSharePostExpand('${p.id}')">
         <div class="sp-av" style="background:${shareAvatarColor(p.who)}">${escapeHtml(p.who.charAt(0))}</div>
         <div style="flex:1;min-width:0">
@@ -10194,59 +10208,44 @@ function sharePostCardHTML(p){
       ${p.range?`<div class="sp-pill" onclick="goToDay('${p.dateKey}')">${escapeHtml(p.range)}${p.title?' · '+escapeHtml(p.title):''}</div>`:''}
       <div class="sp-body" onclick="toggleSharePostExpand('${p.id}')">${escapeHtml(p.body).replace(/\n/g,'<br/>')}</div>
       <div class="sp-foot">
-        <button class="sp-act ${myAmen?'on':''}" onclick="toggleShareAmen('${p.id}')">🙏 아멘${myAmen?' ·  함께 기도했어요':''}</button>
+        <button class="sp-act ${myAmen?'on':''}" onclick="toggleShareAmen('${p.id}')">🙏 아멘${myAmen?' · 함께 기도했어요':''}</button>
         <button class="sp-act" onclick="toggleSharePostExpand('${p.id}', true)">💬 댓글</button>
-        <span style="flex:1"></span>
-        <button class="sp-act" onclick="toggleSharePostExpand('${p.id}')">펼치기 ⌄</button>
       </div>
       ${lastCm?`
-      <div class="sp-cmt" onclick="toggleSharePostExpand('${p.id}', true)">
+      <div class="sp-cmt col-only" onclick="toggleSharePostExpand('${p.id}', true)">
         <div class="sp-av sm" style="background:${shareAvatarColor(lastCm.name)}">${escapeHtml(lastCm.name.charAt(0))}</div>
         <div class="sp-cmt-tx"><b>${escapeHtml(lastCm.name)}</b> ${escapeHtml(lastCm.text)}</div>
       </div>`:''}
-    </div>`;
-  }
-  /* 확장 상태 — 전체 본문 + 전체 댓글 + 댓글 입력 */
-  return `
-    <div class="spost expanded ${p.mine?'mine':''}" id="spost-${p.id}">
-      <div class="spost-h" onclick="toggleSharePostExpand('${p.id}')">
-        <div class="sp-av" style="background:${shareAvatarColor(p.who)}">${escapeHtml(p.who.charAt(0))}</div>
-        <div style="flex:1;min-width:0">
-          <div class="sp-nm">${escapeHtml(p.who)}</div>
-          <div class="sp-mt">${formatRelTime(p.time)} · ${escapeHtml(p.cell)}</div>
+      <div class="sp-x"><div class="sp-x-in">
+        <div class="sp-cmts">
+          ${cms.map(c=>`
+            <div class="sp-cmt static"><div class="sp-av sm" style="background:${shareAvatarColor(c.name)}">${escapeHtml(c.name.charAt(0))}</div>
+            <div class="sp-cmt-tx"><b>${escapeHtml(c.name)}</b> ${escapeHtml(c.text)}<div class="sp-cmt-t">${formatRelTime(c.time||Date.now())}</div></div></div>`).join('')}
         </div>
-        ${shareScopeBadge(p)}
-      </div>
-      ${p.range?`<div class="sp-pill" onclick="goToDay('${p.dateKey}')">${escapeHtml(p.range)}${p.title?' · '+escapeHtml(p.title):''}</div>`:''}
-      <div class="sp-body full">${escapeHtml(p.body).replace(/\n/g,'<br/>')}</div>
-      <div class="sp-foot">
-        <button class="sp-act ${myAmen?'on':''}" onclick="toggleShareAmen('${p.id}')">🙏 아멘${myAmen?' · 함께 기도했어요':''}</button>
-        <span style="flex:1"></span>
-        <button class="sp-act" onclick="toggleSharePostExpand('${p.id}')">접기 ⌃</button>
-      </div>
-      <div class="sp-cmts">
-        ${cms.map(c=>`
-          <div class="sp-cmt static"><div class="sp-av sm" style="background:${shareAvatarColor(c.name)}">${escapeHtml(c.name.charAt(0))}</div>
-          <div class="sp-cmt-tx"><b>${escapeHtml(c.name)}</b> ${escapeHtml(c.text)}<div class="sp-cmt-t">${formatRelTime(c.time||Date.now())}</div></div></div>`).join('')}
-      </div>
-      <div class="sp-cmt-input">
-        <input type="text" id="spCmtInput-${p.id}" placeholder="따뜻한 댓글로 함께해 주세요" maxlength="200"
-          onkeydown="if(event.key==='Enter')addShareComment('${p.id}')"/>
-        <button class="btn btn-sm btn-primary" onclick="addShareComment('${p.id}')">남기기</button>
-      </div>
+        <div class="sp-cmt-input">
+          <input type="text" id="spCmtInput-${p.id}" placeholder="따뜻한 댓글로 함께해 주세요" maxlength="200"
+            onkeydown="if(event.key==='Enter')addShareComment('${p.id}')"/>
+          <button class="btn btn-sm btn-primary" onclick="addShareComment('${p.id}')">남기기</button>
+        </div>
+      </div></div>
     </div>`;
 }
 
+/* 재렌더 없이 클래스 토글 → CSS 트랜지션으로 부드럽게 확장/접힘 */
 function toggleSharePostExpand(id, focusInput){
   state.shareExpanded = state.shareExpanded || {};
+  const el = document.getElementById('spost-'+id);
   const willOpen = !state.shareExpanded[id];
   if(willOpen) state.shareExpanded[id] = true; else delete state.shareExpanded[id];
-  keepScroll(()=>renderShare());
-  if(willOpen) setTimeout(()=>{
-    const el = document.getElementById('spost-'+id);
-    if(el){ try{ el.scrollIntoView({behavior:'smooth', block:'nearest'}); }catch(e){} }
-    if(focusInput){ const inp = document.getElementById('spCmtInput-'+id); if(inp) inp.focus(); }
-  }, 120);
+  if(el){
+    el.classList.toggle('expanded', willOpen);
+    if(willOpen) setTimeout(()=>{
+      try{ el.scrollIntoView({behavior:'smooth', block:'nearest'}); }catch(e){}
+      if(focusInput){ const inp = document.getElementById('spCmtInput-'+id); if(inp) inp.focus(); }
+    }, 380);
+  }else{
+    keepScroll(()=>renderShare());
+  }
 }
 
 function toggleShareAmen(id){

@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="말씀함께">
-<title>말씀함께 · 데모 v1.9.4</title>
+<title>말씀함께 · 데모 v1.9.5</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -3902,7 +3902,15 @@ body,button,input,textarea,select{ font-family:var(--font-body); }
 .sp-body .sp-k.rec{ background:var(--bg-cream); color:var(--ink-3); }
 .sp-body .sp-ln{ display:block; }
 .sp-body .sp-ln + .sp-ln{ margin-top:4px; }
-.sp-act.sp-copy{ margin-left:auto; }
+/* v1.9.5 — 내 글 복사 버튼: 본문 오른쪽 아래, 채움 버튼으로 잘 보이게 */
+.sp-copy-row{ display:flex; justify-content:flex-end; margin:6px 0 2px; }
+.sp-copy-btn{ display:inline-flex; align-items:center; gap:5px; min-width:64px; justify-content:center; padding:7px 14px; border:none; border-radius:999px;
+  background:var(--sage); color:#fff; font-family:var(--sans); font-size:0.75rem; font-weight:800; letter-spacing:-0.2px; cursor:pointer;
+  box-shadow:0 3px 10px rgba(34,62,48,.22); transition:background .2s ease, transform .1s ease; }
+.sp-copy-btn::before{ content:'📋'; font-size:0.8125rem; }
+.sp-copy-btn:active{ transform:translateY(1px); }
+.sp-copy-btn.done{ background:var(--sage-deep); }
+.sp-copy-btn.done::before{ content:''; }
 /* 목장방 글도 동일한 방식 */
 .rpost-lectio{ margin-top:10px; background:var(--bg-soft); border-radius:14px; padding:4px 14px; }
 .rl-row{ display:flex; align-items:flex-start; gap:10px; padding:10px 0; border-top:1px solid rgba(26,31,29,.06); }
@@ -9547,7 +9555,7 @@ function sharePostPlainText(p){
   lines.push('— 말씀함께 나눔');
   return lines.join('\n').replace(/\n{3,}/g,'\n\n').trim();
 }
-async function copySharePost(id){
+async function copySharePost(id, btn){
   const p = listSharePosts(null).find(function(x){ return x.id===id; });
   if(!p){ toast('글을 찾을 수 없습니다'); return; }
   const text = sharePostPlainText(p);
@@ -9561,7 +9569,13 @@ async function copySharePost(id){
       ok = document.execCommand('copy'); document.body.removeChild(ta);
     }catch(e){ ok = false; }
   }
-  toast(ok ? '복사되었습니다 · 카카오톡에 붙여넣기 하세요 📋' : '복사에 실패했습니다. 글을 길게 눌러 복사해 주세요');
+  if(ok && btn){
+    /* v1.9.5 — 버튼이 잠시 '복사됨'으로 바뀌었다가 '복사'로 복귀 */
+    btn.textContent = '복사됨 ✓'; btn.classList.add('done');
+    clearTimeout(btn._t);
+    btn._t = setTimeout(function(){ btn.textContent = '복사'; btn.classList.remove('done'); }, 1600);
+  }
+  toast(ok ? '카카오톡 등에 붙여넣기 하세요 📋' : '복사에 실패했습니다. 글을 길게 눌러 복사해 주세요');
 }
 /* v1.9.1 — 나눔 글 본문: 항목별 라벨 칩 + 줄 (구조 데이터가 없는 이전 글/시드 글은 본문 그대로) */
 function sharePostBodyHTML(p){
@@ -11412,10 +11426,10 @@ function sharePostCardHTML(p){
       </div>
       ${p.range?`<div class="sp-pill" onclick="goToDay('${p.dateKey}')">${escapeHtml(p.range)}${p.title?' · '+escapeHtml(p.title):''}</div>`:''}
       <div class="sp-body" onclick="toggleSharePostExpand('${p.id}')">${sharePostBodyHTML(p)}</div>
+      ${p.mine ? `<div class="sp-copy-row"><button class="sp-copy-btn" onclick="event.stopPropagation();copySharePost('${p.id}', this)" title="카카오톡 등에 붙여넣기">복사</button></div>` : ''}
       <div class="sp-foot">
         <button class="sp-act ${myAmen?'on':''}" onclick="toggleShareAmen('${p.id}')">🙏 아멘${myAmen?' · 함께 기도했어요':''}</button>
         <button class="sp-act" onclick="toggleSharePostExpand('${p.id}', true)">💬 댓글</button>
-        ${p.mine ? `<button class="sp-act sp-copy" onclick="event.stopPropagation();copySharePost('${p.id}')" title="카카오톡 등에 붙여넣기">📋 복사</button>` : ''}
       </div>
       ${lastCm?`
       <div class="sp-cmt col-only" onclick="toggleSharePostExpand('${p.id}', true)">
@@ -11479,9 +11493,9 @@ function openSharePost(id){
       </div>
       ${p.range?`<div class="sp-pill" onclick="closeModal();goToDay('${p.dateKey}')">${escapeHtml(p.range)}${p.title?' · '+escapeHtml(p.title):''}</div>`:''}
       <div class="sp-body full">${sharePostBodyHTML(p)}</div>
+      ${p.mine ? `<div class="sp-copy-row"><button class="sp-copy-btn" onclick="copySharePost('${id}', this)">복사</button></div>` : ''}
       <div class="sp-foot" style="border-top:1px solid var(--line);padding-top:10px;margin-top:12px">
         <button class="sp-act ${myAmen?'on':''}" onclick="toggleShareAmen('${id}');openSharePost('${id}')">🙏 아멘${myAmen?' · 함께 기도했어요':''}</button>
-        ${p.mine ? `<button class="sp-act sp-copy" onclick="copySharePost('${id}')">📋 복사</button>` : ''}
       </div>
       <div class="sp-cmts">
         ${(p.comments||[]).map(c=>`

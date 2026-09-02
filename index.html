@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="말씀함께">
-<title>말씀함께 · 데모 v1.9</title>
+<title>말씀함께 · 데모 v1.9.2</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -3863,6 +3863,56 @@ body,button,input,textarea,select{ font-family:var(--font-body); }
 .myp-text{ flex:1; font-size:0.8125rem; color:var(--ink-2); line-height:1.6; }
 .myp-del{ flex:0 0 auto; width:24px; height:24px; border:none; border-radius:50%; background:var(--bg-soft); color:var(--ink-3); font-size:0.875rem; cursor:pointer; line-height:1; }
 .myp-empty{ padding:14px 2px 6px; font-size:0.7812rem; color:var(--ink-4); text-align:center; }
+</style>
+
+<style id="v192-overview">
+/* v1.9.2 — 말씀 개요 칩 + 시트 */
+.word-ref-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+.word-ref-row .word-passage-ref{ margin:0; }
+.ov-chip{ flex:0 0 auto; display:inline-flex; align-items:center; gap:5px; padding:5px 11px 5px 9px; border-radius:999px;
+  border:1px solid var(--sage-soft); background:var(--sage-pale); color:var(--sage-deep);
+  font-family:var(--sans); font-size:0.6875rem; font-weight:800; letter-spacing:-0.2px; cursor:pointer; line-height:1.4; }
+.ov-chip:active{ transform:translateY(1px); }
+.ov-sheet{ padding:10px 24px 8px; }                       /* 좌우 여백 24px — 본문이 시트 가장자리에 붙지 않게 */
+.ov-kicker{ font-size:0.6875rem; font-weight:700; color:var(--ink-4); letter-spacing:0.2px; }
+.ov-title{ margin:6px 0 0; font-family:var(--serif); font-size:1.5rem; font-weight:700; color:var(--ink); letter-spacing:-0.5px; line-height:1.3; }
+.ov-title-sub{ display:block; font-size:0.8125rem; font-weight:500; color:var(--ink-3); letter-spacing:0; margin-bottom:2px; }
+.ov-verse{ margin:16px 0 4px; padding:14px 16px; background:var(--sage-pale); border-radius:14px;
+  font-family:var(--serif); font-size:0.9062rem; line-height:1.8; color:var(--ink); word-break:keep-all; }
+.ov-verse-ref{ display:block; margin-top:6px; font-family:var(--sans); font-size:0.7188rem; font-weight:700; color:var(--sage-deep); }
+.ov-sec{ margin-top:22px; }
+.ov-h{ font-family:var(--serif); font-size:1.0625rem; font-weight:700; color:var(--sage-deep); padding-bottom:6px; margin-bottom:8px;
+  border-bottom:1px solid var(--line); letter-spacing:-0.3px; }
+.ov-item{ margin-top:12px; }
+.ov-ih{ font-size:0.875rem; font-weight:800; color:var(--ink); margin-bottom:4px; letter-spacing:-0.3px; }
+.ov-p{ font-size:0.875rem; line-height:1.9; color:var(--ink-2); word-break:keep-all; overflow-wrap:anywhere; text-align:left; margin:0 0 10px; }
+.ov-refs{ list-style:none; padding:0; margin:0; }
+.ov-refs li{ font-size:0.8125rem; line-height:1.8; color:var(--ink-3); padding-left:12px; position:relative; }
+.ov-refs li::before{ content:'·'; position:absolute; left:2px; color:var(--ink-4); }
+@media (min-width:480px){ .ov-sheet{ padding:10px 28px 8px; } }
+</style>
+
+<style id="v191-share-parts">
+/* v1.9.1 — 나눔 글: 말씀먹기·말씀기도·말씀살기(·말씀기록)를 한 본문 안에서 작은 라벨 칩으로 구분
+   (별도 칸을 나누지 않아 카드가 길어지지 않음 · 3줄 접힘/펼침 동작 그대로) */
+.sp-body .sp-k{ display:inline-block; vertical-align:1px; margin:0 6px 0 0; padding:1px 7px; border-radius:999px;
+  font-size:0.625rem; font-weight:800; letter-spacing:-0.2px; line-height:1.6; background:var(--sage-pale); color:var(--sage-deep); }
+.sp-body .sp-k.pray{ background:var(--terra-soft); color:#A45A3F; }
+.sp-body .sp-k.live{ background:#E8EEF6; color:#3F5E8E; }
+.sp-body .sp-k.rec{ background:var(--bg-cream); color:var(--ink-3); }
+.sp-body .sp-ln{ display:block; }
+.sp-body .sp-ln + .sp-ln{ margin-top:4px; }
+/* 목장방 글도 동일한 방식 */
+.rpost-lectio{ margin-top:10px; background:var(--bg-soft); border-radius:14px; padding:4px 14px; }
+.rl-row{ display:flex; align-items:flex-start; gap:10px; padding:10px 0; border-top:1px solid rgba(26,31,29,.06); }
+.rl-row:first-child{ border-top:none; }
+.rl-k{ flex:0 0 auto; min-width:52px; text-align:center; margin-top:2px; font-size:0.625rem; font-weight:800; letter-spacing:-0.2px;
+  border-radius:999px; padding:3px 8px; background:var(--sage-pale); color:var(--sage-deep); }
+.rl-row.pray .rl-k{ background:var(--terra-soft); color:#A45A3F; }
+.rl-row.live .rl-k{ background:#E8EEF6; color:#3F5E8E; }
+.rl-row.rec  .rl-k{ background:var(--bg-cream); color:var(--ink-3); }
+.rl-v{ flex:1; min-width:0; font-size:0.8438rem; line-height:1.7; color:var(--ink-2); word-break:keep-all; }
+.rl-row.eat .rl-v{ color:var(--ink); }
 </style>
 </head>
 <body>
@@ -8858,6 +8908,127 @@ function hymnSectionHTML(devotional){
     </div>`;
 }
 
+/* ============================================================================
+   v1.9.2 — 이달의 말씀 개요 (책자 26~31쪽 '간략하게 살펴보는 ○○')
+   · 말씀 탭 헤더의 본문 참조 옆 '📖 ○○ 개요' 칩 → 시트로 전문 열람
+   · 그날 본문의 책(WORD_DATA[..].book)을 자동 인식 — 9월: 스가랴 → 말라기 → 사무엘상
+   ============================================================================ */
+const BOOK_OVERVIEWS = {
+  '스가랴': {
+    title:'간략하게 살펴보는 스가랴', pages:'책자 26~27쪽',
+    verse:{ text:'만군의 여호와께서 말씀하시되 이는 힘으로 되지 아니하며 능력으로 되지 아니하고 오직 나의 영으로 되느니라', ref:'슥 4:6' },
+    sections:[
+      { h:'저자', ps:[
+        '스가랴서는 잇도의 손자이자 베레갸의 아들(1:1)로 제사장 출신 선지자인 스가랴가 기록했습니다. ‘스가랴’라는 이름은 ‘여호와께서 기억하신다’라는 뜻입니다. 동시대에 활동한 선지자 학개가 백성으로 하여금 성전을 짓도록 동기를 부여했다면, 스가랴는 하나님 백성의 회개와 갱신 그리고 영적인 각성과 개혁을 위해 말씀을 선포했습니다.' ]},
+      { h:'저작 시기', ps:[
+        '스가랴서는 이스라엘 백성이 바벨론 포로에서 귀환한 후 예루살렘 성전을 재건하던 시기(주전 520~480년경)에 기록된 것으로 봅니다. 스가랴서 본문에는 이 말씀이 다리오왕 제이년(1:1, 주전 520년), 다리오왕 제이년 열한째 달(1:7, 주전 519년), 다리오왕 제사년 아홉째 달(7:1, 주전 518년)에 기록되었다고 명시되어 있습니다. 이 시기는 바벨론 포로에서 귀환한 하나님의 백성이 성전을 재건한 때이며, 학개 선지자가 활동하던 시기와 같습니다.' ]},
+      { h:'특징', items:[
+        { h:'(1) 회개 촉구', ps:[
+          '스가랴서는 포로 귀환 후 성전을 재건하는 시기에 백성을 향해 조상들의 길을 따르지 말고 돌이킬 것을 강하게 촉구합니다(1:3~4). 조상들이 선지자들의 경고를 무시하다가 결국 바벨론에 포로가 되는 심판을 받았음을 상기시키며, 형식적인 종교 생활을 버리고 진심으로 하나님께 돌아올 것을 요청합니다. 온전한 회복은 단순한 외적 회복(성전 재건)에 머물지 않고 내적·영적 회복이 함께 이루어져야 함을 강조하는 것입니다. 하나님은 사람의 지식과 힘과 세상의 쾌락을 좇던 삶에서 완전히 돌이키는 백성에게 그분의 영을 부으시고 친히 역사하심을 보게 하십니다.' ]},
+        { h:'(2) 하나님 나라와 메시아 통치 선포', ps:[
+          '스가랴서는 구약 선지서 중 메시아 예언이 매우 풍부한 책 중 하나로, 오실 왕에 대한 선명한 그림을 제시합니다. 나귀를 타고 예루살렘에 입성하는 겸손한 왕(9:9), 은 서른 개에 팔리는 목자(11:12~13), 찔린 자를 바라보며 애통하는 장면(12:10) 등은 예수 그리스도를 가리키며, 이 모든 말씀은 그대로 성취되었습니다. 결국 스가랴서는 단순한 이스라엘의 회복을 넘어 온 열방을 다스리시는 하나님 나라의 완성과 메시아 통치를 바라보게 합니다.' ]},
+        { h:'(3) 소선지서 중 가장 많은 환상과 묵시적 표현', ps:[
+          '스가랴서는 소선지서 가운데 묵시적 성격이 가장 강한 책으로, 1~6장에 걸쳐 여덟 가지 밤의 환상이 연속해서 등장합니다. 붉은 말 탄 자, 네 뿔과 네 대장장이, 측량줄을 잡은 자, 대제사장 여호수아의 옷, 순금 등잔대와 두 감람나무, 날아다니는 두루마리, 에바 속의 여인, 네 병거(전차) 등 묵시적이며 비유적인 표현으로 가득합니다. 이러한 묵시적 표현은 단순한 문학적 장치가 아니라 눈에 보이는 현실 너머에서 하나님이 역사를 주관하고 계심을 보여 주는 방식으로, 훗날 신약의 요한계시록에 깊은 영향을 끼쳤습니다.' ]},
+      ]},
+      { h:'참고 문헌', refs:[ '『ESV 스터디 바이블』, 부흥과개혁사', '『성경에센스』, 두란노', 'BST 성경 강해 시리즈 『스가랴』, IVP' ] },
+    ]
+  },
+  '말라기': {
+    title:'간략하게 살펴보는 말라기', pages:'책자 28~29쪽', verse:null,
+    sections:[
+      { h:'저자', ps:[
+        '‘말라기’는 ‘하나님의 사자’라는 뜻입니다. “여호와께서 말라기를 통하여 이스라엘에게 말씀하신 경고”라는 1장 1절 말씀에 따라 학자들은 이 책의 저자를 선지자 말라기로 봅니다. 한편 같은 시기에 기록된 에스라서와 느헤미야서에 말라기의 이름이 등장하지 않는다는 점에서, 3장 1절의 ‘하나님이 보내시는 사자’라는 의미를 담아 책의 제목으로 삼았다는 견해도 있습니다.' ]},
+      { h:'저작 시기', ps:[
+        '말라기서는 주전 460~400년 사이에 저작된 것으로 봅니다. 이는 바벨론 포로에서 돌아온 지 100년이 지난 시점으로, 당시 하나님의 백성은 성전이 재건된 은혜의 시기를 살았습니다. 하지만 하나님을 향한 온전한 신뢰를 잊고, 껍데기뿐인 예배를 드렸으며, 제사장은 부패하고, 백성은 도덕법과 의식법에 대한 무관심 속에 살았습니다. 말라기서는 바로 그 시기에 쓰였습니다.' ]},
+      { h:'특징', items:[
+        { h:'(1) 의심하는 백성, 신실하신 하나님과 그분의 사랑', ps:[
+          '말라기서는 하나님 백성의 죄와 그럼에도 신실하신 하나님의 사랑을 여러 차례의 논쟁 형식으로 증언합니다. 하나님이 말씀하시면 이스라엘이 반박하고, 하나님은 그들의 반박에도 끝까지 설득하시며 그분의 사랑으로 강권하십니다. 구체적으로는 하나님의 사랑을 의심함(1:2), 제사장들이 하나님을 멸시함(1:6~7), 말로 여호와를 괴롭힘(2:17), 정의의 하나님을 멸시함(2:17), 하나님께로 온전히 돌이키지 않음(3:7~8), 하나님의 것을 도둑질함(3:7~8), 완악한 말로 주님을 대적함(3:13)으로 전개됩니다.' ]},
+        { h:'(2) 죄 된 인간의 실존', ps:[
+          '말라기서는 일부 타락한 자의 모습을 보여 주는 책이 아닙니다. 하나님께 묻고 듣는다고 하면서 이방인과 통혼하고, 이혼 문제를 하나님과 무관하게 처리하며, 제사장직을 남용하는 등 하나님과 세상 사이에서 적당히 선택하며 사랑하고 섬기는 인간의 실존을 적나라하게 드러냅니다. 이는 오늘날 우리를 향한 말씀이며, 하나님의 신실한 사랑과 선명히 대조됩니다.' ]},
+        { h:'(3) 하나님의 선언과 침묵 속 외침', ps:[
+          '하나님은 말라기서 이후 세례 요한의 등장과 예수 그리스도가 오시기까지 약 400년간 침묵하십니다. 유대인들은 전통적으로 하나님의 영이 이 시기를 기점으로 이스라엘을 떠나셨다고 여깁니다. 하지만 말라기서는 긴 침묵기에 들어가기에 앞서 죄 된 존재인 하나님의 백성에게 돌아오라고 힘주어 선언합니다. 또한 침묵기 동안 읽히며 침묵 속에 외치시는 하나님의 마음을 깨닫게 합니다. 1~4장에서 스물네 차례나 자신을 ‘만군의 여호와’로 소개하신 하나님은 선지자 엘리야를 보내 아버지의 마음을 자녀에게로, 자녀들의 마음을 그들의 아버지에게로 돌이키게 할 것이라고 약속하십니다(4:5~6). 이 약속은 세례 요한을 통해 이루어졌으며, 예수 그리스도 안에서 완성되었습니다. “내가 너희를 사랑하였노라”(1:2)라고 선언하신 하나님은 죄 된 하나님의 백성을 잊지 않으시고, 침묵기 동안 신실하게 약속을 이행하시며 마침내 지키셨습니다. 예수 그리스도를 통해 ‘이처럼 사랑하시는’ 은혜를 확증하셨습니다(요 3:16). 이는 오늘날 고통과 죄의 문제 앞에서 하나님이 침묵하신다고 생각하며 낙심한 하나님의 백성에게 동일하게 주시는 외침이자 약속입니다.' ]},
+      ]},
+      { h:'참고 문헌', refs:[ '『ESV 스터디 바이블』, 부흥과개혁사', '『성경에센스』, 두란노', 'BST 성경 강해 시리즈 『말라기』, IVP' ] },
+    ]
+  },
+  '사무엘상': {
+    title:'간략하게 살펴보는 사무엘상', pages:'책자 30~31쪽', verse:null,
+    sections:[
+      { h:'저자', ps:[
+        '사무엘서는 전통적으로 상·하권으로 구분되지 않고 열왕기상·하와 함께 한 권으로 이루어진 ‘역사서’로 분류됩니다. 주전 2세기경 헬라어로 번역되면서 사무엘상·하, 열왕기상·하로 구분되었습니다. 사무엘상은 사무엘이 기록했고, 사무엘하는 선지자 나단과 갓이 기록한 것으로 봅니다. ‘사무엘’은 ‘하나님께서 들으심’ 또는 ‘하나님께 구함’이라는 의미입니다. 사무엘은 영적으로 혼탁하고 어두운 시대에 하나님께 귀 기울이고 쓰임받았던 마지막 사사이자 선지자였습니다.' ]},
+      { h:'저작 시기', ps:[
+        '사무엘상은 사무엘의 출생 이야기부터 하나님의 마음에 맞는 자 다윗의 기름 부음, 그리고 이스라엘의 초대 왕 사울의 죽음에 이르기까지 약 94년간의 이야기를 담고 있습니다. 구체적인 저작 시기는 이스라엘 왕국이 분열한 주전 931년과 사마리아의 멸망 시기인 주전 722년 사이로 추정합니다. 일반적으로 사무엘, 나단, 갓의 시대에 기록되었고, 이후 보완되다가 성령의 감동과 주권 아래 주전 6세기 바벨론 포로 기간에 최종 정리된 것으로 봅니다.' ]},
+      { h:'특징', items:[
+        { h:'(1) 하나님이 이스라엘의 참된 왕', ps:[
+          '이스라엘 백성은 주변 국가의 찬란함과 눈에 보이는 권력인 왕을 보았습니다. 그들은 사사를 통한 하나님의 통치보다 그들의 눈에 보이고 귀에 들리며 제도를 통해 이끌어 줄 왕을 구했습니다. 영적으로 어두웠던 시기에 하나님은 사무엘상 이야기를 통해 어둠 속에서도 꺼지지 않는 등불이 있음을 보여 주십니다. 하나님은 사무엘(1~7장), 사울(8~31장), 다윗(16~31장)으로 이어지는 인물들의 역사를 교차시키며, 왕을 세우고 폐하시는 주권이 오직 그분께 있음을 드러내십니다. 이 같은 거대한 서사는 하나님의 백성을 다스리는 참된 통치자가 누구인지 명확히 보여 줍니다.' ]},
+        { h:'(2) 말씀을 버리는 것이 죄', ps:[
+          '엘리 제사장은 귀와 눈이 어두워져 있었고, 그의 아들들은 여호와를 알지 못했습니다. 이는 그들의 행실이 하나님 말씀을 떠나 있는 것으로 증명됩니다. 하나님은 이 가정의 죄를 엄중히 다루십니다. 두 아들이 한날에 죽고, 엘리 제사장은 그 소식을 듣고 놀라 뒤로 넘어져 죽습니다. 이후 하나님은 사무엘을 통해 사울에게 기름을 부으시고 왕으로 삼으십니다. 그런데 사울도 하나님 말씀을 마음에 두지 않고 자기 마음대로 행하다가 하나님께 버림받습니다. 우리는 이 이야기를 통해 말씀을 버리는 것이 가장 큰 죄이며, 하나님은 그 죄를 엄히 다루신다는 것을 알 수 있습니다.' ]},
+        { h:'(3) 더 나은 다윗, 예수 그리스도', ps:[
+          '하나님은 다윗에게 기름을 부어 이스라엘의 왕이 되게 하십니다. 다윗은 세상의 눈에는 왕이 되기에 부족해 보이지만 참된 왕이신 하나님의 마음에 맞는 사람으로 여김받고(13:14) 기름 부음을 받습니다. 특별히 우리는 사무엘상에서 하나님의 섭리와 은혜를 발견하게 됩니다. 다윗이 통과한 역경의 시간을 통해 그를 왕으로 연단하시는 하나님의 세밀한 섭리를 볼 수 있습니다. 이 같은 다윗의 삶은 그리스도의 고난을 묵상하게 하며, 그는 메시아이신 예수 그리스도를 가리키는 자가 됩니다. 우리는 다윗의 부족함과 연약함을 통해 하나님의 섭리와 더 나은 다윗, 예수 그리스도를 바라볼 수 있습니다.' ]},
+      ]},
+      { h:'참고 문헌', refs:[ '『ESV 스터디 바이블』, 부흥과개혁사', '『성경에센스』, 두란노', 'BST 성경 강해 시리즈 『사무엘』, IVP', '『리딩지저스 2: 사사기-에스더』, 웨스트민스터프레스코리아' ] },
+    ]
+  },
+};
+
+/* 그날 본문의 책 이름 → 개요 키 (없으면 null) */
+function bookOverviewKey(dateKey, devotional){
+  try{
+    const w = WORD_DATA[dateKey] || {};
+    const cands = [ devotional && devotional.book, w.book, devotional && devotional.range, w.range ];
+    for(const c of cands){
+      if(!c) continue;
+      for(const k of Object.keys(BOOK_OVERVIEWS)){
+        if(String(c).indexOf(k) === 0) return k;
+      }
+    }
+  }catch(e){}
+  return null;
+}
+/* 헤더 칩 */
+function bookOverviewChipHTML(dateKey, devotional){
+  const k = bookOverviewKey(dateKey, devotional);
+  if(!k) return '';
+  return `<button class="ov-chip" onclick="openBookOverview('${k}')" aria-label="${k} 개요 보기">
+    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    ${k} 개요
+  </button>`;
+}
+/* 시트 열람 */
+function openBookOverview(key){
+  const o = BOOK_OVERVIEWS[key];
+  if(!o){ toast('개요가 아직 등록되지 않았습니다'); return; }
+  const para = function(ps){ return (ps||[]).map(function(t){ return '<p class="ov-p">'+escapeHtml(t)+'</p>'; }).join(''); };
+  const body = o.sections.map(function(s){
+    if(s.refs) return `
+      <div class="ov-sec">
+        <div class="ov-h">${escapeHtml(s.h)}</div>
+        <ul class="ov-refs">${s.refs.map(function(r){ return '<li>'+escapeHtml(r)+'</li>'; }).join('')}</ul>
+      </div>`;
+    if(s.items) return `
+      <div class="ov-sec">
+        <div class="ov-h">${escapeHtml(s.h)}</div>
+        ${s.items.map(function(it){ return '<div class="ov-item"><div class="ov-ih">'+escapeHtml(it.h)+'</div>'+para(it.ps)+'</div>'; }).join('')}
+      </div>`;
+    return `
+      <div class="ov-sec">
+        <div class="ov-h">${escapeHtml(s.h)}</div>
+        ${para(s.ps)}
+      </div>`;
+  }).join('');
+  document.getElementById('modalContent').innerHTML = `
+    <div class="ov-sheet">
+      <div class="ov-kicker">${ISSUE.year}년 ${ISSUE.month}월호 · ${escapeHtml(o.pages)}</div>
+      <h3 class="ov-title"><span class="ov-title-sub">간략하게 살펴보는</span>${escapeHtml(key)}</h3>
+      ${o.verse ? `<div class="ov-verse">“${escapeHtml(o.verse.text)}”<span class="ov-verse-ref">${escapeHtml(o.verse.ref)}</span></div>` : ''}
+      ${body}
+      <button class="btn btn-block btn-secondary" style="margin-top:22px" onclick="closeModal()">닫기</button>
+    </div>
+  `;
+  openModal();
+  try{ const sh=document.getElementById('modalSheet'); if(sh) sh.scrollTop=0; }catch(e){}
+}
+
 async function renderWord(){
   const view = document.getElementById('view-word');
   const today = state.currentDate;
@@ -8954,7 +9125,7 @@ async function renderWord(){
   view.innerHTML = `
     <div class="word-header">
       <div class="today-date word-date-plain" onclick="switchTab('calendar')">${dateLineHtml(today)}</div>
-      <div class="word-passage-ref">${devotional.range}</div>
+      <div class="word-ref-row"><div class="word-passage-ref">${devotional.range}</div>${bookOverviewChipHTML(dateKey, devotional)}</div>
       <div class="word-title">${devotional.subtitle}</div>
       <div class="word-nav">
         <button class="word-nav-btn" onclick="changeDay(-1)" ${isPast?'disabled':''}><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> ${_nav(-1)}</button>
@@ -9340,6 +9511,22 @@ async function saveLectioNow(key, draftOnly){
 }
 
 /* v1.6 — 저장 시 자동 나눔: 내 목장방(없으면 첫 방)에 게시/갱신 */
+/* v1.9.1 — 나눔용 '말씀먹기' 본문: 5단계(1~3번 답 전부) · 간편(1번 답) 모두 포함
+   (이전엔 3번 답만 나눠져 간편 묵상은 말씀먹기가 비어 보였음) */
+function meditatioShareText(lectio){
+  return [lectio.meditatio1, lectio.meditatio2, lectio.meditatio3]
+    .map(function(t){ return (t||'').trim(); }).filter(Boolean).join('\n');
+}
+/* v1.9.1 — 나눔 글 본문: 항목별 라벨 칩 + 줄 (구조 데이터가 없는 이전 글/시드 글은 본문 그대로) */
+function sharePostBodyHTML(p){
+  const parts = p.parts;
+  if(!parts) return escapeHtml(p.body||'').replace(/\n/g,'<br/>');
+  const defs = [['eat','말씀먹기',''],['pray','말씀기도','pray'],['live','말씀살기','live'],['rec','말씀기록','rec']];
+  const lines = defs.filter(d=>(parts[d[0]]||'').trim()).map(d=>
+    `<span class="sp-ln"><span class="sp-k ${d[2]}">${d[1]}</span>${escapeHtml(parts[d[0]].trim()).replace(/\n/g,'<br/>')}</span>`);
+  return lines.length ? lines.join('') : escapeHtml(p.body||'').replace(/\n/g,'<br/>');
+}
+
 async function autoShareLectio(dateKey, lectio){
   const scope = lectioScope(lectio);
   /* v1.9 — 나눔 피드에 게시 (나만 보기는 표시만) */
@@ -9349,7 +9536,7 @@ async function autoShareLectio(dateKey, lectio){
   const room = rooms.find(r=>r.type==='cell') || rooms[0];
   const priv = scope!=='friends_cell';   // 목장방 게시는 '친구+목장'일 때만
   const parts = priv ? null : {
-    grace:(lectio.meditatio3||'').trim(),
+    grace:meditatioShareText(lectio),
     oratio:(lectio.oratio||'').trim(),
     oneThing:(lectio.contemplatio||'').trim(),
     record:(lectio.scribo||'').trim(),
@@ -9690,18 +9877,25 @@ function closeRoom(){
   switchTab('pray');
 }
 
-const ROOM_PART_LABELS = { grace:'받은 은혜', oratio:'말씀기도', oneThing:'One Thing · 오늘의 순종', thanks:'세 가지 감사', record:'말씀기록 · 순종과 감사' };
+const ROOM_PART_LABELS = { grace:'말씀먹기', oratio:'말씀기도', oneThing:'말씀살기', thanks:'세 가지 감사', record:'말씀기록' };
 
 function renderRoomPost(p){
   let partsHtml = '';
   if(p.kind==='lectio' && p.parts){
-    if(p.parts.grace) partsHtml += `<div class="rpost-part grace"><span class="pp-label">${ROOM_PART_LABELS.grace}</span>${escapeHtml(p.parts.grace)}</div>`;
-    if(p.parts.oratio) partsHtml += `<div class="rpost-part pray-part"><span class="pp-label">${ROOM_PART_LABELS.oratio}</span>${escapeHtml(p.parts.oratio)}</div>`;
-    if(p.parts.oneThing) partsHtml += `<div class="rpost-part"><span class="pp-label">${ROOM_PART_LABELS.oneThing}</span>${escapeHtml(p.parts.oneThing)}</div>`;
-    if(p.parts.record) partsHtml += `<div class="rpost-part"><span class="pp-label">${ROOM_PART_LABELS.record}</span>${escapeHtml(p.parts.record).replace(/\n/g,'<br/>')}</div>`;
+    /* v1.9.1 — 말씀먹기·말씀기도·말씀살기(·말씀기록)를 한 박스 안에 라벨 칩으로 구분 */
+    const rows = [];
+    const row = function(k, txt, cls){
+      if(!(txt||'').trim()) return;
+      rows.push(`<div class="rl-row ${cls||''}"><span class="rl-k">${ROOM_PART_LABELS[k]}</span><div class="rl-v">${escapeHtml(txt.trim()).replace(/\n/g,'<br/>')}</div></div>`);
+    };
+    row('grace', p.parts.grace, 'eat');
+    row('oratio', p.parts.oratio, 'pray');
+    row('oneThing', p.parts.oneThing, 'live');
+    row('record', p.parts.record, 'rec');
     if(p.parts.thanks && p.parts.thanks.length){
-      partsHtml += `<div class="rpost-part"><span class="pp-label">${ROOM_PART_LABELS.thanks}</span>${p.parts.thanks.filter(t=>(t||'').trim()).map((t,i)=>`${i+1}. ${escapeHtml(t)}`).join('<br/>')}</div>`;
+      row('thanks', p.parts.thanks.filter(t=>(t||'').trim()).map((t,i)=>`${i+1}. ${t}`).join('\n'), 'rec');
     }
+    if(rows.length) partsHtml = `<div class="rpost-lectio">${rows.join('')}</div>`;
   }
   // v1.6 — 비공개 저장: 기록했다는 표시만
   if(p.kind==='lectio' && p.private){
@@ -9924,7 +10118,7 @@ async function openShareModal(dateKey, preRoomId){
   }
   const d = WORD_DATA[dateKey] || {};
   const parts = [
-    { key:'grace',    label:'받은 은혜 한 줄',          value:(lectio.meditatio3||'').trim() },
+    { key:'grace',    label:'말씀먹기',                  value:meditatioShareText(lectio) },
     { key:'oratio',   label:'말씀기도',                  value:(lectio.oratio||'').trim() },
     { key:'oneThing', label:'One Thing · 오늘의 순종',   value:(lectio.contemplatio||'').trim() },
     { key:'record',   label:'말씀기록 · 순종과 감사',    value:scriboText(lectio).trim() },
@@ -9978,7 +10172,7 @@ async function submitShare(dateKey){
   const roomId = document.getElementById('share-room').value;
   const note = document.getElementById('share-note').value.trim();
   const parts = {};
-  if(checked.includes('grace'))    parts.grace = (lectio.meditatio3||'').trim();
+  if(checked.includes('grace'))    parts.grace = meditatioShareText(lectio);
   if(checked.includes('oratio'))   parts.oratio = (lectio.oratio||'').trim();
   if(checked.includes('oneThing')) parts.oneThing = (lectio.contemplatio||'').trim();
   if(checked.includes('record'))   parts.record = scriboText(lectio).trim();
@@ -11032,11 +11226,17 @@ function upsertMySharePost(dateKey, lectio, scope){
   const o = getShareOverlay();
   o.myPosts = o.myPosts || {};
   const w = WORD_DATA[dateKey] || {};
-  const body = [(lectio.meditatio3||'').trim(), (lectio.scribo||'').trim(), (lectio.oratio||'').trim(), (lectio.contemplatio||'').trim()]
-    .filter(Boolean).join('\n');
+  /* v1.9.1 — 말씀먹기(1~3번 답 전부)·말씀기도·말씀살기·말씀기록을 항목별로 저장 (표시 시 라벨 구분) */
+  const parts = {
+    eat: meditatioShareText(lectio),
+    pray:(lectio.oratio||'').trim(),
+    live:(lectio.contemplatio||'').trim(),
+    rec: (lectio.scribo||'').trim(),
+  };
+  const body = [parts.eat, parts.pray, parts.live, parts.rec].filter(Boolean).join('\n');
   o.myPosts[dateKey] = { dateKey, scope, time: (o.myPosts[dateKey]&&o.myPosts[dateKey].firstTime)||Date.now(),
     firstTime:(o.myPosts[dateKey]&&o.myPosts[dateKey].firstTime)||Date.now(),
-    range:w.range||'', title:w.subtitle||'', body: body||'오늘의 말씀을 묵상했습니다.' };
+    range:w.range||'', title:w.subtitle||'', body: body||'오늘의 말씀을 묵상했습니다.', parts: body ? parts : null };
   saveShareOverlay(o);
 }
 
@@ -11055,7 +11255,7 @@ function listSharePosts(filter){
     if(removed['my_'+dk]) return;   /* 관리자 숨김 반영 */
     const mp = o.myPosts[dk];
     posts.push({ id:'my_'+dk, who:myName+' (나)', mine:true, cell:'우리 목장', group:'mine',
-      scope:mp.scope, time:mp.time, dateKey:dk, range:mp.range, title:mp.title, body:mp.body, comments:[] });
+      scope:mp.scope, time:mp.time, dateKey:dk, range:mp.range, title:mp.title, body:mp.body, parts:mp.parts||null, comments:[] });
   });
   /* 댓글 오버레이 병합 */
   const cm = o.comments || {};
@@ -11146,7 +11346,7 @@ function sharePostCardHTML(p){
         ${shareScopeBadge(p)}
       </div>
       ${p.range?`<div class="sp-pill" onclick="goToDay('${p.dateKey}')">${escapeHtml(p.range)}${p.title?' · '+escapeHtml(p.title):''}</div>`:''}
-      <div class="sp-body" onclick="toggleSharePostExpand('${p.id}')">${escapeHtml(p.body).replace(/\n/g,'<br/>')}</div>
+      <div class="sp-body" onclick="toggleSharePostExpand('${p.id}')">${sharePostBodyHTML(p)}</div>
       <div class="sp-foot">
         <button class="sp-act ${myAmen?'on':''}" onclick="toggleShareAmen('${p.id}')">🙏 아멘${myAmen?' · 함께 기도했어요':''}</button>
         <button class="sp-act" onclick="toggleSharePostExpand('${p.id}', true)">💬 댓글</button>
@@ -11212,7 +11412,7 @@ function openSharePost(id){
         ${shareScopeBadge(p)}
       </div>
       ${p.range?`<div class="sp-pill" onclick="closeModal();goToDay('${p.dateKey}')">${escapeHtml(p.range)}${p.title?' · '+escapeHtml(p.title):''}</div>`:''}
-      <div class="sp-body full">${escapeHtml(p.body).replace(/\n/g,'<br/>')}</div>
+      <div class="sp-body full">${sharePostBodyHTML(p)}</div>
       <div class="sp-foot" style="border-top:1px solid var(--line);padding-top:10px;margin-top:12px">
         <button class="sp-act ${myAmen?'on':''}" onclick="toggleShareAmen('${id}');openSharePost('${id}')">🙏 아멘${myAmen?' · 함께 기도했어요':''}</button>
       </div>

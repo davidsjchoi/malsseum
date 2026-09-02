@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="말씀함께">
-<title>말씀함께 · 데모 v1.9.2</title>
+<title>말씀함께 · 데모 v1.9.3</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -9517,6 +9517,16 @@ function meditatioShareText(lectio){
   return [lectio.meditatio1, lectio.meditatio2, lectio.meditatio3]
     .map(function(t){ return (t||'').trim(); }).filter(Boolean).join('\n');
 }
+/* v1.9.3 — 저장된 묵상 기록에서 나눔 항목을 다시 구성 (v1.9.1 이전에 게시된 내 글도 말씀먹기·기도·살기가 모두 보이도록) */
+function sharePartsFromLectio(dateKey){
+  try{
+    const saved = _read(STORAGE_KEYS.lectio, {});
+    const l = saved[dateKey] || SEED_LECTIO[dateKey];
+    if(!l) return null;
+    const parts = { eat:meditatioShareText(l), pray:(l.oratio||'').trim(), live:(l.contemplatio||'').trim(), rec:scriboText(l).trim() };
+    return (parts.eat||parts.pray||parts.live||parts.rec) ? parts : null;
+  }catch(e){ return null; }
+}
 /* v1.9.1 — 나눔 글 본문: 항목별 라벨 칩 + 줄 (구조 데이터가 없는 이전 글/시드 글은 본문 그대로) */
 function sharePostBodyHTML(p){
   const parts = p.parts;
@@ -9881,6 +9891,21 @@ const ROOM_PART_LABELS = { grace:'말씀먹기', oratio:'말씀기도', oneThing
 
 function renderRoomPost(p){
   let partsHtml = '';
+  /* v1.9.3 — 내가 자동 게시한 목장방 글은 저장된 기록에서 말씀먹기(1~3번 답)를 다시 채움 (이전 게시 글 호환) */
+  try{
+    if(p.kind==='lectio' && p.parts && p.auto && p.dateKey){
+      const u = _normalizeUser(_read(STORAGE_KEYS.user, null) || {});
+      const myName = u.nickname || u.name || '성도님';
+      if(p.who === myName){
+        const l = (_read(STORAGE_KEYS.lectio, {})[p.dateKey]) || SEED_LECTIO[p.dateKey];
+        if(l){
+          const eat = meditatioShareText(l);
+          if(eat) p.parts.grace = eat;
+          if(!(p.parts.record||'').trim() && scriboText(l).trim()) p.parts.record = scriboText(l).trim();
+        }
+      }
+    }
+  }catch(e){}
   if(p.kind==='lectio' && p.parts){
     /* v1.9.1 — 말씀먹기·말씀기도·말씀살기(·말씀기록)를 한 박스 안에 라벨 칩으로 구분 */
     const rows = [];
@@ -11255,7 +11280,8 @@ function listSharePosts(filter){
     if(removed['my_'+dk]) return;   /* 관리자 숨김 반영 */
     const mp = o.myPosts[dk];
     posts.push({ id:'my_'+dk, who:myName+' (나)', mine:true, cell:'우리 목장', group:'mine',
-      scope:mp.scope, time:mp.time, dateKey:dk, range:mp.range, title:mp.title, body:mp.body, parts:mp.parts||null, comments:[] });
+      scope:mp.scope, time:mp.time, dateKey:dk, range:mp.range, title:mp.title, body:mp.body,
+      parts: sharePartsFromLectio(dk) || mp.parts || null, comments:[] });   /* v1.9.3 — 항상 저장된 기록 기준으로 구성 */
   });
   /* 댓글 오버레이 병합 */
   const cm = o.comments || {};

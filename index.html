@@ -3902,15 +3902,13 @@ body,button,input,textarea,select{ font-family:var(--font-body); }
 .sp-body .sp-k.rec{ background:var(--bg-cream); color:var(--ink-3); }
 .sp-body .sp-ln{ display:block; }
 .sp-body .sp-ln + .sp-ln{ margin-top:4px; }
-/* v1.9.5 — 내 글 복사 버튼: 본문 오른쪽 아래, 채움 버튼으로 잘 보이게 */
-.sp-copy-row{ display:flex; justify-content:flex-end; margin:6px 0 2px; }
-.sp-copy-btn{ display:inline-flex; align-items:center; gap:5px; min-width:64px; justify-content:center; padding:7px 14px; border:none; border-radius:999px;
-  background:var(--sage); color:#fff; font-family:var(--sans); font-size:0.75rem; font-weight:800; letter-spacing:-0.2px; cursor:pointer;
-  box-shadow:0 3px 10px rgba(34,62,48,.22); transition:background .2s ease, transform .1s ease; }
-.sp-copy-btn::before{ content:'📋'; font-size:0.8125rem; }
+/* v1.9.5 — 내 글 복사 버튼: 본문 오른쪽 아래, 작은 외곽선 버튼 · 복사됨 순간에만 채움 */
+.sp-copy-row{ display:flex; justify-content:flex-end; margin:4px 0 0; }
+.sp-copy-btn{ min-width:52px; padding:4px 11px; border:1px solid var(--sage-mid); border-radius:999px; background:transparent;
+  color:var(--sage-deep); font-family:var(--sans); font-size:0.6875rem; font-weight:700; letter-spacing:-0.2px; cursor:pointer; line-height:1.5;
+  transition:background .18s ease, color .18s ease, border-color .18s ease; }
 .sp-copy-btn:active{ transform:translateY(1px); }
-.sp-copy-btn.done{ background:var(--sage-deep); }
-.sp-copy-btn.done::before{ content:''; }
+.sp-copy-btn.done{ background:var(--sage); border-color:var(--sage); color:#fff; }
 /* 목장방 글도 동일한 방식 */
 .rpost-lectio{ margin-top:10px; background:var(--bg-soft); border-radius:14px; padding:4px 14px; }
 .rl-row{ display:flex; align-items:flex-start; gap:10px; padding:10px 0; border-top:1px solid rgba(26,31,29,.06); }
@@ -9571,7 +9569,7 @@ async function copySharePost(id, btn){
   }
   if(ok && btn){
     /* v1.9.5 — 버튼이 잠시 '복사됨'으로 바뀌었다가 '복사'로 복귀 */
-    btn.textContent = '복사됨 ✓'; btn.classList.add('done');
+    btn.textContent = '복사됨'; btn.classList.add('done');
     clearTimeout(btn._t);
     btn._t = setTimeout(function(){ btn.textContent = '복사'; btn.classList.remove('done'); }, 1600);
   }

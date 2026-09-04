@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="말씀함께">
-<title>말씀함께 · 데모 v1.9.5</title>
+<title>말씀함께 · 데모 v1.9.6</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -3921,6 +3921,125 @@ body,button,input,textarea,select{ font-family:var(--font-body); }
 .rl-v{ flex:1; min-width:0; font-size:0.8438rem; line-height:1.7; color:var(--ink-2); word-break:keep-all; }
 .rl-row.eat .rl-v{ color:var(--ink); }
 </style>
+<style>
+/* ============================================================================
+   v1.9.6 — 챌린지 배지 + 성경통독
+   ============================================================================ */
+.chal-card{ background:var(--bg-card); border:1px solid var(--line); border-radius:22px; padding:20px 18px; margin:0 16px 14px; }
+.chal-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.chal-title{ font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--ink); letter-spacing:-.3px; display:flex; align-items:center; gap:7px; }
+.chal-title .en{ font-family:var(--en); font-size:0.625rem; font-weight:700; letter-spacing:1.4px; color:var(--ink-3); }
+.chal-sub{ font-size:0.75rem; color:var(--ink-3); margin-top:2px; }
+/* 여정 — 엿새 중 몇 칸 */
+.journey{ margin:6px 0 4px; }
+.journey-top{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:10px; }
+.journey-name{ font-size:0.875rem; font-weight:700; color:var(--ink); }
+.journey-name small{ font-weight:500; color:var(--ink-3); margin-left:6px; font-size:0.75rem; }
+.journey-count{ font-family:var(--en); font-size:0.9375rem; font-weight:800; color:var(--sage-dark); }
+.journey-count small{ font-size:0.6875rem; color:var(--ink-3); font-weight:600; margin-left:2px; }
+.journey-cells{ display:grid; grid-auto-flow:column; grid-auto-columns:1fr; gap:6px; }
+.jc{ position:relative; border-radius:12px; background:var(--bg-soft); border:1.5px dashed var(--line); padding-top:100%; height:0; }
+.jc-in{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; }
+.jc-d{ font-family:var(--en); font-size:0.75rem; font-weight:700; color:var(--ink-3); }
+.jc-w{ font-size:0.5625rem; color:var(--ink-4); font-weight:600; }
+.jc.on{ background:var(--sage); border:1.5px solid var(--sage); }
+.jc.on .jc-d,.jc.on .jc-w{ color:#fff; }
+.jc.on .jc-w{ opacity:.85; }
+.jc.today{ border:2px solid var(--sage-dark); background:#fff; }
+.jc.today .jc-d{ color:var(--sage-dark); }
+.jc.today.on{ background:var(--sage); }
+.jc.today.on .jc-d{ color:#fff; }
+.jc.miss{ background:var(--terra-soft); border-color:transparent; }
+.jc.miss .jc-d{ color:var(--terra); }
+.journey-msg{ margin-top:10px; font-size:0.75rem; color:var(--ink-2); line-height:1.6; }
+.journey-msg b{ color:var(--sage-dark); }
+/* 배지 격자 */
+.badge-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:14px; }
+.bdg{ text-align:center; padding:12px 6px 10px; border-radius:16px; background:var(--bg-soft); border:1px solid var(--line-soft); cursor:pointer; transition:transform .12s; }
+.bdg:active{ transform:scale(.96); }
+.bdg-ic{ width:56px; height:56px; margin:0 auto 8px; border-radius:50%; display:flex; align-items:center; justify-content:center; position:relative; background:var(--sage); color:#fff; box-shadow:0 4px 14px rgba(46,79,63,.22); }
+.bdg-ic svg{ width:26px; height:26px; }
+.bdg-ic .yr{ position:absolute; bottom:-6px; left:50%; transform:translateX(-50%); font-family:var(--en); font-size:0.5625rem; font-weight:800; letter-spacing:.8px; background:#fff; color:var(--sage-dark); border:1px solid var(--sage-soft); border-radius:8px; padding:1px 6px; }
+.bdg-name{ font-size:0.75rem; font-weight:700; color:var(--ink); letter-spacing:-.2px; margin-top:4px; }
+.bdg-date{ font-family:var(--en); font-size:0.625rem; color:var(--ink-3); margin-top:2px; }
+.bdg.locked .bdg-ic{ background:transparent; color:var(--ink-4); box-shadow:none; border:1.5px dashed var(--ink-4); }
+.bdg.locked .bdg-ic .yr{ color:var(--ink-4); border-color:var(--line); }
+.bdg.locked .bdg-name{ color:var(--ink-3); }
+.bdg.closed .bdg-ic{ border-style:solid; opacity:.6; }
+/* 홈 챌린지 스트립 */
+.chal-strip{ margin:12px 16px 0; padding:11px 14px; border-radius:16px; background:var(--sage-pale); border:1px solid var(--sage-soft); display:flex; align-items:center; gap:10px; cursor:pointer; }
+.chal-strip .cs-ic{ width:30px; height:30px; border-radius:50%; background:var(--sage); color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.chal-strip .cs-ic svg{ width:15px; height:15px; }
+.chal-strip .cs-t{ flex:1; min-width:0; font-size:0.8125rem; font-weight:700; color:var(--sage-deep); }
+.chal-strip .cs-t small{ display:block; font-weight:500; color:var(--ink-2); font-size:0.6875rem; margin-top:1px; }
+.chal-strip .cs-n{ font-family:var(--en); font-weight:800; color:var(--sage-dark); font-size:0.9375rem; }
+.chal-strip .cs-dots{ display:flex; gap:3px; margin-top:3px; }
+.chal-strip .cs-dots i{ width:7px; height:7px; border-radius:50%; background:#fff; border:1px solid var(--sage-soft); display:block; }
+.chal-strip .cs-dots i.on{ background:var(--sage); border-color:var(--sage); }
+/* 축하 시트 */
+.bdg-sheet{ text-align:center; padding:6px 6px 10px; }
+.bdg-sheet .big{ width:120px; height:120px; margin:6px auto 0; border-radius:50%; background:var(--sage); color:#fff; display:flex; align-items:center; justify-content:center; position:relative; box-shadow:0 10px 30px rgba(46,79,63,.28); }
+.bdg-sheet .big svg{ width:54px; height:54px; }
+.bdg-sheet .big .yr{ position:absolute; bottom:-10px; left:50%; transform:translateX(-50%); font-family:var(--en); font-size:0.6875rem; font-weight:800; letter-spacing:1.2px; background:#fff; color:var(--sage-dark); border:1px solid var(--sage-soft); border-radius:10px; padding:2px 10px; }
+.bdg-sheet .big.locked{ background:transparent; color:var(--ink-4); border:2px dashed var(--ink-4); box-shadow:none; }
+.bdg-sheet .kicker{ margin-top:22px; font-family:var(--en); font-size:0.625rem; letter-spacing:1.6px; font-weight:700; color:var(--ink-3); }
+.bdg-sheet h3{ font-family:var(--serif); font-size:1.25rem; font-weight:700; margin:6px 0 4px; letter-spacing:-.4px; color:var(--ink); }
+.bdg-sheet p{ font-size:0.8125rem; color:var(--ink-2); line-height:1.7; margin:0 12px; }
+.bdg-sheet .when{ margin-top:8px; font-family:var(--en); font-size:0.75rem; color:var(--sage-dark); font-weight:700; }
+.bdg-sheet .share-img{ display:block; width:min(300px,86%); margin:16px auto 0; border-radius:16px; box-shadow:0 8px 28px rgba(0,0,0,.14); }
+.bdg-sheet .hint{ font-size:0.6875rem; color:var(--ink-3); margin-top:8px; }
+.bdg-actions{ display:flex; gap:8px; margin:16px 0 0; }
+/* 통독 섹션 (말씀 탭) */
+.td-list{ display:flex; flex-direction:column; gap:8px; margin-top:6px; }
+.td-item{ display:flex; align-items:center; gap:12px; padding:12px 12px 12px 14px; border-radius:14px; background:var(--bg-soft); border:1px solid var(--line-soft); cursor:pointer; transition:background .15s; }
+.td-item.done{ background:var(--sage-pale); border-color:var(--sage-soft); }
+.td-check{ width:24px; height:24px; border-radius:50%; border:1.5px solid var(--ink-4); display:flex; align-items:center; justify-content:center; color:transparent; flex-shrink:0; background:#fff; transition:all .15s; }
+.td-item.done .td-check{ background:var(--sage); border-color:var(--sage); color:#fff; }
+.td-check svg{ width:13px; height:13px; }
+.td-text{ flex:1; min-width:0; font-size:0.9375rem; font-weight:700; color:var(--ink); letter-spacing:-.2px; }
+.td-text small{ display:block; font-size:0.6875rem; color:var(--ink-3); font-weight:500; margin-top:1px; }
+.td-item.done .td-text{ color:var(--sage-deep); }
+.td-read{ flex-shrink:0; height:30px; padding:0 11px; border-radius:9px; border:1px solid var(--line); background:#fff; color:var(--sage-dark); font-size:0.6875rem; font-weight:700; cursor:pointer; }
+.td-foot{ display:flex; align-items:center; justify-content:space-between; margin-top:12px; font-size:0.75rem; color:var(--ink-3); }
+.td-foot .lnk{ color:var(--sage-dark); font-weight:700; cursor:pointer; background:none; border:none; font-size:0.75rem; }
+.td-bar{ height:6px; border-radius:4px; background:var(--bg-soft); border:1px solid var(--line-soft); overflow:hidden; margin-top:8px; }
+.td-bar i{ display:block; height:100%; background:var(--sage); border-radius:4px; transition:width .4s; }
+/* 홈 통독 카드 */
+.td-home{ margin:12px 16px 0; padding:14px 16px; border-radius:18px; background:var(--bg-card); border:1px solid var(--line); display:flex; align-items:center; gap:12px; cursor:pointer; }
+.td-home .th-ic{ width:36px; height:36px; border-radius:11px; background:var(--sage-pale); color:var(--sage-dark); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.td-home .th-ic svg{ width:18px; height:18px; }
+.td-home .th-t{ flex:1; min-width:0; }
+.td-home .th-k{ font-family:var(--en); font-size:0.5625rem; letter-spacing:1.4px; font-weight:700; color:var(--ink-3); }
+.td-home .th-v{ font-size:0.875rem; font-weight:700; color:var(--ink); margin-top:2px; letter-spacing:-.2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.td-home .th-n{ font-family:var(--en); font-weight:800; font-size:0.875rem; color:var(--sage-dark); flex-shrink:0; }
+.td-home .th-n.done{ color:#fff; background:var(--sage); border-radius:10px; padding:3px 9px; font-size:0.6875rem; }
+/* 달력 통독 표식 */
+.cal-td{ position:absolute; top:4px; right:4px; width:7px; height:7px; border-radius:2px; background:var(--terra); }
+.cal-cell.complete .cal-td,.cal-cell.today.complete .cal-td{ background:#fff; opacity:.85; }
+/* 마이 탭 통독 카드 */
+.td-my{ display:flex; align-items:center; gap:14px; }
+.td-my .n{ font-family:var(--en); font-size:1.5rem; font-weight:800; color:var(--sage-dark); line-height:1; }
+.td-my .n small{ font-size:0.75rem; color:var(--ink-3); font-weight:600; margin-left:2px; }
+.td-my .l{ font-size:0.6875rem; color:var(--ink-3); margin-top:4px; }
+/* 통독 지도 시트 */
+.tdmap-stats{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:4px 0 14px; }
+.tdmap-stat{ background:var(--bg-soft); border:1px solid var(--line-soft); border-radius:14px; padding:12px; text-align:center; }
+.tdmap-stat .n{ font-family:var(--en); font-size:1.25rem; font-weight:800; color:var(--sage-dark); }
+.tdmap-stat .n small{ font-size:0.6875rem; color:var(--ink-3); font-weight:600; margin-left:2px; }
+.tdmap-stat .l{ font-size:0.6875rem; color:var(--ink-3); margin-top:2px; }
+.tdmap-part{ font-family:var(--en); font-size:0.625rem; letter-spacing:1.4px; font-weight:700; color:var(--ink-3); margin:14px 0 8px; }
+.tdmap-book{ display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--line-soft); }
+.tdmap-book .bn{ width:82px; flex-shrink:0; font-size:0.75rem; font-weight:700; color:var(--ink); padding-top:1px; letter-spacing:-.2px; }
+.tdmap-book .bn small{ display:block; font-family:var(--en); font-size:0.5625rem; color:var(--ink-3); font-weight:600; }
+.tdmap-book .bn.full{ color:var(--sage-dark); }
+.tdmap-book .chs{ flex:1; display:flex; flex-wrap:wrap; gap:2px; }
+.tdmap-book .chs i{ width:7px; height:7px; border-radius:1.5px; background:var(--bg-soft); border:1px solid var(--line); display:block; box-sizing:border-box; }
+.tdmap-book .chs i.on{ background:var(--sage); border-color:var(--sage); }
+.tdmap-book .bc{ width:44px; flex-shrink:0; text-align:right; font-family:var(--en); font-size:0.6875rem; color:var(--ink-3); font-weight:700; }
+.tdmap-book .bc.full{ color:var(--sage-dark); }
+.tdmap-wrap{ max-height:62vh; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-right:2px; }
+</style>
+
 </head>
 <body>
 <div class="device-shell" id="app">
@@ -7245,6 +7364,9 @@ const STORAGE_KEYS = {
   myPrayerItems:'mh_v05_my_prayer_items',// v1.6.1 — 나의 기도제목 (내 기기)
   homePhoto:'mh_v05_home_photo',         // v1.7 — 홈 '오늘의 말씀' 박스 배경 사진 (관리자 업로드)
   alertsSeen:'mh_v05_alerts_seen',       // v1.7.2 — 담당교역자가 확인한 승인 요청 id (알림 배지 해제용)
+  badgeDefs:'mh_v05_badge_defs',         // v1.9.6 — 배지 정의(관리자 편집본, 없으면 앱 기본값)
+  badges:'mh_v05_badges',                // v1.9.6 — 획득한 배지 {id:{at,date,year}}
+  tongdok:'mh_v05_tongdok',              // v1.9.6 — 성경통독 체크 {YYYY-MM-DD:{done:[..]}}
 };
 
 /* ============================================================================
@@ -8598,9 +8720,24 @@ function openHomeBanner(){
   const b = getHomeBanner();
   if(b && (b.url||'').trim()) window.open(b.url.trim(), '_blank', 'noopener');
 }
+
+/* ── v1.9.6: 책자 구매 페이지(말씀함께.com) 연결 — 관리자 prefs.shopUrl 로 변경 가능 ── */
+const SHOP_URL_DEFAULT = 'https://xn--hp0b01sr3i9pq.com/product/list.html?cate_no=24';   /* 말씀함께.com › 말씀함께 구독하기 */
+function getShopUrl(){ try{ const u=(getPrefsSync().shopUrl||'').trim(); return u || SHOP_URL_DEFAULT; }catch(e){ return SHOP_URL_DEFAULT; } }
+function openShop(){ const u=getShopUrl(); try{ window.open(u,'_blank','noopener'); }catch(e){ location.href=u; } }
+function renderShopBanner(){
+  return `<div class="home-banner shop-banner" onclick="openShop()" style="margin:14px 16px 0;padding:15px 18px;border-radius:16px;background:linear-gradient(135deg, var(--sage-pale, #E9F0EA), #F7F3E9);border:1px solid var(--sage-soft);display:flex;align-items:center;gap:12px;cursor:pointer">
+    <svg width="22" height="22" fill="none" stroke="var(--sage-dark)" stroke-width="1.8" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    <div style="flex:1;min-width:0">
+      <div style="font-weight:700;font-size:0.875rem;letter-spacing:-0.3px;color:var(--ink)">말씀함께 책자 구독 · 구매</div>
+      <div style="font-size:0.7812rem;color:var(--ink-3);margin-top:2px">말씀함께.com — 정기구독 · 단편구매 · 어린이/청소년판</div>
+    </div>
+    <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--ink-3);flex-shrink:0"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg>
+  </div>`;
+}
 function renderHomeBanner(){
   const b = getHomeBanner();
-  if(!b || !b.on || !(b.title||'').trim()) return '';
+  if(!b || !b.on || !(b.title||'').trim()) return renderShopBanner();   /* v1.9.6 — 관리자 배너가 없으면 책자 구매 배너 */
   const hasUrl = !!(b.url||'').trim();
   return `<div class="home-banner" ${hasUrl?'onclick="openHomeBanner()"':''} style="margin:14px 16px 0;padding:15px 18px;border-radius:16px;background:linear-gradient(135deg, var(--sage-pale, #E9F0EA), #F7F3E9);border:1px solid var(--line);display:flex;align-items:center;gap:12px;${hasUrl?'cursor:pointer':''}">
     <svg width="20" height="20" fill="none" stroke="var(--sage-dark, #3c5c4c)" stroke-width="1.8" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M11 5.882V19.24a1.76 1.76 0 0 1-3.417.592l-2.147-6.15M18 13a3 3 0 1 0 0-6M5.436 13.683A4.001 4.001 0 0 1 7 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 0 1-1.564-.317z"/></svg>
@@ -8866,6 +9003,9 @@ async function renderToday(){
 
     ${wordBoxHtml}
 
+    ${renderChallengeHomeStrip()}
+    ${renderTongdokHomeCard(dateKey)}
+
     ${renderSharePreview()}
 
     ${latestCol ? `
@@ -9110,6 +9250,8 @@ async function renderWord(){
         </div>
       </div>
 
+      ${renderTongdokSection(dateKey)}
+
       ${renderFamilyWorshipSection(today.getFullYear(), today.getMonth()+1, Math.ceil(today.getDate()/7))}
     `;
     api.getSundayNote(dateKey).then(function(n){
@@ -9199,6 +9341,8 @@ async function renderWord(){
     </div>
 
     ${renderLectioForm(dateKey, lectio)}
+
+    ${renderTongdokSection(dateKey)}
 
     ${renderFamilyWorshipSection(today.getFullYear(), today.getMonth()+1, Math.ceil(today.getDate()/7))}
   `;
@@ -9509,6 +9653,8 @@ async function saveLectioNow(key, draftOnly){
     try{ shared = await autoShareLectio(key, data); }catch(e){ shared = 'none'; }
   }
   if(btn){ btn.disabled = false; }
+  /* v1.9.6 — 저장 후 배지 판정 (새 배지는 축하 시트) */
+  if(!draftOnly){ setTimeout(function(){ try{ checkBadges(); }catch(e){} }, 900); }
   if(draftOnly) toast('임시저장되었습니다 · 내 기기에만 저장');
   else if(shared==='shared') toast('저장 완료 · 나눔 설정에 따라 피드에 나눠졌습니다 🌿');
   else if(shared==='marked') toast('저장 완료 · 나만 보기 — 기록 표시만 남습니다 🔒');
@@ -11013,6 +11159,7 @@ async function renderCalendar(){
       <div class="cal-leg-item"><div class="cal-leg-sw" style="background:var(--sage)"></div>묵상한 날</div>
       <div class="cal-leg-item"><div class="cal-leg-sw" style="background:#fff;box-shadow:inset 0 0 0 2px var(--sage-dark)"></div>오늘</div>
       <div class="cal-leg-item"><div class="cal-leg-sw" style="background:var(--bg-soft);border:1px solid var(--line)"></div>미시작</div>
+      <div class="cal-leg-item"><div class="cal-leg-sw" style="background:var(--bg-soft);border:1px solid var(--line);position:relative"><span style="position:absolute;top:2px;right:2px;width:6px;height:6px;border-radius:2px;background:var(--terra)"></span></div>통독</div>
     </div>
     ${renderFamilyWorshipSection(year, month)}
   `;
@@ -11083,7 +11230,7 @@ async function renderCalendar(){
         for(var i=1;i<=4;i++){
           dots += '<span class="ct '+(p && p['s'+i]===1?'on':'')+'"></span>';
         }
-        return '<div class="cal-cell '+cls+'" onclick="goToDay(\''+c.key+'\')"><div class="cal-cell-inner"><span>'+c.d+'</span><div class="cal-dots">'+dots+'</div></div></div>';
+        return '<div class="cal-cell '+cls+'" onclick="goToDay(\''+c.key+'\')"><div class="cal-cell-inner">'+(tongdokDayDone(c.key)?'<span class="cal-td"></span>':'')+'<span>'+c.d+'</span><div class="cal-dots">'+dots+'</div></div></div>';
       }).join('')}
     </div>
   `;
@@ -11683,6 +11830,382 @@ function renderSharePreview(){
   `;
 }
 
+/* ============================================================================
+   v1.9.6 — 챌린지 배지 엔진
+   · 배지 정의는 데이터(BADGE_DEFS_DEFAULT) — 관리자에서 덮어쓰기(mh_v05_badge_defs)
+   · 판정 기준(2026-09-04 확정): 묵상은 '하나라도 저장'하면 그날 인정 · 지난 날짜에 뒤늦게 기록해도 모두 인정
+   · 노출: 마이 탭 + 획득 시 축하 시트(이미지 저장·공유). 나눔 탭에는 노출하지 않음.
+   · 규칙 종류: streak_all(기간 전부) · count(기간 중 N일) · first(처음 한 날) · total(누적 N일)
+   · 지표(metric): lectio(묵상) · share(나눔) · tongdok(통독)
+   ============================================================================ */
+const BADGE_DEFS_DEFAULT = [
+  { id:'launch_2026', year:2026, tier:1, icon:'launch', name:'앱 출시 기념', short:'말씀함께주간 엿새 완주',
+    desc:'말씀함께주간 엿새를 하루도 빠짐없이 묵상하면 받습니다. 앱이 처음 나온 해의 첫 챌린지 — 올해만 발급됩니다.',
+    rule:{ type:'streak_all', metric:'lectio', start:'2026-09-04', end:'2026-09-09' }   /* 테스트용 — 정식은 관리자에서 10/19~24로 */, close:'2026-12-31' },
+  { id:'first_lectio_2026', year:2026, tier:1, icon:'book', name:'첫 묵상', short:'앱에서 처음 묵상한 날',
+    desc:'앱 출시 후 처음으로 묵상 기록을 저장한 날 받습니다.',
+    rule:{ type:'first', metric:'lectio', from:'2026-09-04' }, close:'2026-12-31' },
+  { id:'first_share_2026', year:2026, tier:1, icon:'share', name:'첫 나눔', short:'묵상을 처음 나눈 날',
+    desc:'묵상 기록을 처음으로 친구·목장에 나눈 날 받습니다.',
+    rule:{ type:'first', metric:'share', from:'2026-09-04' }, close:'2026-12-31' },
+];
+const BADGE_ICONS = {
+  launch:'<svg fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 21c-3.5-2.6-6-6-6-9.5C6 7.5 8.7 4.5 12 3c3.3 1.5 6 4.5 6 8.5 0 3.5-2.5 6.9-6 9.5z"/><path d="M12 3v18"/><path d="M8.5 12.5c1.6-.2 2.8-1.3 3.5-2.8.7 1.5 1.9 2.6 3.5 2.8"/></svg>',
+  book:'<svg fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M9 7h7M9 11h5"/></svg>',
+  share:'<svg fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.6-.8L3 21l1.9-4.6A8.4 8.4 0 0 1 3 11.5a8.4 8.4 0 0 1 9-8.4 8.4 8.4 0 0 1 9 8.4z"/><path d="M8.5 11.5h7M12 8v7"/></svg>',
+  star:'<svg fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2l2.4 6.9H22l-6 4.5 2.3 7L12 16.9 5.7 20.4 8 13.4l-6-4.5h7.6z"/></svg>',
+  calendar:'<svg fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M9 15l2 2 4-4"/></svg>',
+  cross:'<svg fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 3v18M6 9h12"/></svg>',
+  candle:'<svg fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 11h6v10H9z"/><path d="M12 3c1.5 1.8 2 3 2 4a2 2 0 1 1-4 0c0-1 .5-2.2 2-4z"/></svg>',
+  wheat:'<svg fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 22V8"/><path d="M12 8c-3 0-5-2-5-5 3 0 5 2 5 5zM12 8c3 0 5-2 5-5-3 0-5 2-5 5zM12 13c-3 0-5-2-5-5 3 0 5 2 5 5zM12 13c3 0 5-2 5-5-3 0-5 2-5 5zM12 18c-3 0-5-2-5-5 3 0 5 2 5 5zM12 18c3 0 5-2 5-5-3 0-5 2-5 5z"/></svg>',
+};
+function getBadgeDefs(){
+  try{ const o=_read(STORAGE_KEYS.badgeDefs,null); if(Array.isArray(o)&&o.length) return o; }catch(e){}
+  return BADGE_DEFS_DEFAULT;
+}
+function getEarnedBadges(){ return _read(STORAGE_KEYS.badges,{})||{}; }
+/* 배지·통독의 '오늘'은 기기 실제 날짜 (realToday()는 콘텐츠 범위로 보정되므로 쓰지 않음) */
+function _todayKey(){ return formatDateKey(new Date()); }
+function _addDaysKey(key, n){ const p=key.split('-').map(Number); const dt=new Date(p[0],p[1]-1,p[2]); dt.setDate(dt.getDate()+n); return formatDateKey(dt); }
+function _daysBetween(a,b){ const p=a.split('-').map(Number), q=b.split('-').map(Number); return Math.round((new Date(q[0],q[1]-1,q[2])-new Date(p[0],p[1]-1,p[2]))/86400000); }
+function _rangeKeys(start,end){ const out=[]; let k=start, guard=0; while(k<=end && guard<400){ out.push(k); k=_addDaysKey(k,1); guard++; } return out; }
+function _fmtKeyKor(key){ if(!key) return ''; const p=key.split('-').map(Number); return p[1]+'월 '+p[2]+'일'; }
+function _fmtKeyShort(key){ if(!key) return ''; const p=key.split('-').map(Number); return p[1]+'/'+p[2]; }
+
+/* 지표별 '한 날' 집합 — 사용자 기기의 실제 기록만(데모 시드 제외) */
+function _lectioFilled(d){
+  if(!d) return false;
+  const any = (d.lectio_read==='yes') || (d.meditatio1||'').trim() || (d.meditatio2||'').trim() || (d.meditatio3||'').trim()
+    || (d.oratio||'').trim() || (d.contemplatio||'').trim() || (d.scribo||'').trim() || (d.scribo_walk||'').trim() || (d.scribo_obey||'').trim()
+    || ((d.thanks||[]).some(function(t){ return (t||'').trim(); }));
+  return !!any;
+}
+function metricDays(metric){
+  const set={};
+  try{
+    if(metric==='lectio'){
+      const all=_read(STORAGE_KEYS.lectio,{})||{};
+      Object.keys(all).forEach(function(k){ if(/^\d{4}-\d{2}-\d{2}$/.test(k) && _lectioFilled(all[k])) set[k]=true; });
+    }else if(metric==='share'){
+      const o=_read(STORAGE_KEYS.shareFeed,{})||{}; const mp=o.myPosts||{};
+      Object.keys(mp).forEach(function(k){ const p=mp[k]; if(!p||p.scope==='private') return; set[k]=true;
+        if(p.firstTime){ try{ set[formatDateKey(new Date(p.firstTime))]=true; }catch(e){} } });
+    }else if(metric==='tongdok'){
+      const t=_read(STORAGE_KEYS.tongdok,{})||{};
+      Object.keys(t).forEach(function(k){ if(tongdokDayDone(k)) set[k]=true; });
+    }
+  }catch(e){}
+  return set;
+}
+/* 규칙 평가 → {earned, date, done, total, keys, missed, window} */
+function evalBadge(def, daysCache){
+  const r=def.rule||{}; const days=(daysCache&&daysCache[r.metric]) ? daysCache[r.metric] : metricDays(r.metric);
+  const today=_todayKey();
+  if((r.type==='streak_all' || r.type==='count') && r.start && r.end){
+    const keys=_rangeKeys(r.start,r.end); const done=keys.filter(function(k){ return days[k]; }); const missed=keys.filter(function(k){ return !days[k] && k<today; });
+    const need = r.type==='streak_all' ? keys.length : Math.min(keys.length, r.n||keys.length);
+    return { earned: done.length>=need, date: done.length? done[done.length-1] : '', done:done.length, total:need, keys:keys, missed:missed, window:true };
+  }
+  if(r.type==='first'){
+    const ks=Object.keys(days).filter(function(k){ return !r.from || k>=r.from; }).sort();
+    return { earned: ks.length>0, date: ks[0]||'', done: ks.length?1:0, total:1 };
+  }
+  if(r.type==='total'){
+    const ks=Object.keys(days).filter(function(k){ return !r.from || k>=r.from; }).sort(); const n=r.n||100;
+    return { earned: ks.length>=n, date: ks.length>=n ? ks[n-1] : '', done:Math.min(ks.length,n), total:n };
+  }
+  return { earned:false, date:'', done:0, total:1 };
+}
+function badgeClosed(def){ return !!(def.close && _todayKey()>def.close); }
+/* 새로 획득한 배지를 저장하고 축하 시트를 띄움 */
+function checkBadges(silent){
+  const earned=getEarnedBadges(); let changed=false; const fresh=[];
+  const cache={ lectio:metricDays('lectio'), share:metricDays('share'), tongdok:metricDays('tongdok') };
+  getBadgeDefs().forEach(function(def){
+    if(earned[def.id]) return;
+    if(badgeClosed(def)) return;
+    const ev=evalBadge(def,cache);
+    if(ev.earned){ earned[def.id]={ at:Date.now(), date:ev.date||_todayKey(), year:def.year }; changed=true; fresh.push(def); }
+  });
+  if(changed){ _write(STORAGE_KEYS.badges, earned); }
+  if(fresh.length && !silent){ setTimeout(function(){ openBadgeSheet(fresh[0].id, true); }, 350); }
+  return fresh;
+}
+function _badgeIcon(def){ return BADGE_ICONS[def.icon] || BADGE_ICONS.star; }
+function _badgeTile(def, ev, got){
+  const closed=!got && badgeClosed(def);
+  const cls = got ? '' : (closed ? 'locked closed' : 'locked');
+  const sub = got ? _fmtKeyKor(got.date) : (closed ? (def.year||'')+' 마감' : (ev.window ? ev.done+' / '+ev.total+'일' : (def.short||'')));
+  return '<div class="bdg '+cls+'" onclick="openBadgeSheet(\''+def.id+'\')">'
+    +'<div class="bdg-ic">'+_badgeIcon(def)+'<span class="yr">'+(def.year||'')+'</span></div>'
+    +'<div class="bdg-name">'+escapeHtml(def.name)+'</div>'
+    +'<div class="bdg-date">'+escapeHtml(sub)+'</div></div>';
+}
+/* 여정 — 기간형 배지(streak_all/count)의 칸 */
+function _journeyHTML(def, ev){
+  const r=def.rule, today=_todayKey(); const dow=['일','월','화','수','목','금','토'];
+  const days=metricDays(r.metric);
+  const cells=ev.keys.map(function(k){
+    const p=k.split('-').map(Number); const on=!!days[k]; const isT=k===today; const miss=!on && k<today;
+    return '<div class="jc '+(on?'on':'')+' '+(isT?'today':'')+' '+(miss?'miss':'')+'"><div class="jc-in"><div class="jc-d">'+p[2]+'</div><div class="jc-w">'+dow[new Date(p[0],p[1]-1,p[2]).getDay()]+'</div></div></div>';
+  }).join('');
+  let msg='';
+  if(ev.earned) msg='<b>완주했습니다.</b> 배지를 눌러 이미지로 저장하거나 나눠 보세요.';
+  else if(today<r.start) msg='<b>'+_fmtKeyKor(r.start)+'</b> 시작 · D-'+_daysBetween(today,r.start)+'. 그날부터 '+ev.total+'일을 하루도 빠짐없이 묵상하면 배지를 받습니다.';
+  else if(today>r.end) msg = '기간이 지났지만 <b>지난 날짜를 열어 기록하면</b> 그날도 인정됩니다. 빈 칸을 채워 완주하세요.';
+  else { const left=_daysBetween(today,r.end);
+    msg = (days[today] ? '<b>오늘 묵상 완료.</b> ' : '<b>오늘 묵상이 아직입니다.</b> ')
+        + (ev.missed.length ? '빠진 날 '+ev.missed.map(_fmtKeyShort).join(', ')+'도 지난 날짜에서 기록하면 인정됩니다. ' : '')
+        + (left>0 ? '완주까지 '+left+'일 남았습니다.' : '오늘이 마지막 날입니다.'); }
+  return '<div class="journey">'
+    +'<div class="journey-top"><div class="journey-name">'+escapeHtml(def.name)+'<small>'+_fmtKeyShort(r.start)+' ~ '+_fmtKeyShort(r.end)+'</small></div><div class="journey-count">'+ev.done+'<small>/ '+ev.total+'일</small></div></div>'
+    +'<div class="journey-cells">'+cells+'</div>'
+    +'<div class="journey-msg">'+msg+'</div></div>';
+}
+/* 마이 탭 카드 */
+function renderChallengeCard(){
+  try{
+    const defs=getBadgeDefs(); if(!defs.length) return '';
+    try{ checkBadges(); }catch(e){}   /* 다른 경로로 채워진 기록도 여기서 판정 */
+    const earned=getEarnedBadges(); const today=_todayKey();
+    const cache={ lectio:metricDays('lectio'), share:metricDays('share'), tongdok:metricDays('tongdok') };
+    const evs={}; defs.forEach(function(d){ evs[d.id]=evalBadge(d,cache); });
+    /* 여정: 기간형 중 시작 21일 전 ~ 마감까지 보여줌 */
+    const journeys = defs.filter(function(d){ const r=d.rule||{}; if(!(r.type==='streak_all'||r.type==='count')||!r.start||!r.end) return false;
+      const showFrom=_addDaysKey(r.start,-21); const until=d.close||_addDaysKey(r.end,30); return today>=showFrom && today<=until; });
+    const gotCnt=defs.filter(function(d){ return earned[d.id]; }).length;
+    return '<div class="chal-card">'
+      +'<div class="chal-head"><div><div class="chal-title">챌린지 · 배지 <span class="en">CHALLENGE</span></div><div class="chal-sub">말씀함께 책자의 묵상을 실제로 한 날만 셉니다 · 획득 '+gotCnt+'/'+defs.length+'</div></div></div>'
+      + journeys.map(function(d){ return _journeyHTML(d, evs[d.id]); }).join('')
+      +'<div class="badge-grid">'+defs.map(function(d){ return _badgeTile(d, evs[d.id], earned[d.id]); }).join('')+'</div>'
+      +'</div>';
+  }catch(e){ console.error('renderChallengeCard',e); return ''; }
+}
+/* 홈(오늘 탭) — 챌린지 기간 중에만 얇은 스트립 */
+function renderChallengeHomeStrip(){
+  try{
+    const today=_todayKey(); const earned=getEarnedBadges();
+    const def=getBadgeDefs().find(function(d){ const r=d.rule||{}; return (r.type==='streak_all'||r.type==='count') && r.start && r.end && today>=r.start && today<=r.end && !earned[d.id]; });
+    if(!def) return '';
+    const ev=evalBadge(def); const days=metricDays(def.rule.metric); const doneToday=!!days[today];
+    return '<div class="chal-strip" onclick="switchTab(\'mypage\')">'
+      +'<div class="cs-ic">'+_badgeIcon(def)+'</div>'
+      +'<div class="cs-t">'+escapeHtml(def.name)+' 챌린지<small>'+(doneToday?'오늘 묵상 완료 · ':'오늘 묵상을 저장하면 한 칸이 채워집니다 · ')+_fmtKeyShort(def.rule.start)+'~'+_fmtKeyShort(def.rule.end)+'</small>'
+      +'<div class="cs-dots">'+ev.keys.map(function(k){ return '<i class="'+(days[k]?'on':'')+'"></i>'; }).join('')+'</div></div>'
+      +'<div class="cs-n">'+ev.done+'/'+ev.total+'</div></div>';
+  }catch(e){ return ''; }
+}
+/* 배지 시트 — 획득: 축하 + 이미지 저장·공유 / 미획득: 조건과 진행 */
+function openBadgeSheet(id, celebrate){
+  const def=getBadgeDefs().find(function(d){ return d.id===id; }); if(!def) return;
+  const got=getEarnedBadges()[id]; const ev=evalBadge(def); const closed=!got&&badgeClosed(def);
+  const r=def.rule||{};
+  const cond = r.type==='streak_all' ? _fmtKeyKor(r.start)+' ~ '+_fmtKeyKor(r.end)+' 매일 묵상'
+             : r.type==='count' ? _fmtKeyKor(r.start)+' ~ '+_fmtKeyKor(r.end)+' 중 '+(r.n||'')+'일 묵상'
+             : r.type==='first' ? (r.metric==='share'?'처음 나눈 날':r.metric==='tongdok'?'처음 통독한 날':'처음 묵상한 날')+(r.from?' · '+_fmtKeyKor(r.from)+' 이후':'')
+             : r.type==='total' ? '누적 '+(r.n||'')+'일' : '';
+  const html='<div class="bdg-sheet">'
+    +'<div class="big '+(got?'':'locked')+'">'+_badgeIcon(def)+'<span class="yr">'+(def.year||'')+'</span></div>'
+    +'<div class="kicker">'+(got ? (celebrate?'NEW BADGE':'EARNED') : (closed?'CLOSED':'LOCKED'))+' · '+escapeHtml(getChurchName())+'</div>'
+    +'<h3>'+escapeHtml(def.name)+'</h3>'
+    +'<p>'+escapeHtml(def.desc||'')+'</p>'
+    +(got ? '<div class="when">'+_fmtKeyKor(got.date)+' 획득 · '+(def.year||'')+' 각인</div>' : '<div class="when">'+escapeHtml(cond)+' · 진행 '+ev.done+'/'+ev.total+'</div>')
+    +(got ? '<img class="share-img" id="bdgShareImg" alt="배지 이미지"/><div class="hint">이미지를 길게 눌러 저장하거나, 아래 버튼으로 공유하세요.</div>' : '')
+    +'<div class="bdg-actions">'
+    +(got ? '<button class="btn btn-block" onclick="shareBadgeImage(\''+def.id+'\')">이미지 공유 · 저장</button>' : '')
+    +'<button class="btn btn-block btn-secondary" onclick="closeModal()">닫기</button>'
+    +'</div></div>';
+  document.getElementById('modalContent').innerHTML=html; openModal();
+  if(got){ try{ const url=drawBadgeCanvas(def,got).toDataURL('image/png'); const im=document.getElementById('bdgShareImg'); if(im) im.src=url; }catch(e){ console.warn('badge canvas',e); } }
+}
+/* 캔버스로 공유용 배지 카드 그리기 (1080×1350) */
+function drawBadgeCanvas(def, got){
+  const W=1080,H=1350; const c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d');
+  x.fillStyle='#F7F5EF'; x.fillRect(0,0,W,H);
+  x.fillStyle='#FFFFFF'; _rr(x,80,120,W-160,H-240,48); x.fill();
+  x.strokeStyle='#ECECE8'; x.lineWidth=3; _rr(x,80,120,W-160,H-240,48); x.stroke();
+  const cx=W/2, cy=520, R=190;
+  x.shadowColor='rgba(46,79,63,.28)'; x.shadowBlur=60; x.shadowOffsetY=24;
+  x.fillStyle='#2E4F3F'; x.beginPath(); x.arc(cx,cy,R,0,Math.PI*2); x.fill();
+  x.shadowColor='transparent'; x.shadowBlur=0; x.shadowOffsetY=0;
+  x.strokeStyle='rgba(255,255,255,.35)'; x.lineWidth=4; x.beginPath(); x.arc(cx,cy,R-22,0,Math.PI*2); x.stroke();
+  try{
+    const svg=_badgeIcon(def); const paths=[]; const re=/<path d="([^"]+)"/g; let m; while((m=re.exec(svg))) paths.push(m[1]);
+    x.save(); x.translate(cx-96, cy-96); x.scale(8,8); x.strokeStyle='#FFFFFF'; x.lineWidth=1.9; x.lineCap='round'; x.lineJoin='round';
+    paths.forEach(function(d){ x.stroke(new Path2D(d)); });
+    x.restore();
+  }catch(e){}
+  x.fillStyle='#FFFFFF'; _rr(x,cx-90,cy+R-34,180,64,32); x.fill(); x.strokeStyle='#D9E3DC'; x.lineWidth=3; _rr(x,cx-90,cy+R-34,180,64,32); x.stroke();
+  x.fillStyle='#2E4F3F'; x.font='800 30px Inter, Pretendard, -apple-system, sans-serif'; x.textAlign='center'; x.textBaseline='middle'; x.fillText(String(def.year||''), cx, cy+R-2);
+  x.fillStyle='#8B8E89'; x.font='700 26px Inter, Pretendard, -apple-system, sans-serif'; x.fillText('MALSSEUM HAMKKE · CHALLENGE BADGE', cx, 820);
+  x.fillStyle='#1F241F'; x.font='700 68px "Noto Serif KR", "Apple SD Gothic Neo", serif'; x.fillText(def.name||'', cx, 905);
+  x.fillStyle='#4A524E'; x.font='500 32px "Apple SD Gothic Neo", Pretendard, sans-serif';
+  _wrapText(x, def.short||'', cx, 975, 760, 44);
+  x.fillStyle='#2E4F3F'; x.font='700 30px Inter, Pretendard, -apple-system, sans-serif';
+  const dk=(got.date||'').split('-'); x.fillText(dk.length===3 ? dk[0]+'. '+dk[1]+'. '+dk[2] : '', cx, 1060);
+  x.fillStyle='#8B8E89'; x.font='600 26px "Apple SD Gothic Neo", Pretendard, sans-serif'; x.fillText(getChurchName()+' · 말씀함께', cx, 1140);
+  return c;
+}
+function _rr(x,X,Y,w,h,r){ x.beginPath(); x.moveTo(X+r,Y); x.arcTo(X+w,Y,X+w,Y+h,r); x.arcTo(X+w,Y+h,X,Y+h,r); x.arcTo(X,Y+h,X,Y,r); x.arcTo(X,Y,X+w,Y,r); x.closePath(); }
+function _wrapText(x, text, cx, y, maxW, lh){ const words=(text||'').split(' '); let line=''; words.forEach(function(w){ const t=line?line+' '+w:w; if(x.measureText(t).width>maxW && line){ x.fillText(line,cx,y); y+=lh; line=w; } else line=t; }); if(line) x.fillText(line,cx,y); }
+async function shareBadgeImage(id){
+  const def=getBadgeDefs().find(function(d){ return d.id===id; }); const got=getEarnedBadges()[id]; if(!def||!got) return;
+  try{
+    const canvas=drawBadgeCanvas(def,got);
+    const blob=await new Promise(function(res){ canvas.toBlob(res,'image/png'); });
+    const file=new File([blob], 'malsseum_badge_'+def.id+'.png', {type:'image/png'});
+    if(navigator.canShare && navigator.canShare({files:[file]})){ await navigator.share({ files:[file], title:'말씀함께 배지 · '+def.name }); return; }
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=file.name; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1500);
+    toast('이미지를 저장했습니다');
+  }catch(e){ if(!(e && e.name==='AbortError')) toast('공유가 지원되지 않는 환경입니다 — 이미지를 길게 눌러 저장해 주세요'); }
+}
+
+/* ============================================================================
+   v1.9.6 — 성경통독
+   · 책자 통독표(TONGDOK[날짜] = ['겔 21~22장','시 89편'])를 항목별로 '읽었어요' 체크
+   · 저장: mh_v05_tongdok = { 'YYYY-MM-DD': { done:[true,false,...] } }
+   · 달력 표식 · 마이 탭 통계 · 66권 진도 지도(장 단위 채색) · 배지 지표(tongdok)
+   · '본문' 버튼: 성서공회 라이선스 / 갓피플성경 연동이 확정되기 전까지 안내 시트.
+     관리자 설정 prefs.bibleUrlTemplate 이 있으면 그 링크를 엶 ({book_en}·{book_kor}·{abbr}·{ch} 치환)
+   ============================================================================ */
+const BIBLE_BOOKS = [
+  /* 구약 */
+  {a:'창',n:'창세기',c:50,e:'GEN'},{a:'출',n:'출애굽기',c:40,e:'EXO'},{a:'레',n:'레위기',c:27,e:'LEV'},{a:'민',n:'민수기',c:36,e:'NUM'},{a:'신',n:'신명기',c:34,e:'DEU'},
+  {a:'수',n:'여호수아',c:24,e:'JOS'},{a:'삿',n:'사사기',c:21,e:'JDG'},{a:'룻',n:'룻기',c:4,e:'RUT'},{a:'삼상',n:'사무엘상',c:31,e:'1SA'},{a:'삼하',n:'사무엘하',c:24,e:'2SA'},
+  {a:'왕상',n:'열왕기상',c:22,e:'1KI'},{a:'왕하',n:'열왕기하',c:25,e:'2KI'},{a:'대상',n:'역대상',c:29,e:'1CH'},{a:'대하',n:'역대하',c:36,e:'2CH'},{a:'스',n:'에스라',c:10,e:'EZR'},
+  {a:'느',n:'느헤미야',c:13,e:'NEH'},{a:'에',n:'에스더',c:10,e:'EST'},{a:'욥',n:'욥기',c:42,e:'JOB'},{a:'시',n:'시편',c:150,e:'PSA'},{a:'잠',n:'잠언',c:31,e:'PRO'},
+  {a:'전',n:'전도서',c:12,e:'ECC'},{a:'아',n:'아가',c:8,e:'SNG'},{a:'사',n:'이사야',c:66,e:'ISA'},{a:'렘',n:'예레미야',c:52,e:'JER'},{a:'애',n:'예레미야애가',c:5,e:'LAM'},
+  {a:'겔',n:'에스겔',c:48,e:'EZK'},{a:'단',n:'다니엘',c:12,e:'DAN'},{a:'호',n:'호세아',c:14,e:'HOS'},{a:'욜',n:'요엘',c:3,e:'JOL'},{a:'암',n:'아모스',c:9,e:'AMO'},
+  {a:'옵',n:'오바댜',c:1,e:'OBA'},{a:'욘',n:'요나',c:4,e:'JON'},{a:'미',n:'미가',c:7,e:'MIC'},{a:'나',n:'나훔',c:3,e:'NAM'},{a:'합',n:'하박국',c:3,e:'HAB'},
+  {a:'습',n:'스바냐',c:3,e:'ZEP'},{a:'학',n:'학개',c:2,e:'HAG'},{a:'슥',n:'스가랴',c:14,e:'ZEC'},{a:'말',n:'말라기',c:4,e:'MAL'},
+  /* 신약 */
+  {a:'마',n:'마태복음',c:28,e:'MAT',nt:1},{a:'막',n:'마가복음',c:16,e:'MRK',nt:1},{a:'눅',n:'누가복음',c:24,e:'LUK',nt:1},{a:'요',n:'요한복음',c:21,e:'JHN',nt:1},{a:'행',n:'사도행전',c:28,e:'ACT',nt:1},
+  {a:'롬',n:'로마서',c:16,e:'ROM',nt:1},{a:'고전',n:'고린도전서',c:16,e:'1CO',nt:1},{a:'고후',n:'고린도후서',c:13,e:'2CO',nt:1},{a:'갈',n:'갈라디아서',c:6,e:'GAL',nt:1},{a:'엡',n:'에베소서',c:6,e:'EPH',nt:1},
+  {a:'빌',n:'빌립보서',c:4,e:'PHP',nt:1},{a:'골',n:'골로새서',c:4,e:'COL',nt:1},{a:'살전',n:'데살로니가전서',c:5,e:'1TH',nt:1},{a:'살후',n:'데살로니가후서',c:3,e:'2TH',nt:1},{a:'딤전',n:'디모데전서',c:6,e:'1TI',nt:1},
+  {a:'딤후',n:'디모데후서',c:4,e:'2TI',nt:1},{a:'딛',n:'디도서',c:3,e:'TIT',nt:1},{a:'몬',n:'빌레몬서',c:1,e:'PHM',nt:1},{a:'히',n:'히브리서',c:13,e:'HEB',nt:1},{a:'약',n:'야고보서',c:5,e:'JAS',nt:1},
+  {a:'벧전',n:'베드로전서',c:5,e:'1PE',nt:1},{a:'벧후',n:'베드로후서',c:3,e:'2PE',nt:1},{a:'요일',n:'요한일서',c:5,e:'1JN',nt:1},{a:'요이',n:'요한이서',c:1,e:'2JN',nt:1},{a:'요삼',n:'요한삼서',c:1,e:'3JN',nt:1},
+  {a:'유',n:'유다서',c:1,e:'JUD',nt:1},{a:'계',n:'요한계시록',c:22,e:'REV',nt:1},
+];
+const BIBLE_TOTAL_CH = BIBLE_BOOKS.reduce(function(s,b){ return s+b.c; },0);   /* 1189 */
+const _BOOK_BY_ABBR = {}; BIBLE_BOOKS.forEach(function(b){ _BOOK_BY_ABBR[b.a]=b; });
+/* '겔 21~22장' | '시 89편' | '옵 1장' → {book, from, to} */
+function parseTongdokRef(s){
+  const m=/^\s*([가-힣]+)\s*(\d+)\s*(?:[~\-–]\s*(\d+))?\s*(장|편)?/.exec(s||'');
+  if(!m) return null; const b=_BOOK_BY_ABBR[m[1]]; if(!b) return null;
+  const from=+m[2], to=m[3]?+m[3]:from; return { book:b, from:Math.min(from,to), to:Math.max(from,to), count:Math.abs(to-from)+1 };
+}
+function tongdokRefLabel(s){ const p=parseTongdokRef(s); if(!p) return ''; return p.book.n+' '+p.from+(p.to>p.from?'~'+p.to:'')+(p.book.a==='시'?'편':'장')+' · '+p.count+(p.book.a==='시'?'편':'장'); }
+function getTongdokState(){ return _read(STORAGE_KEYS.tongdok,{})||{}; }
+function tongdokItems(dateKey){ return (typeof TONGDOK!=='undefined' && TONGDOK[dateKey]) ? TONGDOK[dateKey] : []; }
+function tongdokDone(dateKey){ const st=getTongdokState()[dateKey]; return (st&&st.done)||[]; }
+function tongdokDayDone(dateKey){ const items=tongdokItems(dateKey); if(!items.length) return false; const d=tongdokDone(dateKey); return !!d[0]; }
+function toggleTongdok(dateKey){
+  /* v1.9.6 — 하루치(구약+시편)를 하나로 묶어 체크. done:[bool] 한 칸 */
+  const all=getTongdokState(); const cur=!!(all[dateKey]&&all[dateKey].done&&all[dateKey].done[0]);
+  all[dateKey]={ done:[!cur], at:Date.now() }; _write(STORAGE_KEYS.tongdok, all);
+  const el=document.getElementById('tongdokSec'); if(el){ el.outerHTML=renderTongdokSection(dateKey); }
+  if(!cur){ toast('오늘 통독 완료 🌿'); try{ checkBadges(); }catch(e){} }
+}
+/* 말씀 탭 섹션 */
+function renderTongdokSection(dateKey){
+  const items=tongdokItems(dateKey); if(!items.length) return '';
+  const done=tongdokDayDone(dateKey);
+  const ym=dateKey.slice(0,7); const monthKeys=Object.keys(TONGDOK).filter(function(k){ return k.startsWith(ym); });
+  const monthDone=monthKeys.filter(tongdokDayDone).length;
+  const label=items.join(' · '); const sub=items.map(tongdokRefLabel).filter(Boolean).join(' · ');
+  return '<div class="w-section" id="tongdokSec">'
+    +'<div class="w-section-head"><div class="w-section-label">성경통독 <span class="maek-range">책자 통독표</span></div><div class="w-section-en">Bible Reading</div></div>'
+    +'<div class="td-list">'
+      +'<div class="td-item '+(done?'done':'')+'" onclick="toggleTongdok(\''+dateKey+'\')">'
+        +'<div class="td-check"><svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>'
+        +'<div class="td-text">'+escapeHtml(label)+'<small>'+escapeHtml(sub)+'</small></div>'
+        +'<button class="td-read" onclick="event.stopPropagation();openBibleReader(\''+escapeHtml(items.join(' · '))+'\')">본문</button></div>'
+    +'</div>'
+    +'<div class="td-foot"><span>'+(done?'오늘 통독 완료':'읽고 나서 눌러 주세요')+' · 이번 달 '+monthDone+'/'+monthKeys.length+'일</span><button class="lnk" onclick="openTongdokMap()">통독 지도 →</button></div>'
+    +'</div>';
+}
+/* 홈(오늘 탭) 카드 */
+function renderTongdokHomeCard(dateKey){
+  const items=tongdokItems(dateKey); if(!items.length) return '';
+  const all=tongdokDayDone(dateKey);
+  return '<div class="td-home" onclick="goToTongdok(\''+dateKey+'\')">'
+    +'<div class="th-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>'
+    +'<div class="th-t"><div class="th-k">BIBLE READING · 오늘의 통독</div><div class="th-v">'+escapeHtml(items.join(' · '))+'</div></div>'
+    +'<div class="th-n '+(all?'done':'')+'">'+(all?'완료':'읽기')+'</div></div>';
+}
+function goToTongdok(dateKey){
+  goToDay(dateKey);
+  setTimeout(function(){ const el=document.getElementById('tongdokSec'); if(el) el.scrollIntoView({behavior:'smooth', block:'start'}); }, 450);
+}
+/* 마이 탭 카드 — 이번 달 통독 · 전체 성경 진도 */
+function tongdokChaptersRead(){
+  const st=getTongdokState(); const read={};
+  Object.keys(st).forEach(function(k){ const items=tongdokItems(k); if(!tongdokDayDone(k)) return;
+    items.forEach(function(s,i){ const p=parseTongdokRef(s); if(!p) return; for(let c=p.from;c<=Math.min(p.to,p.book.c);c++) read[p.book.a+':'+c]=true; }); });
+  return read;
+}
+function renderTongdokMyCard(){
+  try{
+    if(typeof TONGDOK==='undefined') return '';
+    const ym=_todayKey().slice(0,7); const monthKeys=Object.keys(TONGDOK).filter(function(k){ return k.startsWith(ym); });
+    const monthDone=monthKeys.filter(tongdokDayDone).length;
+    const readCnt=Object.keys(tongdokChaptersRead()).length; const pct=Math.round(readCnt/BIBLE_TOTAL_CH*1000)/10;
+    const totalDays=Object.keys(getTongdokState()).filter(tongdokDayDone).length;
+    return '<div class="chal-card">'
+      +'<div class="chal-head"><div><div class="chal-title">성경통독 <span class="en">BIBLE READING</span></div><div class="chal-sub">책자 통독표를 따라 읽고 체크한 기록</div></div>'
+      +'<button class="section-more" onclick="openTongdokMap()">통독 지도 →</button></div>'
+      +'<div class="td-my"><div style="flex:1"><div class="n">'+(monthKeys.length?monthDone:'–')+'<small>/ '+(monthKeys.length||'–')+'일</small></div><div class="l">이번 달 통독한 날</div></div>'
+      +'<div style="flex:1"><div class="n">'+totalDays+'<small>일</small></div><div class="l">누적 통독한 날</div></div>'
+      +'<div style="flex:1.3"><div class="n">'+readCnt+'<small>/ '+BIBLE_TOTAL_CH+'장</small></div><div class="l">성경 전체 진도 '+pct+'%</div></div></div>'
+      +'<div class="td-bar"><i style="width:'+Math.max(pct,0.5)+'%"></i></div>'
+      +'</div>';
+  }catch(e){ console.error('renderTongdokMyCard',e); return ''; }
+}
+/* 66권 진도 지도 시트 */
+function openTongdokMap(){
+  const read=tongdokChaptersRead(); const readCnt=Object.keys(read).length;
+  const allKeys=Object.keys(TONGDOK).sort(); const today=_todayKey();
+  const booksDone=BIBLE_BOOKS.filter(function(b){ for(let c=1;c<=b.c;c++){ if(!read[b.a+':'+c]) return false; } return true; }).length;
+  const dueKeys=allKeys.filter(function(k){ return k<=today; }); const dueDone=dueKeys.filter(tongdokDayDone).length;
+  function part(label, books){
+    return '<div class="tdmap-part">'+label+'</div>'+books.map(function(b){
+      let n=0; let sq=''; for(let c=1;c<=b.c;c++){ const on=!!read[b.a+':'+c]; if(on) n++; sq+='<i class="'+(on?'on':'')+'" title="'+b.n+' '+c+'장"></i>'; }
+      const full=n===b.c;
+      return '<div class="tdmap-book"><div class="bn '+(full?'full':'')+'">'+b.n+'<small>'+b.e+'</small></div><div class="chs">'+sq+'</div><div class="bc '+(full?'full':'')+'">'+n+'/'+b.c+'</div></div>';
+    }).join('');
+  }
+  const html='<div style="padding:4px 22px 8px">'
+    +'<div class="chal-title" style="margin-bottom:2px">통독 지도 <span class="en">JOURNEY MAP</span></div>'
+    +'<div class="chal-sub" style="margin-bottom:10px">읽은 장이 채워집니다 · 66권 '+BIBLE_TOTAL_CH+'장</div>'
+    +'<div class="tdmap-stats">'
+    +'<div class="tdmap-stat"><div class="n">'+readCnt+'<small>/ '+BIBLE_TOTAL_CH+'장</small></div><div class="l">성경 전체 진도 '+(Math.round(readCnt/BIBLE_TOTAL_CH*1000)/10)+'%</div></div>'
+    +'<div class="tdmap-stat"><div class="n">'+booksDone+'<small>/ 66권</small></div><div class="l">완독한 책 · 통독표 '+dueDone+'/'+dueKeys.length+'일</div></div>'
+    +'</div>'
+    +'<div class="tdmap-wrap">'+part('구약 · OLD TESTAMENT', BIBLE_BOOKS.filter(function(b){ return !b.nt; }))+part('신약 · NEW TESTAMENT', BIBLE_BOOKS.filter(function(b){ return b.nt; }))+'</div>'
+    +'<div style="margin-top:12px;font-size:0.6875rem;color:var(--ink-3);line-height:1.6">지도는 통독표에서 체크한 날의 범위만 채워집니다.</div>'
+    +'<button class="btn btn-block btn-secondary" style="margin-top:12px" onclick="closeModal()">닫기</button>'
+    +'</div>';
+  document.getElementById('modalContent').innerHTML=html; openModal();
+}
+/* 본문 보기 — 연동 확정 전 안내 / 관리자 링크 템플릿이 있으면 열기 */
+function openBibleReader(ref){
+  const refs=String(ref||'').split(' · ').map(function(t){ return t.trim(); }).filter(Boolean);
+  const p=parseTongdokRef(refs[0]);
+  const tpl=(getPrefsSync().bibleUrlTemplate||'').trim();
+  if(tpl && p){
+    const url=tpl.replace(/\{book_en\}/g,p.book.e).replace(/\{book_kor\}/g,encodeURIComponent(p.book.n)).replace(/\{abbr\}/g,encodeURIComponent(p.book.a)).replace(/\{ch\}/g,String(p.from)).replace(/\{ch_to\}/g,String(p.to));
+    try{ window.open(url,'_blank'); }catch(e){ location.href=url; }
+    return;
+  }
+  const title=refs.map(function(t){ const q=parseTongdokRef(t); return q ? q.book.n+' '+q.from+(q.to>q.from?'~'+q.to:'')+(q.book.a==='시'?'편':'장') : t; }).join(' · ');
+  document.getElementById('modalContent').innerHTML='<div class="bdg-sheet" style="text-align:left;padding:8px 26px 12px">'
+    +'<div class="kicker" style="margin-top:0">BIBLE TEXT</div><h3>'+escapeHtml(title)+'</h3>'
+    +'<p style="margin:0">본문 보기는 준비 중입니다. 대한성서공회 라이선스 또는 갓피플성경 연동이 확정되면 이 버튼에서 바로 본문이 열립니다.<br/><br/>지금은 성경책이나 성경 앱으로 읽으신 뒤 통독 칸의 <b>체크</b>를 눌러 주세요.</p>'
+    +'<div class="bdg-actions"><button class="btn btn-block btn-secondary" onclick="closeModal()">닫기</button></div></div>';
+  openModal();
+}
+
+
 function render(){
   if(state.tab==='today') renderToday();
   else if(state.tab==='share') renderShare();
@@ -11808,8 +12331,9 @@ async function _renderMypageBody(view){
             : '구독하시면 앱의 모든 기능이 열리고, 원하시면 말씀함께 책자를 매달 집으로 받아보실 수 있습니다.<br/>무료 이용 시 묵상 5단계(<em>말씀기록</em>) 입력이 제한됩니다.'}</div>
         </div>
       </div>
-      <button class="sub-toggle" onclick="toggleSubscription()">
-        ${subscribed ? '구독 해지 (데모)' : '구독 신청'}
+      <button class="sub-toggle" onclick="openShop()">책자 구독 · 구매하기 — 말씀함께.com ↗</button>
+      <button class="sub-toggle" style="margin-top:8px;background:transparent;color:var(--sage-dark);border:1px solid var(--sage-soft)" onclick="toggleSubscription()">
+        ${subscribed ? '구독 해지 (데모)' : '구독자 인증 (데모)'}
       </button>
     </div>
 
@@ -11845,6 +12369,10 @@ async function _renderMypageBody(view){
         <div class="my-stat-lbl">좋아요 칼럼</div>
       </div>
     </div>
+
+    ${renderChallengeCard()}
+
+    ${renderTongdokMyCard()}
 
     <div class="my-cal-card">
       <div class="my-cal-head">
@@ -11898,7 +12426,7 @@ async function _renderMypageBody(view){
     </div>
 
     <div style="text-align:center;padding:14px;font-family:var(--en);font-size:0.6562rem;color:var(--ink-4);letter-spacing:1px">
-      말씀함께 v1.9 · DEMO
+      말씀함께 v1.9.6 · DEMO
     </div>
   `;
 }
@@ -12254,7 +12782,7 @@ async function renderSettings(){
       <div class="menu-row" style="cursor:default">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
         <div class="menu-text"><div class="menu-ttl">버전</div></div>
-        <div class="menu-right" style="font-family:var(--en);font-weight:600;color:var(--ink-3)">v1.9 · DEMO</div>
+        <div class="menu-right" style="font-family:var(--en);font-weight:600;color:var(--ink-3)">v1.9.6 · DEMO</div>
       </div>
       <div class="menu-row" onclick="toast('이용약관 (실제 앱에서 제공)')">
         <div class="menu-ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>

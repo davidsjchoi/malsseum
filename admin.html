@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>말씀함께 · 관리자 v1.9.5</title>
+<title>말씀함께 · 관리자 v1.9.6</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -198,6 +198,7 @@ a{color:inherit}
   .side-item{justify-content:center}.method-grid{grid-template-columns:1fr}.row2{grid-template-columns:1fr}
 }
 </style>
+<style>.chip{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--bg-soft);color:var(--ink-3);border:1px solid var(--line)} code{font-family:var(--en);font-size:11.5px;background:var(--bg-soft);padding:1px 5px;border-radius:5px}</style>
 </head>
 <body>
 <div class="layout">
@@ -244,6 +245,7 @@ a{color:inherit}
       <div class="view" id="view-pwj"></div>
       <div class="view" id="view-rooms"></div>
       <div class="view" id="view-share"></div>
+      <div class="view" id="view-badges"></div>
       <div class="view" id="view-settings"></div>
     </div>
   </main>
@@ -269,6 +271,7 @@ const STORAGE_KEYS = {
   pwj:'mh_v05_pwj_content',   // v1.6.1 — 예수동행기도 콘텐츠(앱 중보기도 탭 상단)
   shareFeed:'mh_v19_share_feed', friends:'mh_v19_friends',   // v1.9 — 나눔(친구 피드)
   rooms:'mh_v06_rooms', roomPosts:'mh_v06_room_posts', roomPostsHidden:'mh_v06_room_posts_hidden',
+  badgeDefs:'mh_v05_badge_defs', badges:'mh_v05_badges', tongdok:'mh_v05_tongdok',   // v1.9.6 — 배지 정의·획득, 통독 체크
 };
 function _read(k,f){ try{ const r=localStorage.getItem(k); return r?JSON.parse(r):(f!==undefined?f:null);}catch(e){return f!==undefined?f:null;} }
 function _write(k,v){ localStorage.setItem(k,JSON.stringify(v)); }
@@ -754,6 +757,7 @@ const NAV=[
   {id:'pwj', name:'예수동행기도 콘텐츠', en:'PrayWithJesus', icon:'<circle cx="12" cy="12" r="9"/><path d="M3.6 9h16.8M3.6 15h16.8M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/>'},
   {id:'rooms', name:'목장방', en:'Rooms', icon:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>'},
   {id:'share', name:'나눔 관리', en:'Sharing', icon:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>'},
+  {id:'badges', name:'배지 · 통독', en:'Badges', icon:'<path d="M12 2l2.4 6.9H22l-6 4.5 2.3 7L12 16.9 5.7 20.4 8 13.4l-6-4.5h7.6z"/>'},
   {group:'정책'},
   {id:'tiers', name:'모임 단계', en:'Group Tiers', icon:'<path d="M3 3v18h18"/><rect x="7" y="13" width="3" height="5"/><rect x="12" y="9" width="3" height="9"/><rect x="17" y="5" width="3" height="13"/>'},
   {id:'method', name:'묵상 방식', en:'Method', icon:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'},
@@ -966,6 +970,164 @@ function homePhotoSection(){
 }
 
 /* ====================== 뷰: 대시보드 ====================== */
+/* ============================================================================
+   v1.9.6 — 배지 · 챌린지 정의 편집 + 획득 현황 + 성경통독 현황 + 본문 링크 템플릿
+   · 앱과 같은 키를 공유: mh_v05_badge_defs(정의 편집본) · mh_v05_badges(획득) · mh_v05_tongdok(통독 체크)
+   · 데모 모드는 이 브라우저의 사용자 앱 기록만 집계 (전체 통계는 Firebase 연동 후)
+   ============================================================================ */
+const BADGE_DEFS_DEFAULT = [
+  { id:'launch_2026', year:2026, tier:1, icon:'launch', name:'앱 출시 기념', short:'말씀함께주간 엿새 완주',
+    desc:'말씀함께주간 엿새를 하루도 빠짐없이 묵상하면 받습니다. 앱이 처음 나온 해의 첫 챌린지 — 올해만 발급됩니다.',
+    rule:{ type:'streak_all', metric:'lectio', start:'2026-09-04', end:'2026-09-09' }   /* 테스트용 — 정식은 관리자에서 10/19~24로 */, close:'2026-12-31' },
+  { id:'first_lectio_2026', year:2026, tier:1, icon:'book', name:'첫 묵상', short:'앱에서 처음 묵상한 날',
+    desc:'앱 출시 후 처음으로 묵상 기록을 저장한 날 받습니다.',
+    rule:{ type:'first', metric:'lectio', from:'2026-09-04' }, close:'2026-12-31' },
+  { id:'first_share_2026', year:2026, tier:1, icon:'share', name:'첫 나눔', short:'묵상을 처음 나눈 날',
+    desc:'묵상 기록을 처음으로 친구·목장에 나눈 날 받습니다.',
+    rule:{ type:'first', metric:'share', from:'2026-09-04' }, close:'2026-12-31' },
+];
+const BADGE_ICON_NAMES = { launch:'새싹(출시)', book:'책(묵상)', share:'말풍선(나눔)', star:'별', calendar:'달력(월별)', cross:'십자가(절기)', candle:'촛불(대림)', wheat:'이삭(추수감사)' };
+const RULE_TYPES = { streak_all:'기간 전부(하루도 빠짐없이)', count:'기간 중 N일 이상', first:'처음 한 날', total:'누적 N일' };
+const METRICS = { lectio:'묵상 저장', share:'나눔(공개 게시)', tongdok:'통독 완료' };
+function getBadgeDefsAdmin(){ const o=_read(STORAGE_KEYS.badgeDefs,null); return (Array.isArray(o)&&o.length)? o : JSON.parse(JSON.stringify(BADGE_DEFS_DEFAULT)); }
+function isBadgeDefsCustom(){ const o=_read(STORAGE_KEYS.badgeDefs,null); return Array.isArray(o)&&o.length>0; }
+/* --- 판정(앱과 동일 규칙, 이 브라우저 기록 기준) --- */
+function _bdk(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function _todayKeyA(){ return _bdk(new Date()); }
+function _addKey(k,n){ const p=k.split('-').map(Number); const d=new Date(p[0],p[1]-1,p[2]); d.setDate(d.getDate()+n); return _bdk(d); }
+function _rangeKeysA(s,e){ const o=[]; let k=s,g=0; while(k<=e&&g<400){ o.push(k); k=_addKey(k,1); g++; } return o; }
+function _lectioFilledA(d){ if(!d) return false; return !!((d.lectio_read==='yes')||(d.meditatio1||'').trim()||(d.meditatio2||'').trim()||(d.meditatio3||'').trim()||(d.oratio||'').trim()||(d.contemplatio||'').trim()||(d.scribo||'').trim()||(d.scribo_walk||'').trim()||(d.scribo_obey||'').trim()||((d.thanks||[]).some(t=>(t||'').trim()))); }
+function metricDaysA(metric){
+  const set={};
+  if(metric==='lectio'){ const all=_read('mh_v05_lectio',{})||{}; Object.keys(all).forEach(k=>{ if(/^\d{4}-\d{2}-\d{2}$/.test(k)&&_lectioFilledA(all[k])) set[k]=true; }); }
+  else if(metric==='share'){ const o=_read(STORAGE_KEYS.shareFeed,{})||{}; const mp=o.myPosts||{}; Object.keys(mp).forEach(k=>{ const p=mp[k]; if(!p||p.scope==='private') return; set[k]=true; if(p.firstTime) set[_bdk(new Date(p.firstTime))]=true; }); }
+  else if(metric==='tongdok'){ const t=_read(STORAGE_KEYS.tongdok,{})||{}; Object.keys(t).forEach(k=>{ const d=(t[k]&&t[k].done)||[]; if(d.length&&d.every(Boolean)) set[k]=true; }); }
+  return set;
+}
+function evalBadgeA(def){
+  const r=def.rule||{}; const days=metricDaysA(r.metric); const today=_todayKeyA();
+  if((r.type==='streak_all'||r.type==='count')&&r.start&&r.end){ const keys=_rangeKeysA(r.start,r.end); const done=keys.filter(k=>days[k]); const need=r.type==='streak_all'?keys.length:Math.min(keys.length,r.n||keys.length); return {earned:done.length>=need, done:done.length, total:need, keys, days}; }
+  if(r.type==='first'){ const ks=Object.keys(days).filter(k=>!r.from||k>=r.from).sort(); return {earned:ks.length>0, date:ks[0]||'', done:ks.length?1:0, total:1}; }
+  if(r.type==='total'){ const ks=Object.keys(days).filter(k=>!r.from||k>=r.from); const n=r.n||100; return {earned:ks.length>=n, done:Math.min(ks.length,n), total:n}; }
+  return {earned:false, done:0, total:1};
+}
+/* --- 화면 --- */
+RENDERERS.badges=function(){
+  const defs=getBadgeDefsAdmin(); const earned=_read(STORAGE_KEYS.badges,{})||{}; const p=getPrefs();
+  const sel=(id,opts,val)=>`<select class="select" id="${id}">${Object.keys(opts).map(k=>`<option value="${k}" ${k===val?'selected':''}>${opts[k]}</option>`).join('')}</select>`;
+  const f=(id,label,val,type,sub)=>`<div class="field"><label>${label}${sub?`<span class="sub">${sub}</span>`:''}</label><input class="input" type="${type||'text'}" id="${id}" value="${esc(val||'')}"></div>`;
+  const defCards=defs.map((d,i)=>{
+    const r=d.rule||{}; const ev=evalBadgeA(d); const got=earned[d.id];
+    const status = got ? `<span class="chip" style="background:var(--sage-pale);color:var(--sage-dark)">획득 · ${esc(got.date)}</span>` : `<span class="chip">미획득 · 진행 ${ev.done}/${ev.total}</span>`;
+    return `<div class="card" style="padding:16px;margin-bottom:14px" id="bdef-${i}">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px;flex-wrap:wrap">
+        <div style="font-weight:800;font-size:13px;color:var(--ink-3)">${i+1}번 배지 <span class="en" style="font-weight:600;margin-left:6px">${esc(d.id)}</span></div>
+        <div style="display:flex;gap:6px;align-items:center">${status}<button class="btn btn-sm btn-ghost" onclick="removeBadgeDef(${i})">삭제</button></div>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:0 12px">
+        ${f('bd-name-'+i,'이름',d.name)} ${f('bd-year-'+i,'연도(각인)',d.year,'number')}
+        <div class="field"><label>아이콘</label>${sel('bd-icon-'+i,BADGE_ICON_NAMES,d.icon||'star')}</div>
+      </div>
+      ${f('bd-short-'+i,'한 줄 설명 (공유 이미지에 표시)',d.short)}
+      <div class="field"><label>조건 설명 (배지 시트에 표시)</label><textarea class="textarea" id="bd-desc-${i}" style="min-height:70px">${esc(d.desc||'')}</textarea></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 12px">
+        <div class="field"><label>규칙</label>${sel('bd-type-'+i,RULE_TYPES,r.type||'first')}</div>
+        <div class="field"><label>지표</label>${sel('bd-metric-'+i,METRICS,r.metric||'lectio')}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0 10px">
+        ${f('bd-start-'+i,'기간 시작',r.start,'date','기간형')} ${f('bd-end-'+i,'기간 끝',r.end,'date','기간형')}
+        ${f('bd-from-'+i,'이 날부터 인정',r.from,'date','처음/누적')} ${f('bd-n-'+i,'N일',r.n,'number','N일형')}
+        ${f('bd-close-'+i,'발급 마감',d.close,'date','이후 획득 불가')}
+      </div>
+      ${ev.keys ? `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:2px">${ev.keys.map(k=>`<span class="chip" style="${ev.days[k]?'background:var(--sage-dark);color:#fff':''}">${k.slice(5).replace('-','/')}</span>`).join('')}</div>` : ''}
+    </div>`;
+  }).join('');
+  /* 통독 현황 */
+  const td=_read(STORAGE_KEYS.tongdok,{})||{}; const tdKeys=Object.keys(td).filter(k=>{ const d=(td[k]&&td[k].done)||[]; return d.length&&d.every(Boolean); });
+  const ym=_todayKeyA().slice(0,7); const tdMonth=tdKeys.filter(k=>k.startsWith(ym)).length;
+  const tdItems=tdKeys.length;
+  document.getElementById('view-badges').innerHTML=`
+    <p class="hint">앱 <b>마이 탭</b>의 챌린지·배지와 성경통독을 관리합니다. 배지는 <b>책자 묵상을 실제로 한 날</b>만 셉니다(하나라도 저장하면 인정 · 지난 날짜에 기록해도 인정). 예배·봉사·출석은 조건이 아닙니다. 배지는 마이 탭과 획득 시 축하 시트에만 보이고, 나눔 탭에는 노출하지 않습니다.</p>
+    <div class="section-title">획득 현황 <span style="font-size:11px;color:var(--ink-3);font-weight:600">· 이 브라우저 기준</span></div>
+    <div class="stat-grid">
+      ${statCard('sage','획득한 배지',Object.keys(earned).filter(id=>defs.some(d=>d.id===id)).length,'/ '+defs.length,'M12 2l2.4 6.9H22l-6 4.5 2.3 7L12 16.9 5.7 20.4 8 13.4l-6-4.5h7.6z')}
+      ${statCard('plum','이번 달 통독한 날',tdMonth,'일','M4 19.5A2.5 2.5 0 0 1 6.5 17H20 M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z')}
+      ${statCard('sky','누적 통독한 날',tdKeys.length,'일','M12 8v4l3 3 M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z')}
+      ${statCard('warn','통독 체크 총 일수',tdItems,'일','M9 12l2 2 4-4 M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z')}
+    </div>
+    <p class="hint" style="margin-top:-4px">데모 모드는 이 브라우저의 사용자 앱 기록만 집계합니다. 전체 성도 완주자 수는 Firebase 연동 후 제공됩니다.</p>
+
+    <div class="section-title">배지 정의 <span style="font-size:11px;color:var(--ink-3);font-weight:600">· ${isBadgeDefsCustom()?'편집본 적용 중':'앱 기본값'} · ${defs.length}종</span></div>
+    <p class="hint" style="margin-bottom:12px">2026년은 「한 번뿐 배지」 3종으로 시작합니다. 2027년 월별·절기·말씀함께주간 배지는 여기서 <b>배지 추가</b>로 붙이면 앱 코드 수정 없이 반영됩니다(연도 각인은 '연도' 값).</p>
+    ${defCards}
+    <div style="display:flex;gap:8px;margin:4px 0 26px;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="saveBadgeDefs()">저장 (앱에 반영)</button>
+      <button class="btn" onclick="addBadgeDef()">배지 추가</button>
+      <button class="btn btn-ghost" onclick="resetBadgeDefs()">앱 기본값으로 되돌리기</button>
+    </div>
+
+    <div class="section-title">브리핑·시연 도구</div>
+    <div class="card" style="padding:16px;margin-bottom:22px">
+      <p class="hint" style="margin-bottom:10px">회의에서 완주 화면을 보여줄 때 씁니다. ① 1번 배지의 기간을 <b>오늘부터 6일</b>로 임시 설정 → ② 여정 채우기 → 앱 마이 탭에서 확인. 끝나면 ③ 되돌리기.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-sm" onclick="demoWindowToday()">① 1번 배지 기간을 오늘부터 6일로</button>
+        <button class="btn btn-sm" onclick="demoFillJourney()">② 여정 채우기 (데모 기록)</button>
+        <button class="btn btn-sm btn-ghost" onclick="demoClear()">③ 데모 기록·기간 되돌리기</button>
+      </div>
+    </div>
+
+    <div class="section-title">성경 본문 링크 <span style="font-size:11px;color:var(--ink-3);font-weight:600">· 통독 '본문' 버튼</span></div>
+    <div class="card" style="padding:16px;margin-bottom:22px">
+      <p class="hint" style="margin-bottom:10px">비워 두면 앱은 "본문 보기 준비 중" 안내를 띄웁니다. 갓피플성경 또는 성서공회 연동이 확정되어 장(章) 단위 주소 형식을 받으면 아래에 넣어 주세요. 치환자: <code>{book_en}</code>(GEN·PSA…) <code>{book_kor}</code>(창세기) <code>{abbr}</code>(창) <code>{ch}</code>(시작 장) <code>{ch_to}</code>(끝 장)</p>
+      <div class="field"><label>주소 템플릿</label><input class="input" id="bibleUrlTpl" value="${esc(p.bibleUrlTemplate||'')}" placeholder="예) https://example.com/bible/{book_en}/{ch}"></div>
+      <div style="display:flex;gap:8px"><button class="btn btn-sm btn-primary" onclick="saveBibleUrlTpl()">저장</button><button class="btn btn-sm btn-ghost" onclick="document.getElementById('bibleUrlTpl').value='';saveBibleUrlTpl()">비우기</button></div>
+    </div>`;
+};
+function _collectBadgeDefs(){
+  const defs=getBadgeDefsAdmin(); const v=id=>{ const el=document.getElementById(id); return el?el.value.trim():''; };
+  return defs.map((d,i)=>{
+    const type=v('bd-type-'+i), metric=v('bd-metric-'+i);
+    const rule={ type, metric };
+    if(type==='streak_all'||type==='count'){ rule.start=v('bd-start-'+i); rule.end=v('bd-end-'+i); }
+    if(type==='first'||type==='total'){ if(v('bd-from-'+i)) rule.from=v('bd-from-'+i); }
+    if(type==='count'||type==='total'){ rule.n=parseInt(v('bd-n-'+i))||undefined; }
+    return { id:d.id, tier:d.tier||1, year:parseInt(v('bd-year-'+i))||d.year, icon:v('bd-icon-'+i)||'star', name:v('bd-name-'+i)||d.name, short:v('bd-short-'+i), desc:v('bd-desc-'+i), rule, close:v('bd-close-'+i)||undefined };
+  });
+}
+function saveBadgeDefs(){
+  const defs=_collectBadgeDefs();
+  for(const d of defs){ const r=d.rule; if((r.type==='streak_all'||r.type==='count')&&(!r.start||!r.end||r.start>r.end)){ toast('「'+d.name+'」 기간 시작·끝을 확인해 주세요'); return; } }
+  _write(STORAGE_KEYS.badgeDefs, defs); toast('저장되었습니다 — 앱 마이 탭에 반영됩니다'); RENDERERS.badges();
+}
+function addBadgeDef(){
+  const defs=_collectBadgeDefs(); const y=new Date().getFullYear();
+  defs.push({ id:'badge_'+Date.now().toString(36), tier:2, year:y, icon:'calendar', name:'새 배지', short:'', desc:'', rule:{type:'count', metric:'lectio', start:y+'-01-01', end:y+'-01-31', n:20}, close:y+'-12-31' });
+  _write(STORAGE_KEYS.badgeDefs, defs); RENDERERS.badges(); toast('배지를 추가했습니다 — 내용을 채우고 저장하세요');
+}
+function removeBadgeDef(i){ if(!confirm('이 배지 정의를 삭제할까요? (이미 획득한 기록은 남습니다)')) return; const defs=_collectBadgeDefs(); defs.splice(i,1); _write(STORAGE_KEYS.badgeDefs, defs); RENDERERS.badges(); }
+function resetBadgeDefs(){ if(!confirm('편집본을 버리고 앱 기본값(2026 한 번뿐 배지 3종)으로 되돌릴까요?')) return; try{ localStorage.removeItem(STORAGE_KEYS.badgeDefs); }catch(e){} toast('앱 기본값으로 되돌렸습니다'); RENDERERS.badges(); }
+function saveBibleUrlTpl(){ setPrefs({ bibleUrlTemplate:(document.getElementById('bibleUrlTpl').value||'').trim() }); toast('저장되었습니다 — 앱 통독 본문 버튼에 반영됩니다'); }
+/* 시연 도구 */
+function demoWindowToday(){
+  const defs=getBadgeDefsAdmin(); const d=defs[0]; if(!d) return;
+  if(!d._origRule) d._origRule=JSON.parse(JSON.stringify(d.rule));
+  const s=_todayKeyA(); d.rule.start=s; d.rule.end=_addKey(s,5); if(d.close && d.close<d.rule.end) d.close=_addKey(d.rule.end,60);
+  _write(STORAGE_KEYS.badgeDefs, defs); toast('1번 배지 기간: '+s+' ~ '+d.rule.end+' (임시)'); RENDERERS.badges();
+}
+function demoFillJourney(){
+  const defs=getBadgeDefsAdmin(); const d=defs[0]; if(!d||!d.rule.start){ toast('1번 배지에 기간이 없습니다'); return; }
+  const lec=_read('mh_v05_lectio',{})||{}; let n=0;
+  _rangeKeysA(d.rule.start,d.rule.end).forEach(k=>{ if(!_lectioFilledA(lec[k])){ lec[k]={ lectio_read:'yes', meditatio1:'(시연용 기록)', oratio:'', contemplatio:'', scribo:'', _demo:true }; n++; } });
+  _write('mh_v05_lectio', lec); toast('데모 기록 '+n+'일 추가 — 앱 마이 탭을 새로고침해 확인하세요'); RENDERERS.badges();
+}
+function demoClear(){
+  const lec=_read('mh_v05_lectio',{})||{}; let n=0; Object.keys(lec).forEach(k=>{ if(lec[k]&&lec[k]._demo){ delete lec[k]; n++; } }); _write('mh_v05_lectio', lec);
+  const defs=getBadgeDefsAdmin(); const d=defs[0]; if(d&&d._origRule){ d.rule=d._origRule; delete d._origRule; _write(STORAGE_KEYS.badgeDefs, defs); }
+  const b=_read(STORAGE_KEYS.badges,{})||{}; if(d&&b[d.id]&&confirm('시연으로 획득된 1번 배지 기록도 지울까요?')){ delete b[d.id]; _write(STORAGE_KEYS.badges,b); }
+  toast('데모 기록 '+n+'일 삭제 · 기간 되돌림'); RENDERERS.badges();
+}
+
+
 RENDERERS.dashboard=function(){
   const subs=listSubmissions(); const pendCnt=subs.filter(c=>c.status==='review').length;
   const rejCnt=subs.filter(c=>c.status==='rejected').length;
@@ -1015,6 +1177,7 @@ RENDERERS.dashboard=function(){
       ${policyRow('나눔 기본 공개범위', shareScopeLabel(p.shareDefaultScope||'friends_cell')+' · 친구 상한 '+(p.shareFriendLimit||100)+'명','share')}
       ${policyRow('구독 정책','책자 구독자 무료 · PRO 자동 적용 · 데모 사용자 '+(u.subscribed?'구독 중':'미구독'),'subscription')}
       ${policyRow('교회 이름',getChurchName(),'settings')}
+      ${policyRow('챌린지 배지', (function(){ try{ const d=getBadgeDefsAdmin(); const f=d[0]; return d.length+'종 · '+(f&&f.rule&&f.rule.start? f.name+' '+f.rule.start+'~'+f.rule.end : (f?f.name:'')) + (isBadgeDefsCustom()?' (편집본)':''); }catch(e){ return '-'; } })(),'badges')}
     </div>
     ${bannerSection()}
     ${homePhotoSection()}`;
@@ -1237,9 +1400,16 @@ RENDERERS.method=function(){
 function setMethod(m){ setPrefs({medMethod:m==='simple'?'simple':'lectio'}); toast((m==='simple'?'간편 묵상':'렉시오 디비나')+' 적용'); RENDERERS.method(); }
 
 /* ====================== 뷰: 구독 · PRO ====================== */
+function saveShopUrl(){ setPrefs({ shopUrl:(document.getElementById('shopUrl').value||'').trim() }); toast('저장되었습니다 — 앱 홈 배너·마이 탭 구매 버튼에 반영됩니다'); }
 RENDERERS.subscription=function(){
-  const u=getUser();
+  const u=getUser(); const shop=(getPrefs().shopUrl||'').trim();
   document.getElementById('view-subscription').innerHTML=`
+    <div class="section-title">책자 구매 페이지 <span style="font-size:11px;color:var(--ink-3);font-weight:600">· 앱 홈 배너 · 마이 탭 '책자 구독·구매하기' 버튼</span></div>
+    <div class="card" style="padding:16px;margin-bottom:22px">
+      <p class="hint" style="margin-bottom:10px">기본값은 말씀함께.com의 「말씀함께 구독하기」 카테고리입니다. 특정 상품(예: 11월호 정기구독)으로 바로 보내려면 그 상품 주소를 넣으세요. 홈 배너를 따로 설정하면 홈에서는 그 배너가 우선 표시되고, 마이 탭 버튼은 항상 이 주소를 엽니다.</p>
+      <div class="field"><label>구매 페이지 주소</label><input class="input" id="shopUrl" value="${esc(shop)}" placeholder="https://xn--hp0b01sr3i9pq.com/product/list.html?cate_no=24 (비우면 기본값)"></div>
+      <div style="display:flex;gap:8px"><button class="btn btn-sm btn-primary" onclick="saveShopUrl()">저장</button><button class="btn btn-sm btn-ghost" onclick="document.getElementById('shopUrl').value='';saveShopUrl()">기본값으로</button><a class="btn btn-sm btn-ghost" href="${esc(shop||'https://xn--hp0b01sr3i9pq.com/product/list.html?cate_no=24')}" target="_blank">열어보기 ↗</a></div>
+    </div>
     <p class="hint">말씀함께 책자 구독자는 앱의 모든 기능(PRO)을 무료로 사용합니다. 별도 결제 없이 구독 = PRO 권한입니다.</p>
     <div class="section-title">구독 정책</div>
     <div class="card" style="padding:6px 0">

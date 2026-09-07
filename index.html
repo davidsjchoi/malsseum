@@ -1713,7 +1713,8 @@ body{
 .spost-modal{ padding:6px 16px 14px; }
 .spost-modal .sp-cmts{ margin-top:12px; }
 .spost-modal .sp-cmt{ cursor:default; }
-.sp-cmt-input{ display:flex; gap:8px; margin-top:14px; }
+.sp-cmt-input{ display:flex; gap:8px; margin-top:14px; align-items:center; }
+.sp-cmt-input .btn{ font-size:0.75rem; padding:8px 12px; min-height:0; height:auto; border-radius:12px; flex-shrink:0; }
 .sp-cmt-input input{ flex:1; border:1px solid var(--line); border-radius:12px; padding:10px 13px; font-size:0.8125rem;
   font-family:var(--sans); background:var(--bg-card); color:var(--ink); outline:none; }
 .sp-cmt-input input:focus{ border-color:var(--sage); }
@@ -10947,12 +10948,12 @@ async function renderColumn(){
         </div>
       </div>
     </div>
-    <div id="bookColumns">${renderBookColumnsSection()}</div>
     <div id="columnReview"></div>
-    <div class="section-title" style="margin:18px 20px 10px">목회자 칼럼</div>
+    <div class="section-title" style="margin:6px 20px 10px">목회자 칼럼</div>
     <div id="columnList">
       ${Array.from({length:2}).map(()=>`<div style="margin:0 16px 14px"><div class="skeleton" style="height:240px;border-radius:16px"></div></div>`).join('')}
     </div>
+    <div id="bookColumns" style="margin-top:18px">${renderBookColumnsSection()}</div>
   `;
   renderColumnReview();
   const colsAll = await api.listColumns();
@@ -13139,7 +13140,7 @@ if(document.readyState === 'loading'){
 .td-home.v20 .th-n{ cursor:pointer; }
 .td-home.v20 .th-n.done{ background:var(--sage-pale); color:var(--sage-deep); }
 /* 코랄 — 약한 강조 (라벨·키커) */
-.kicker, .w-section-label .maek-range, .share-mystrip .sm-go, .mypage-sub, .pray-h-sub b{ color:var(--coral-deep) !important; }
+.kicker, .w-section-label .maek-range, .mypage-sub, .pray-h-sub b{ color:var(--coral-deep) !important; }
 .schip.on{ background:var(--coral-deep); border-color:var(--coral-deep); }
 .frd-req-dot{ background:var(--coral) !important; }
 .v20-shop{ margin:0 16px 14px; }
@@ -13593,7 +13594,7 @@ renderSettings = async function(){
   }catch(e){}
   return r;
 };
-const MH_BUILD='2.0.3';
+const MH_BUILD='2.0.4';
 async function v20HardRefresh(){
   try{ const regs=await navigator.serviceWorker.getRegistrations(); for(const r of regs) await r.unregister(); }catch(e){}
   try{ const ks=await caches.keys(); for(const k of ks) await caches.delete(k); }catch(e){}
@@ -13674,4 +13675,6 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 </body>
+</html>
+
 </html>

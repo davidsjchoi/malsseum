@@ -13104,6 +13104,8 @@ if(document.readyState === 'loading'){
 .spost.has-photo{ padding:0; overflow:hidden; }
 .spost.has-photo .spost-h{ padding:12px 15px 8px; }
 .spost.has-photo .sp-pill{ margin:0 15px 8px; }
+.spost.has-photo .sp-photos-wrap + .sp-pill{ margin-top:14px; }
+.spost.has-photo .sp-photos-wrap + .sp-body{ margin-top:14px; }
 .spost.has-photo .sp-body{ padding:0 15px; }
 .spost.has-photo .sp-foot{ margin:8px 15px 0; padding-bottom:10px; }
 .spost.has-photo .sp-cmt{ margin-left:15px; margin-right:15px; }
@@ -13594,7 +13596,7 @@ renderSettings = async function(){
   }catch(e){}
   return r;
 };
-const MH_BUILD='2.0.4';
+const MH_BUILD='2.0.5';
 async function v20HardRefresh(){
   try{ const regs=await navigator.serviceWorker.getRegistrations(); for(const r of regs) await r.unregister(); }catch(e){}
   try{ const ks=await caches.keys(); for(const k of ks) await caches.delete(k); }catch(e){}
@@ -13675,6 +13677,8 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 </body>
+</html>
+
 </html>
 
 </html>

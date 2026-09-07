@@ -207,7 +207,7 @@ a{color:inherit}
       <div class="side-mark">함</div>
       <div>
         <div class="side-brand-text">말씀함께</div>
-        <div class="side-brand-sub en">ADMIN · v1.9</div>
+        <div class="side-brand-sub en">ADMIN · v2.0.1</div>
       </div>
     </div>
     <nav class="side-nav" id="sideNav"></nav>
@@ -788,7 +788,7 @@ function go(id){
   if(RENDERERS[id]) RENDERERS[id]();
   buildNav(); document.querySelectorAll('.side-item').forEach(e=>e.classList.toggle('active',e.dataset.view===id));
 }
-function openUserApp(){ window.open('index.html','_blank'); }
+function openUserApp(){ window.open('말씀함께_데모_v1.9.6.html','_blank'); }
 
 
 
@@ -2202,5 +2202,329 @@ function init(){
 }
 init();
 </script>
+<style id="v20-admin-style">
+:root{ --coral:#E4674A; --coral-deep:#B84A31; --coral-soft:#FCEDE8; --coral-line:#F3C9BD; }
+.v20-role{ display:flex; flex-direction:column; gap:6px; padding:10px 12px 4px; border-top:1px solid var(--line); }
+.v20-role label{ font-size:10.5px; font-weight:800; color:var(--coral-deep); letter-spacing:.06em; }
+.v20-role select{ width:100%; font-size:12px; padding:7px 9px; border:1px solid var(--line); border-radius:9px; background:var(--bg-card); font-family:inherit; }
+.v20-rolechip{ display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:800; padding:4px 10px; border-radius:999px; background:var(--coral-soft); color:var(--coral-deep); border:1px solid var(--coral-line); margin-right:8px; }
+.v20-rolechip.super{ background:#1F2421; color:#fff; border-color:#1F2421; }
+.v20-pill{ display:inline-flex; font-size:10.5px; font-weight:800; padding:2px 8px; border-radius:999px; background:var(--coral-soft); color:var(--coral-deep); border:1px solid var(--coral-line); }
+.v20-pill.ok{ background:var(--sage-pale); color:var(--sage-dark); border-color:transparent; }
+.v20-pill.gray{ background:var(--bg-soft); color:var(--ink-3); border-color:var(--line); }
+.v20-pill.dark{ background:#1F2421; color:#fff; border-color:#1F2421; }
+.v20-tabs{ display:flex; gap:6px; margin:0 0 12px; flex-wrap:wrap; }
+.v20-tabs .tab{ font-size:12.5px; font-weight:700; padding:7px 12px; border-radius:999px; border:1px solid var(--line); background:var(--bg-card); cursor:pointer; color:var(--ink-3); }
+.v20-tabs .tab.active{ background:var(--coral-deep); border-color:var(--coral-deep); color:#fff; }
+.v20-table{ width:100%; border-collapse:collapse; font-size:12.5px; background:var(--bg-card); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+.v20-table th{ text-align:left; font-size:11px; color:var(--ink-3); font-weight:700; padding:9px 12px; background:var(--bg-soft); border-bottom:1px solid var(--line); letter-spacing:.03em; }
+.v20-table td{ padding:10px 12px; border-bottom:1px solid var(--line-soft, var(--line)); vertical-align:middle; }
+.v20-table tr:last-child td{ border-bottom:none; }
+.v20-table .mono{ font-family:var(--en); font-variant-numeric:tabular-nums; }
+.v20-scope{ display:flex; gap:14px; align-items:center; padding:10px 12px; background:var(--coral-soft); border:1px solid var(--coral-line); border-radius:10px; margin-top:12px; font-size:12.5px; }
+.v20-scope b{ color:var(--coral-deep); }
+.v20-scope label{ display:flex; align-items:center; gap:5px; cursor:pointer; font-weight:600; }
+.v20-rec{ display:flex; gap:12px; padding:14px; background:var(--bg-card); border:1px solid var(--line); border-radius:12px; margin-bottom:10px; align-items:flex-start; }
+.v20-rec.featured{ border-color:var(--coral); box-shadow:0 0 0 3px var(--coral-soft); }
+.v20-rec .rc-cnt{ min-width:54px; text-align:center; font-family:var(--en); font-weight:800; font-size:20px; color:var(--coral-deep); line-height:1; }
+.v20-rec .rc-cnt small{ display:block; font-size:10px; color:var(--ink-3); font-weight:700; margin-top:3px; }
+.v20-rec .rc-body{ flex:1; min-width:0; font-size:12.5px; line-height:1.65; }
+.v20-rec .rc-body .who{ font-weight:800; }
+.v20-rec .rc-body .rng{ color:var(--ink-3); font-size:11.5px; }
+.v20-rec .rc-body .txt{ margin-top:4px; color:var(--ink-2); display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+.v20-rec .rc-ph{ display:flex; gap:4px; margin-top:6px; }
+.v20-rec .rc-ph img{ width:48px; height:48px; object-fit:cover; border-radius:6px; }
+.v20-kv{ display:grid; grid-template-columns:110px 1fr; gap:6px 12px; font-size:12.5px; }
+.v20-kv b{ color:var(--ink-3); font-weight:700; }
+.v20-sec-note{ font-size:12px; color:var(--coral-deep); font-weight:700; margin:6px 0 10px; }
+.v20-search{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:10px 12px; background:var(--bg-card); border:1px solid var(--coral-line); border-radius:12px; margin:0 0 14px; }
+.v20-search .lbl{ font-size:11px; font-weight:800; color:var(--coral-deep); letter-spacing:.05em; margin-right:2px; }
+.v20-search input,.v20-search select{ font-size:12.5px; padding:7px 10px; border:1px solid var(--line); border-radius:9px; background:var(--bg); font-family:inherit; }
+.v20-search input{ flex:1; min-width:180px; }
+.v20-search .cnt{ font-size:11.5px; color:var(--ink-3); font-family:var(--en); margin-left:auto; }
+.v20-search .clr{ border:none; background:var(--bg-soft); border-radius:99px; padding:5px 10px; font-size:11.5px; font-weight:700; cursor:pointer; font-family:inherit; }
+.v20-test{ display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:12px; margin:0 0 14px; background:#FFF8F5; border:1px dashed var(--coral); font-size:12.5px; }
+.v20-test b{ color:var(--coral-deep); }
+</style>
+<script id="v20-admin-script">
+/* ═══════════════════════════════════════════════════════════════════════════
+   관리자 v2.0 — 역할(슈퍼/교회/교구담당) · 교회 관리 · 가입자 승인 · 추천 묵상 · 콘텐츠 범위
+   ═══════════════════════════════════════════════════════════════════════════ */
+const V20K={ churches:'mh_v20_churches', members:'mh_v20_members', recs:'mh_v20_recs', featured:'mh_v20_featured', session:'mh_v20_admin_session', log:'mh_v20_admin_log', contentScope:'mh_v20_content_scope' };
+const CHURCH_SEED=[
+  { id:'gsmch', name:'선한목자교회', preset:'shepherd', tiers:['교구','초원','목장'], org:true, createdAt:0,
+    staff:[{name:'강동윤 목사', role:'교구목사', districts:['성남교구','송파교구']},{name:'김성렬 전도사', role:'교구전도사', districts:['서울교구']},{name:'이진 전도사', role:'교구전도사', districts:['위례교구','경기남교구']}],
+    admins:['최성제 장로'] },
+  { id:'grace', name:'은혜교회(예시)', preset:'cell', tiers:['교구','셀'], org:false, createdAt:0, staff:[{name:'박은혜 목사', role:'교구목사', districts:['1교구']}], admins:['김관리 집사'] },
+];
+function v20Churches(){ const c=_read(V20K.churches,null); return (Array.isArray(c)&&c.length)?c:JSON.parse(JSON.stringify(CHURCH_SEED)); }
+function v20SaveChurches(list){ _write(V20K.churches,list); }
+function v20Members(){ return _read(V20K.members,{})||{}; }
+function v20Log(action, detail){ const l=_read(V20K.log,[])||[]; l.unshift({t:Date.now(), by:v20Sess().name, role:v20Sess().role, action, detail}); _write(V20K.log, l.slice(0,300)); }
+
+/* ── 세션(역할) — 데모: 사이드바에서 전환 / 실제: Firebase Auth + admins 문서 ── */
+const V20_ROLES=[
+  { key:'super',    name:'말씀함께 본부', role:'super',    churchId:'gsmch', label:'슈퍼관리자 · 선한목자교회 본부' },
+  { key:'church',   name:'최성제 장로',   role:'church',   churchId:'gsmch', label:'교회관리자 · 선한목자교회' },
+  { key:'district', name:'강동윤 목사',   role:'district', churchId:'gsmch', districts:['성남교구','송파교구'], label:'교구담당 · 강동윤 목사 (성남·송파)' },
+  { key:'district2',name:'김성렬 전도사', role:'district', churchId:'gsmch', districts:['서울교구'], label:'교구담당 · 김성렬 전도사 (서울)' },
+  { key:'church2',  name:'김관리 집사',   role:'church',   churchId:'grace', label:'교회관리자 · 은혜교회(예시)' },
+];
+function v20Sess(){ const k=_read(V20K.session,'super'); return V20_ROLES.find(r=>r.key===k)||V20_ROLES[0]; }
+function v20SetRole(k){ _write(V20K.session,k); v20ApplyRole(); toast('역할 전환: '+v20Sess().label); go(current==='churches'&&v20Sess().role!=='super'?'dashboard':current); }
+function v20IsSuper(){ return v20Sess().role==='super'; }
+function v20MyChurch(){ return v20Churches().find(c=>c.id===v20Sess().churchId)||v20Churches()[0]; }
+function v20CanSee(m){ const s=v20Sess(); if(s.role==='super') return true; if(m.churchId!==s.churchId) return false; if(s.role==='district') return (s.districts||[]).includes(m.district); return true; }
+function v20CanApprove(m){ const s=v20Sess(); if(m.churchId!==s.churchId && s.role!=='super') return false; if(s.role==='district') return (s.districts||[]).includes(m.district); return true; }
+
+function v20ApplyRole(){
+  const s=v20Sess(); const c=v20MyChurch();
+  const nm=document.querySelector('.side-user-name'); if(nm) nm.textContent=s.name;
+  const sc=document.getElementById('sideChurch'); if(sc) sc.textContent=(s.role==='super'?'본부 · 전체 교회':(c?c.name:''))+(s.role==='district'?' · '+(s.districts||[]).join('·'):'');
+  const av=document.querySelector('.side-user-av'); if(av) av.textContent=s.name.charAt(0);
+  let chip=document.getElementById('v20RoleChip');
+  if(!chip){ chip=document.createElement('span'); chip.id='v20RoleChip'; const tr=document.querySelector('.topbar-right'); if(tr) tr.insertBefore(chip, tr.firstChild); }
+  chip.className='v20-rolechip'+(s.role==='super'?' super':''); chip.textContent=(s.role==='super'?'SUPER':(s.role==='church'?'교회관리자':'교구담당'))+' · '+s.name;
+  const sub=document.querySelector('.side-brand-sub'); if(sub) sub.textContent='ADMIN · v2.0.1';
+  buildNav(); document.querySelectorAll('.side-item').forEach(e=>e.classList.toggle('active',e.dataset.view===current));
+}
+/* 역할 전환 UI (데모) */
+(function(){
+  const bottom=document.querySelector('.side-bottom'); if(!bottom) return;
+  const d=document.createElement('div'); d.className='v20-role';
+  d.innerHTML='<label>데모 · 역할 전환</label><select onchange="v20SetRole(this.value)">'+V20_ROLES.map(r=>'<option value="'+r.key+'" '+(v20Sess().key===r.key?'selected':'')+'>'+esc(r.label)+'</option>').join('')+'</select>';
+  bottom.appendChild(d);
+})();
+openUserApp=function(){ window.open('index.html','_blank'); };
+
+/* ── 내비게이션 확장 ── */
+function v20PendingCount(){ return Object.values(v20Members()).filter(m=>m.status==='pending'&&v20CanSee(m)).length; }
+function v20RecCount(){ const r=_read(V20K.recs,{})||{}; const f=_read(V20K.featured,null); return Object.keys(r).filter(k=>(r[k].count||0)>0&&(!f||f.postId!==k)&&(v20IsSuper()||r[k].churchId===v20Sess().churchId)).length; }
+(function(){
+  const i=NAV.findIndex(n=>n.id==='column');
+  const add=[
+    {id:'members', name:'가입자 관리', en:'Members', badge:v20PendingCount, icon:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/>'},
+    {id:'recs', name:'추천 묵상', en:'Featured', badge:v20RecCount, icon:'<path d="M12 19V5"/><path d="M5 12l7-7 7 7"/>'},
+    {id:'churches', name:'교회 관리', en:'Churches', superOnly:true, icon:'<path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/><path d="M12 3v4M10 5h4"/>'},
+  ];
+  NAV.splice(i,0,...add);
+  ['members','recs','churches'].forEach(id=>{ const v=document.createElement('div'); v.className='view'; v.id='view-'+id; document.querySelector('.content').appendChild(v); });
+  const _bn=buildNav;
+  buildNav=function(){ const s=v20Sess(); const hide=NAV.filter(n=>n.superOnly&&s.role!=='super'); const backup=NAV.slice(); hide.forEach(n=>NAV.splice(NAV.indexOf(n),1)); _bn(); NAV.length=0; backup.forEach(n=>NAV.push(n)); };
+})();
+
+/* ═══════════ 교회 관리 (슈퍼관리자) ═══════════ */
+RENDERERS.churches=function(){
+  const list=v20Churches(); const mem=Object.values(v20Members());
+  document.getElementById('view-churches').innerHTML=`
+    <p class="hint">말씀함께 본부(선한목자교회)만 교회를 등록합니다. 교회를 등록하면 <b>교회관리자 계정</b>이 생기고, 그 교회 관리자는 자기 교회의 모임 단계·가입자·나눔·칼럼·중보 나눔만 관리합니다. 말씀 본문·긴급기도·나라를 위한 기도는 본부가 공통으로 올립니다.</p>
+    <div class="section-title">등록 교회 <span style="font-size:11px;color:var(--ink-3);font-weight:600">· ${list.length}곳 · 가입자 ${mem.length}명</span><button class="btn btn-sm btn-primary" style="margin-left:auto" onclick="v20OpenChurchForm()">+ 교회 등록</button></div>
+    <table class="v20-table"><tr><th>교회</th><th>모임 단계</th><th>교회관리자</th><th>교구 담당자</th><th>가입자</th><th></th></tr>
+    ${list.map(c=>{ const n=mem.filter(m=>m.churchId===c.id); return `<tr>
+      <td><b>${esc(c.name)}</b><div style="font-size:11px;color:var(--ink-3)" class="mono">${esc(c.id)}${c.org?' · 목장편성표 연동':''}</div></td>
+      <td>${(c.tiers||[]).map(t=>'<span class="v20-pill gray">'+esc(t)+'</span>').join(' ')}</td>
+      <td>${(c.admins||[]).map(esc).join(', ')||'-'}</td>
+      <td>${(c.staff||[]).map(s=>esc(s.name)+' <small style="color:var(--ink-3)">('+esc((s.districts||[]).join('·'))+')</small>').join('<br/>')||'-'}</td>
+      <td class="mono">${n.length} <small style="color:var(--ink-3)">대기 ${n.filter(m=>m.status==='pending').length}</small></td>
+      <td><button class="btn btn-sm" onclick="v20OpenChurchForm('${c.id}')">편집</button></td></tr>`; }).join('')}
+    </table>
+    <div class="section-title" style="margin-top:26px">처리 기록</div>
+    ${v20LogHTML(12)}`;
+};
+function v20OpenChurchForm(id){
+  const list=v20Churches(); const c=id?list.find(x=>x.id===id):{id:'',name:'',tiers:['교구','셀'],staff:[],admins:[]};
+  openModal(`<div class="modal-head"><h3>${id?'교회 편집':'교회 등록'}</h3><button class="modal-x" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="row2"><div class="field"><label>교회 이름</label><input class="input" id="ch-name" value="${esc(c.name)}" placeholder="예) 은혜교회"></div>
+        <div class="field"><label>교회 ID <span class="sub">영문·숫자, 변경 불가</span></label><input class="input" id="ch-id" value="${esc(c.id)}" ${id?'disabled':''} placeholder="예) grace"></div></div>
+      <div class="field"><label>모임 단계 <span class="sub">큰 단위 → 작은 단위, 쉼표로 구분 (예: 교구, 셀 / 교구, 초원, 목장)</span></label><input class="input" id="ch-tiers" value="${esc((c.tiers||[]).join(', '))}"></div>
+      <div class="field"><label>교회관리자 <span class="sub">쉼표로 구분 · 실제 서비스에서는 계정 초대 메일 발송</span></label><input class="input" id="ch-admins" value="${esc((c.admins||[]).join(', '))}"></div>
+      <div class="field"><label>교구 담당자 <span class="sub">한 줄에 한 명 — 이름 | 직분 | 담당 교구(쉼표) &nbsp;예) 박은혜 목사 | 교구목사 | 1교구, 2교구</span></label>
+        <textarea class="textarea" id="ch-staff" rows="4">${esc((c.staff||[]).map(s=>s.name+' | '+(s.role||'')+' | '+(s.districts||[]).join(', ')).join('\n'))}</textarea></div>
+      <p class="hint">교구 담당자(교구목사·교구전도사·교구간사)만 가입 승인을 할 수 있습니다. 목자는 승인 권한이 없습니다.</p>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal()">취소</button><button class="btn btn-primary" onclick="v20SaveChurch('${esc(id||'')}')">저장</button></div>`);
+}
+function v20SaveChurch(id){
+  const list=v20Churches();
+  const name=val('ch-name'); const cid=(id||val('ch-id')).replace(/[^a-z0-9_-]/gi,'').toLowerCase();
+  if(!name||!cid){ toast('교회 이름과 ID를 입력해 주세요'); return; }
+  if(!id && list.find(c=>c.id===cid)){ toast('이미 있는 ID입니다'); return; }
+  const tiers=val('ch-tiers').split(',').map(s=>s.trim()).filter(Boolean);
+  const admins=val('ch-admins').split(',').map(s=>s.trim()).filter(Boolean);
+  const staff=val('ch-staff').split('\n').map(l=>l.split('|').map(s=>s.trim())).filter(a=>a[0]).map(a=>({name:a[0], role:a[1]||'교구담당', districts:(a[2]||'').split(',').map(s=>s.trim()).filter(Boolean)}));
+  let c=list.find(x=>x.id===cid);
+  if(c){ Object.assign(c,{name,tiers,admins,staff}); } else { c={id:cid,name,tiers,admins,staff,org:false,createdAt:Date.now()}; list.push(c); }
+  v20SaveChurches(list); v20Log(id?'교회 편집':'교회 등록', name); closeModal(); toast('저장되었습니다'); RENDERERS.churches();
+}
+
+/* ═══════════ 가입자 관리 ═══════════ */
+let v20MemTab='pending';
+RENDERERS.members=function(){
+  const s=v20Sess(); const all=Object.values(v20Members()).filter(v20CanSee).sort((a,b)=>(b.appliedAt||0)-(a.appliedAt||0));
+  const tabs=[['pending','승인 대기'],['approved','승인'],['rejected','미승인'],['all','전체']];
+  const list=v20MemTab==='all'?all:all.filter(m=>m.status===v20MemTab);
+  const chs=v20Churches();
+  document.getElementById('view-members').innerHTML=`
+    <p class="hint">가입자는 <b>실명·휴대전화(SMS 인증)·소속</b>을 직접 입력합니다. 교적 DB와 대조하지 않으며, <b>교구 담당 교역자</b>가 아는 사람인지 확인해 승인합니다. 승인 전에는 말씀·기록·나라 기도만 이용할 수 있습니다.</p>
+    ${s.role==='district'?`<div class="v20-sec-note">담당 교구: ${esc((s.districts||[]).join(' · '))} — 이 교구 가입자만 보이고 승인할 수 있습니다.</div>`:''}
+    <div class="stat-grid" style="margin-bottom:16px">
+      ${[['pending','승인 대기','var(--coral-deep)'],['approved','승인 완료','var(--sage-dark)'],['rejected','미승인','var(--ink-3)']].map(([k,l,c])=>`<div class="stat" style="cursor:pointer" onclick="v20MemTab='${k}';RENDERERS.members()"><div class="stat-num" style="color:${c}">${all.filter(m=>m.status===k).length}</div><div class="hint">${l}</div></div>`).join('')}
+    </div>
+    <div class="v20-tabs">${tabs.map(([k,l])=>`<div class="tab ${v20MemTab===k?'active':''}" onclick="v20MemTab='${k}';RENDERERS.members()">${l}</div>`).join('')}
+      <span style="flex:1"></span><button class="btn btn-sm" onclick="v20DemoMembers()">데모 가입자 3명 추가</button></div>
+    ${list.length?`<table class="v20-table"><tr><th>이름</th><th>휴대전화</th>${s.role==='super'?'<th>교회</th>':''}<th>소속</th><th>신청</th><th>상태</th><th></th></tr>
+    ${list.map(m=>{ const ch=chs.find(c=>c.id===m.churchId); const can=v20CanApprove(m); return `<tr>
+      <td><b>${esc(m.name||'')}</b></td><td class="mono">****-${esc(m.phoneLast4||'')}</td>${s.role==='super'?'<td>'+esc(ch?ch.name:m.churchId)+'</td>':''}
+      <td>${esc([m.district,m.grove,m.cell].filter(Boolean).join(' · ')||'-')}</td>
+      <td class="mono" style="color:var(--ink-3)">${m.appliedAt?relTime(m.appliedAt):'-'}</td>
+      <td>${m.status==='approved'?'<span class="v20-pill ok">승인</span><div style="font-size:10.5px;color:var(--ink-3);margin-top:2px">'+esc(m.approvedBy||'')+'</div>':(m.status==='rejected'?'<span class="v20-pill gray">미승인</span><div style="font-size:10.5px;color:var(--ink-3);margin-top:2px">'+esc(m.rejectReason||'')+'</div>':'<span class="v20-pill">대기</span>')}</td>
+      <td style="white-space:nowrap">${can?(m.status!=='approved'?`<button class="btn btn-sm btn-primary" onclick="v20Approve('${m.uid}')">승인</button> `:'')+(m.status!=='rejected'?`<button class="btn btn-sm btn-ghost" onclick="v20OpenReject('${m.uid}')">${m.status==='approved'?'승인 취소':'거절'}</button>`:''):'<span style="font-size:11px;color:var(--ink-3)">권한 없음</span>'}</td></tr>`; }).join('')}
+    </table>`:emptyBox('해당 상태의 가입자가 없습니다')}
+    <div class="section-title" style="margin-top:26px">처리 기록</div>${v20LogHTML(8)}`;
+};
+function v20Approve(uid){ const all=v20Members(); const m=all[uid]; if(!m||!v20CanApprove(m)) return; m.status='approved'; m.approvedBy=v20Sess().name; m.approvedAt=Date.now(); m.rejectReason=''; _write(V20K.members,all); v20Log('가입 승인', m.name+' · '+[m.district,m.cell].filter(Boolean).join(' ')); toast(m.name+' 님을 승인했습니다'); RENDERERS.members(); buildNav(); markActive(); }
+function v20OpenReject(uid){ openModal(`<div class="modal-head"><h3>승인 거절 / 취소</h3><button class="modal-x" onclick="closeModal()">×</button></div><div class="modal-body"><div class="field"><label>사유 <span class="sub">가입자에게 그대로 보입니다</span></label><input class="input" id="rj-reason" placeholder="예) 우리 교구에서 확인되지 않는 분입니다. 소속을 확인해 주세요."></div></div><div class="modal-foot"><button class="btn btn-ghost" onclick="closeModal()">취소</button><button class="btn btn-primary" style="background:var(--coral-deep);border-color:var(--coral-deep)" onclick="v20Reject('${uid}')">확인</button></div>`); }
+function v20Reject(uid){ const all=v20Members(); const m=all[uid]; if(!m||!v20CanApprove(m)) return; m.status='rejected'; m.rejectReason=val('rj-reason')||'담당 교역자 확인 필요'; m.approvedBy=''; _write(V20K.members,all); v20Log('가입 거절', m.name+' · '+m.rejectReason); closeModal(); toast('처리되었습니다'); RENDERERS.members(); buildNav(); markActive(); }
+function v20DemoMembers(){
+  const all=v20Members(); const now=Date.now();
+  [{name:'박준영',district:'성남교구',grove:'김재기 초원',cell:'김재기 목장',phoneLast4:'2211',churchId:'gsmch'},{name:'이정숙',district:'서울교구',grove:'',cell:'3목장',phoneLast4:'8834',churchId:'gsmch'},{name:'한소영',district:'1교구',grove:'',cell:'은혜셀',phoneLast4:'1102',churchId:'grace'}]
+    .forEach((m,i)=>{ const uid='demo_'+(now+i); all[uid]=Object.assign({uid,status:'pending',appliedAt:now-i*3600000*5},m); });
+  _write(V20K.members,all); toast('데모 가입자를 추가했습니다'); RENDERERS.members(); buildNav(); markActive();
+}
+function v20LogHTML(n){ const l=(_read(V20K.log,[])||[]).slice(0,n); if(!l.length) return '<p class="hint">아직 처리 기록이 없습니다.</p>'; return '<table class="v20-table"><tr><th>시각</th><th>처리자</th><th>작업</th><th>내용</th></tr>'+l.map(x=>'<tr><td class="mono" style="color:var(--ink-3)">'+relTime(x.t)+'</td><td>'+esc(x.by)+'</td><td><b>'+esc(x.action)+'</b></td><td>'+esc(x.detail||'')+'</td></tr>').join('')+'</table>'; }
+
+/* ═══════════ 추천 묵상 ═══════════ */
+RENDERERS.recs=function(){
+  const r=_read(V20K.recs,{})||{}; const f=_read(V20K.featured,null); const s=v20Sess();
+  const items=Object.keys(r).map(k=>Object.assign({id:k},r[k])).filter(x=>(x.count||0)>0 && (v20IsSuper()||x.churchId===s.churchId)).sort((a,b)=>(b.count||0)-(a.count||0));
+  const card=(x,isF)=>{ const sn=x.snapshot||{}; return `<div class="v20-rec ${isF?'featured':''}">
+      <div class="rc-cnt">${x.count||0}<small>추천</small></div>
+      <div class="rc-body"><span class="who">${esc(sn.who||'')}</span> <span class="rng">· ${esc(sn.cell||'')} · ${esc(sn.range||'')}${sn.title?' · '+esc(sn.title):''}</span>
+        <div class="txt">${esc(sn.body||'')}</div>
+        ${(sn.photos||[]).length?'<div class="rc-ph">'+(sn.photos||[]).map(p=>'<img src="'+p+'"/>').join('')+'</div>':''}
+        ${isF?'<div style="margin-top:6px" class="v20-pill">📌 현재 게시 중 · '+esc(f.approvedBy||'')+' · '+relTime(f.approvedAt||Date.now())+'</div>':''}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">${isF?`<button class="btn btn-sm btn-ghost" onclick="v20Unfeature()">게시 내리기</button>`:`<button class="btn btn-sm btn-primary" onclick="v20Feature('${x.id}')">승인 · 상단 게시</button><button class="btn btn-sm btn-ghost" onclick="v20ClearRec('${x.id}')">반려</button>`}</div>
+    </div>`; };
+  const fItem=f?(items.find(x=>x.id===f.postId)||{id:f.postId,count:(r[f.postId]||{}).count||0,snapshot:f.snapshot}):null;
+  document.getElementById('view-recs').innerHTML=`
+    <p class="hint">성도들이 나눔 글의 <b>⬆ 추천</b>을 누르면 이곳에 모입니다. 관리자가 <b>1건</b>을 승인하면 나눔 피드 맨 위에 고정되고, 새로 승인하면 이전 글은 자동으로 내려갑니다. 승인된 글은 공개 범위와 관계없이 우리 교회 교인 전체에게 보이므로, 필요하면 작성자에게 먼저 알려 주세요.</p>
+    <div class="section-title">현재 게시 중</div>
+    ${fItem?card(fItem,true):emptyBox('게시 중인 추천 묵상이 없습니다')}
+    <div class="section-title" style="margin-top:22px">추천 대기 <span style="font-size:11px;color:var(--ink-3);font-weight:600">· ${items.filter(x=>!f||x.id!==f.postId).length}건</span></div>
+    ${items.filter(x=>!f||x.id!==f.postId).map(x=>card(x,false)).join('')||emptyBox('추천된 글이 없습니다 — 사용자 앱 나눔 피드에서 ⬆ 추천을 눌러 보세요')}`;
+};
+function v20Feature(id){ const r=_read(V20K.recs,{})||{}; const x=r[id]; if(!x) return; _write(V20K.featured,{postId:id, snapshot:x.snapshot, approvedAt:Date.now(), approvedBy:v20Sess().name, churchId:x.churchId}); v20Log('추천 묵상 승인', (x.snapshot||{}).who+' · '+(x.snapshot||{}).range); toast('상단에 게시되었습니다'); RENDERERS.recs(); buildNav(); markActive(); }
+function v20Unfeature(){ const f=_read(V20K.featured,null); _write(V20K.featured,null); v20Log('추천 묵상 내림', f&&f.snapshot?f.snapshot.who:''); toast('게시를 내렸습니다'); RENDERERS.recs(); buildNav(); markActive(); }
+function v20ClearRec(id){ const r=_read(V20K.recs,{})||{}; delete r[id]; _write(V20K.recs,r); v20Log('추천 반려', id); toast('반려했습니다'); RENDERERS.recs(); buildNav(); markActive(); }
+
+/* ═══════════ 콘텐츠 범위 스위치 — 칼럼 · 중보기도 ═══════════ */
+function v20ScopeRadio(field){
+  const s=v20Sess(); const c=v20MyChurch();
+  if(s.role!=='super') return `<div class="v20-scope"><b>범위</b> <span class="v20-pill">우리 교회 · ${esc(c?c.name:'')}</span><span style="color:var(--ink-3);font-size:11.5px">교회관리자가 올린 글은 우리 교회 교인에게만 보입니다</span><input type="hidden" id="${field}" value="church"></div>`;
+  return `<div class="v20-scope"><b>범위</b>
+    <label><input type="radio" name="${field}" value="church" checked> 우리 교회 (선한목자교회)</label>
+    <label><input type="radio" name="${field}" value="common"> 공통 · 모든 교회</label>
+    <span style="color:var(--ink-3);font-size:11.5px;margin-left:auto">공통은 본부만 올릴 수 있습니다</span></div>`;
+}
+function v20ReadScope(field){ const h=document.getElementById(field); if(h) return h.value; const r=document.querySelector('input[name="'+field+'"]:checked'); return r?r.value:'church'; }
+const _v20_openColumnForm=openColumnForm;
+openColumnForm=function(){ _v20_openColumnForm(); const body=document.querySelector('#modalBox .modal-body'); if(body) body.insertAdjacentHTML('beforeend', v20ScopeRadio('cf-scope')); };
+const _v20_addColumn=addColumn;
+addColumn=function(data){ data.scope=v20ReadScope('cf-scope'); data.churchId=v20Sess().churchId; data.by=v20Sess().name; return _v20_addColumn(data); };
+const _v20_openPrayerForm=openPrayerForm;
+openPrayerForm=function(){ _v20_openPrayerForm(); const body=document.querySelector('#modalBox .modal-body'); if(body) body.insertAdjacentHTML('beforeend', v20ScopeRadio('pf-scope')); };
+const _v20_addPrayer=addPrayer;
+addPrayer=function(o){ o=o||{}; o.contentScope=v20ReadScope('pf-scope'); o.churchId=v20Sess().churchId; return _v20_addPrayer(o); };
+
+/* 나눔 관리 — '목장만' 기본 공개범위 추가 */
+shareScopeLabel=function(v){ return v==='private'?'나만 보기':(v==='friends'?'친구':(v==='cell'?'목장만':'친구+목장')); };
+const _v20_share=RENDERERS.share;
+RENDERERS.share=function(){
+  _v20_share();
+  const v=document.getElementById('view-share'); const p=getPrefs(); const def=p.shareDefaultScope||'friends_cell';
+  const anchor=v.querySelector('input[name="shDef"][onchange*="friends_cell"]'); if(!anchor) return;
+  const lab=anchor.closest('label');
+  lab.insertAdjacentHTML('beforebegin',`<label style="display:flex;align-items:center;gap:8px;padding:6px 2px;cursor:pointer;font-size:13.5px"><input type="radio" name="shDef" ${def==='cell'?'checked':''} onchange="setShareDefaultScope('cell')"/><b>목장만</b> <span style="color:var(--ink-3);font-size:12px">— 우리 목장 식구에게만 (친구에게는 안 보임)</span></label>`);
+  const note=v.querySelector('.hint'); if(note) note.insertAdjacentHTML('afterend','<div class="v20-sec-note">v2.0 — 사진 최대 2장(기기에서 1280px로 축소) · 추천 묵상은 「추천 묵상」 메뉴에서 승인 · 나눔은 승인된 우리 교회 교인만 열람</div>');
+};
+
+/* 대시보드 — 승인 대기 · 추천 대기 카드 */
+const _v20_dash=RENDERERS.dashboard;
+RENDERERS.dashboard=function(){
+  _v20_dash();
+  const v=document.getElementById('view-dashboard'); const s=v20Sess(); const c=v20MyChurch();
+  const pend=v20PendingCount(), recs=v20RecCount(); const mem=Object.values(v20Members()).filter(v20CanSee);
+  v.insertAdjacentHTML('afterbegin',`<div class="stat-grid" style="margin-bottom:18px">
+    <div class="stat" style="cursor:pointer;border-color:var(--coral-line)" onclick="go('members')"><div class="stat-num" style="color:var(--coral-deep)">${pend}</div><div class="hint">가입 승인 대기 <span class="v20-pill" style="margin-left:4px">교구 담당</span></div></div>
+    <div class="stat" style="cursor:pointer" onclick="go('members')"><div class="stat-num">${mem.filter(m=>m.status==='approved').length}</div><div class="hint">승인된 교인 ${s.role==='super'?'(전체 교회)':'· '+esc(c?c.name:'')}</div></div>
+    <div class="stat" style="cursor:pointer" onclick="go('recs')"><div class="stat-num" style="color:var(--coral-deep)">${recs}</div><div class="hint">추천 묵상 승인 대기</div></div>
+    ${s.role==='super'?`<div class="stat" style="cursor:pointer" onclick="go('churches')"><div class="stat-num">${v20Churches().length}</div><div class="hint">등록 교회</div></div>`:''}
+  </div>
+  <p class="hint" style="margin-bottom:14px"><b>v2.0 정책</b> — 앱 전면 무료 · 나눔/칼럼/중보 나눔은 승인된 우리 교회 교인만 · 말씀 본문/긴급기도/나라 기도는 본부 공통 · 책자는 앱 안 몰(말씀함께.com PG)에서 실물 구매</p>`);
+};
+
+
+/* ═══════════ 검색·필터 (메뉴별) ═══════════ */
+let v20Q={}; /* viewId → {q, district} */
+function v20MyDistricts(){ const s=v20Sess(); const c=v20MyChurch();
+  if(s.role==='district') return s.districts||[];
+  if(c&&c.org&&typeof ORG_DATA!=='undefined') return ORG_DATA.districts.map(d=>d.name);
+  return Array.from(new Set(Object.values(v20Members()).filter(m=>m.churchId===(c?c.id:'')).map(m=>m.district).filter(Boolean)));
+}
+function v20SearchBarHTML(view){
+  const st=v20Q[view]||{q:'',district:''}; const ds=v20MyDistricts(); const s=v20Sess();
+  return `<div class="v20-search" id="v20sb-${view}">
+    <span class="lbl">검색</span>
+    <select onchange="v20SetQ('${view}','district',this.value)"><option value="">${s.role==='district'?'담당 교구 전체':'교구 전체'}</option>${ds.map(d=>'<option value="'+esc(d)+'" '+(st.district===d?'selected':'')+'>'+esc(d)+'</option>').join('')}</select>
+    <input type="search" placeholder="이름 · 전화 뒤 4자리 · 목장 · 내용" value="${esc(st.q)}" oninput="v20SetQ('${view}','q',this.value)"/>
+    ${(st.q||st.district)?`<button class="clr" onclick="v20SetQ('${view}','q','');v20SetQ('${view}','district','')">지우기</button>`:''}
+    <span class="cnt" id="v20cnt-${view}"></span></div>`;
+}
+let _v20qTimer=null;
+function v20SetQ(view,k,v){ v20Q[view]=v20Q[view]||{q:'',district:''}; v20Q[view][k]=v; clearTimeout(_v20qTimer);
+  _v20qTimer=setTimeout(()=>{ if(view==='members'){ RENDERERS.members(); const i=document.querySelector('#v20sb-members input'); if(i&&k==='q'){ i.focus(); i.setSelectionRange(i.value.length,i.value.length); } } else { v20ApplyDomFilter(view); const c=document.querySelector('#v20sb-'+view+' .clr'); } }, view==='members'?250:0); }
+function v20ApplyDomFilter(view){
+  const root=document.getElementById('view-'+view); if(!root) return;
+  const st=v20Q[view]||{q:'',district:''}; const q=(st.q||'').trim().toLowerCase(); const d=(st.district||'').toLowerCase();
+  const rows=root.querySelectorAll('.lrow, .v20-rec, .col-card');
+  let shown=0, total=0;
+  rows.forEach(el=>{ total++; const t=(el.textContent||'').toLowerCase(); const ok=(!q||t.indexOf(q)>-1)&&(!d||t.indexOf(d)>-1); el.style.display=ok?'':'none'; if(ok) shown++; });
+  const c=document.getElementById('v20cnt-'+view); if(c) c.textContent=(q||d)?(shown+' / '+total):(total+'건');
+}
+function v20MountSearch(view){
+  const root=document.getElementById('view-'+view); if(!root||root.querySelector('.v20-search')) return;
+  const first=root.querySelector('.hint, p'); const html=v20SearchBarHTML(view);
+  if(first) first.insertAdjacentHTML('afterend', html); else root.insertAdjacentHTML('afterbegin', html);
+  v20ApplyDomFilter(view);
+}
+['prayer','column','share','rooms','recs'].forEach(v=>{ const orig=RENDERERS[v]; if(!orig) return; RENDERERS[v]=function(){ orig.apply(this, arguments); try{ v20MountSearch(v); }catch(e){} }; });
+
+/* 가입자 관리 — 구조화 필터(교구·이름·전화 뒤4자리·목장) */
+const _v20_members=RENDERERS.members;
+RENDERERS.members=function(){
+  _v20_members();
+  const root=document.getElementById('view-members'); const st=v20Q.members||{q:'',district:''};
+  const q=(st.q||'').trim().toLowerCase(); const qd=q.replace(/[^0-9]/g,''); const d=(st.district||'').toLowerCase();
+  const tabs=root.querySelector('.v20-tabs'); if(tabs) tabs.insertAdjacentHTML('beforebegin', v20TestModeHTML()+v20SearchBarHTML('members'));
+  const tables=root.querySelectorAll('.v20-table'); const tbl=tables[0]; let shown=0,total=0;
+  if(tbl && !tbl.textContent.includes('처리자')){
+    tbl.querySelectorAll('tr').forEach((tr,i)=>{ if(!tr.querySelector('td')) return; total++; const text=tr.textContent.toLowerCase();
+      const okQ=!q||text.indexOf(q)>-1||(qd.length>=2&&text.replace(/[^0-9]/g,'').indexOf(qd)>-1);
+      const okD=!d||text.indexOf(d)>-1; const ok=okQ&&okD; tr.style.display=ok?'':'none'; if(ok) shown++; });
+  }
+  const c=document.getElementById('v20cnt-members'); if(c) c.textContent=(q||d)?(shown+' / '+total+'명'):(total+'명');
+};
+
+/* ═══════════ 테스트 모드 — 가입 즉시 승인 (출시 전 OFF) ═══════════ */
+const V20_TESTKEY='mh_v20_test_mode';
+function v20TestMode(){ const v=_read(V20_TESTKEY,null); return v===null?true:!!v; }
+function v20TestModeHTML(){ const on=v20TestMode(); return `<div class="v20-test"><div style="flex:1"><b>테스트 모드 ${on?'ON':'OFF'}</b> — ${on?'지금은 가입하면 <b>즉시 승인</b>됩니다. 실제 출시 전에 끄면 교구 담당자 승인 대기로 바뀝니다.':'가입 후 교구 담당자 승인 대기 상태가 됩니다(실제 운영).'}</div><button class="toggle ${on?'on':''}" onclick="_write('${V20_TESTKEY}',!v20TestMode());toast('테스트 모드 '+(v20TestMode()?'ON — 가입 즉시 승인':'OFF — 승인 대기'));RENDERERS.members()"></button></div>`; }
+
+(function(){ const n=NAV.find(x=>x.id==='subscription'); if(n){ n.name='책자 · 몰'; n.en='Shop'; } })();
+v20ApplyRole(); go(current);
+</script>
+
 </body>
 </html>

@@ -13654,6 +13654,7 @@ renderMypage = async function(){
 </script>
 <style id="v206-style">
 /* ═══════════ v2.0.6 — 나눔탭 목자 말풍선 + 기간 한정 교회·교구 소식 ═══════════ */
+#viewContainer{ overflow-anchor:none; } /* 브라우저 자동 스크롤 앵커링 대신 직접 보정 */
 .v206-bw{ display:flex; gap:9px; align-items:flex-start; padding:4px 0 10px; }
 .v206-bw .sp-av{ margin-top:2px; }
 .v206-bubble{ position:relative; flex:1; min-width:0; background:#FFF9E8; border:1px solid #F0E2B8; border-radius:4px 16px 16px 16px; padding:10px 12px 9px; cursor:pointer; }
@@ -13673,6 +13674,7 @@ renderMypage = async function(){
 .v206-x-in{ overflow:hidden; min-height:0; }
 .v206-x .v206-qa{ opacity:0; transform:translateY(-4px); transition:opacity .3s ease .08s, transform .3s ease .08s; }
 .v206-x.open .v206-qa{ opacity:1; transform:none; }
+.v206-bw.noanim, .v206-bw.noanim .v206-x, .v206-bw.noanim .v206-tx, .v206-bw.noanim .v206-bubble, .v206-bw.noanim .v206-x .v206-qa{ transition:none !important; }
 @media (prefers-reduced-motion: reduce){ .v206-x,.v206-tx,.v206-bubble,.v206-x .v206-qa{ transition:none; } }
 .v206-ft{ display:flex; align-items:center; gap:6px; margin-top:8px; font-size:0.65rem; color:#A08A55; }
 .v206-ft .b{ background:#fff; border:1px solid #EAD9A6; border-radius:99px; padding:3px 9px; font-weight:700; color:#7A5A10; cursor:pointer; }
@@ -13805,10 +13807,12 @@ function v206RefreshBits(){
 function v206SetOpen(open){
   const el=document.getElementById('v206Bubble'); if(!el) return;
   state.v206Open=!!open;
+  if(!open) el.classList.add('noanim');            /* 접힘은 장면 없이 즉시 */
   const x=el.querySelector('.v206-x'); if(x) x.classList.toggle('open', !!open);
   const qb=el.querySelector('.v206-qbtn'); if(qb) qb.classList.toggle('on', !!open);
   const mini=(state.shareFilter||'all')!=='cell';
   el.classList.toggle('mini', mini && !open);
+  if(!open){ void el.offsetHeight; requestAnimationFrame(()=>el.classList.remove('noanim')); }
   if(open){
     const c=document.getElementById('viewContainer'); state.v206OpenY=c?c.scrollTop:0;
     setTimeout(()=>{ try{ el.scrollIntoView({behavior:'smooth', block:'nearest'}); }catch(e){} const inp=document.getElementById('v206QaInput'); if(inp) inp.focus({preventScroll:true}); }, 440);
@@ -13828,22 +13832,16 @@ function v206AddQa(){
   const ql=document.querySelector('#v206Bubble .v206-qa-list'); if(ql&&ql.lastElementChild) ql.lastElementChild.scrollIntoView({behavior:'smooth', block:'nearest'});
   if(typeof toast==='function') toast('목자에게 질문을 남겼어요');
 }
-/* 피드를 쓸어 올려 말풍선이 화면 위로 빠져나가면 스르르 접힘 — 접히는 만큼 스크롤을 보정해 아래 글이 튀지 않게 */
+/* 피드를 쓸어 올려 말풍선이 화면 위로 완전히 벗어나면, 보이지 않는 곳에서 접힌 상태로 바꿈 (접히는 장면 없음, 아래 글이 튀지 않게 스크롤 보정) */
 (function(){
   const c=document.getElementById('viewContainer'); if(!c) return;
-  let closing=false;
   c.addEventListener('scroll', function(){
-    if(!state.v206Open || state.tab!=='share' || closing) return;
+    if(!state.v206Open || state.tab!=='share') return;
     const el=document.getElementById('v206Bubble'); if(!el) return;
     const r=el.getBoundingClientRect(), cr=c.getBoundingClientRect();
-    if(r.top < cr.top - 24){
-      closing=true;
-      let prevH=el.offsetHeight; v206SetOpen(false);
-      const t0=performance.now();
-      (function step(){
-        const h=el.offsetHeight; const d=prevH-h; if(d>0) c.scrollTop-=d; prevH=h;
-        if(performance.now()-t0<520) requestAnimationFrame(step); else closing=false;
-      })();
+    if(r.bottom < cr.top){
+      const before=el.offsetHeight; v206SetOpen(false);
+      const d=before-el.offsetHeight; if(d>0) c.scrollTop-=d;
     }
   }, {passive:true});
 })();

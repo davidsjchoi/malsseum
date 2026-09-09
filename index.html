@@ -13817,7 +13817,7 @@ function v206SetOpen(open){
   if(!open){ void el.offsetHeight; requestAnimationFrame(()=>el.classList.remove('noanim')); }
   if(open){
     const c=document.getElementById('viewContainer'); state.v206OpenY=c?c.scrollTop:0;
-    setTimeout(()=>{ try{ el.scrollIntoView({behavior:'smooth', block:'nearest'}); }catch(e){} const inp=document.getElementById('v206QaInput'); if(inp) inp.focus({preventScroll:true}); }, 440);
+    setTimeout(()=>{ try{ el.scrollIntoView({behavior:'smooth', block:'nearest'}); }catch(e){} }, 440); /* 입력창 자동 포커스 없음 — 키보드가 뜨면 화면 높이가 바뀌어 튐 */
   }
 }
 function v206ToggleBubble(){ v206SetOpen(!state.v206Open); }
@@ -13843,10 +13843,20 @@ function v206AddQa(){
     if(touching) return;
     if(!state.v206Open || state.tab!=='share') return;
     const el=document.getElementById('v206Bubble'); if(!el) return;
+    const inp=document.getElementById('v206QaInput'); if(inp && document.activeElement===inp) return;   /* 질문 입력 중(키보드 열림)엔 손대지 않음 */
+    const maxY=c.scrollHeight-c.clientHeight;
+    if(c.scrollTop<0 || c.scrollTop>maxY+0.5){ arm(); return; }                                          /* iOS 바운스(오버스크롤) 중이면 끝난 뒤에 */
     const r=el.getBoundingClientRect(), cr=c.getBoundingClientRect();
     if(r.bottom < cr.top){
-      const before=el.offsetHeight; v206SetOpen(false);
-      const d=before-el.offsetHeight; if(d>0) c.scrollTop-=d;
+      /* 화면에 보이는 첫 글을 기준점으로 잡고, 접은 뒤 그 글이 같은 화면 위치에 오도록 scrollTop을 맞춤
+         (높이 차 계산이 아니라 실제 위치를 재서, 맨 아래 클램프·여백 변화 등 어떤 경우에도 화면이 움직이지 않음) */
+      const anchor=Array.from(c.querySelectorAll('.share-feed > *')).find(x=>x!==el && x.getBoundingClientRect().bottom > cr.top);
+      const y0=anchor?anchor.getBoundingClientRect().top:null;
+      v206SetOpen(false);
+      if(anchor){
+        const y1=anchor.getBoundingClientRect().top; const diff=y1-y0;
+        if(Math.abs(diff)>0.5){ c.scrollTop+=diff; const y2=anchor.getBoundingClientRect().top; if(Math.abs(y2-y0)>0.5) c.scrollTop+=(y2-y0); }
+      }
     }
   }
   function arm(){ clearTimeout(timer); timer=setTimeout(settle, 160); }

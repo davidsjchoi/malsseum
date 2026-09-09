@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>말씀함께 · 관리자 v1.9.6</title>
+<title>말씀함께 · 관리자 v2.0.6</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -207,7 +207,7 @@ a{color:inherit}
       <div class="side-mark">함</div>
       <div>
         <div class="side-brand-text">말씀함께</div>
-        <div class="side-brand-sub en">ADMIN · v2.0.1</div>
+        <div class="side-brand-sub en">ADMIN · v2.0.6</div>
       </div>
     </div>
     <nav class="side-nav" id="sideNav"></nav>
@@ -2245,6 +2245,8 @@ init();
 .v20-search .clr{ border:none; background:var(--bg-soft); border-radius:99px; padding:5px 10px; font-size:11.5px; font-weight:700; cursor:pointer; font-family:inherit; }
 .v20-test{ display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:12px; margin:0 0 14px; background:#FFF8F5; border:1px dashed var(--coral); font-size:12.5px; }
 .v20-test b{ color:var(--coral-deep); }
+.v206-sc{display:inline-block;font-size:11px;font-weight:700;border-radius:5px;padding:2px 7px;background:var(--sage-pale,#EDF2EE);color:var(--sage-deep,#223E30)}
+.v206-sc.district{background:#F0EBE4;color:#8C6A1E}
 </style>
 <script id="v20-admin-script">
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -2285,7 +2287,7 @@ function v20ApplyRole(){
   let chip=document.getElementById('v20RoleChip');
   if(!chip){ chip=document.createElement('span'); chip.id='v20RoleChip'; const tr=document.querySelector('.topbar-right'); if(tr) tr.insertBefore(chip, tr.firstChild); }
   chip.className='v20-rolechip'+(s.role==='super'?' super':''); chip.textContent=(s.role==='super'?'SUPER':(s.role==='church'?'교회관리자':'교구담당'))+' · '+s.name;
-  const sub=document.querySelector('.side-brand-sub'); if(sub) sub.textContent='ADMIN · v2.0.1';
+  const sub=document.querySelector('.side-brand-sub'); if(sub) sub.textContent='ADMIN · v2.0.6';
   buildNav(); document.querySelectorAll('.side-item').forEach(e=>e.classList.toggle('active',e.dataset.view===current));
 }
 /* 역할 전환 UI (데모) */
@@ -2521,6 +2523,98 @@ RENDERERS.members=function(){
 const V20_TESTKEY='mh_v20_test_mode';
 function v20TestMode(){ const v=_read(V20_TESTKEY,null); return v===null?true:!!v; }
 function v20TestModeHTML(){ const on=v20TestMode(); return `<div class="v20-test"><div style="flex:1"><b>테스트 모드 ${on?'ON':'OFF'}</b> — ${on?'지금은 가입하면 <b>즉시 승인</b>됩니다. 실제 출시 전에 끄면 교구 담당자 승인 대기로 바뀝니다.':'가입 후 교구 담당자 승인 대기 상태가 됩니다(실제 운영).'}</div><button class="toggle ${on?'on':''}" onclick="_write('${V20_TESTKEY}',!v20TestMode());toast('테스트 모드 '+(v20TestMode()?'ON — 가입 즉시 승인':'OFF — 승인 대기'));RENDERERS.members()"></button></div>`; }
+
+
+/* ═══════════ v2.0.6 — 나눔 관리: 교회·교구 소식(기간 한정) + 목장 안내(말풍선) 현황 ═══════════ */
+const V206K = { cellNotice:'mh_v206_cell_notice', churchNotices:'mh_v206_church_notices' };
+const V206_MAX_DAYS = 28, V206_DEFAULT_DAYS = 14, V206_LIMIT_PER_SCOPE = 3;
+function v206All(){ return _read(V206K.churchNotices,[])||[]; }
+function v206Save(list){ _write(V206K.churchNotices, list); }
+function v206Dk(ts){ const d=new Date(ts); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function v206CanScope(){ const s=v20Sess(); return s.role==='district' ? ['district'] : ['church','district']; }
+function v206Visible(n){ const s=v20Sess(); const c=v20MyChurch(); if(s.role==='super') return true; if(n.churchId!==(c?c.id:'gsmch')) return false; if(s.role==='district') return n.scope==='district' && (s.districts||[]).includes(n.district); return true; }
+function v206Status(n){ const now=Date.now(); if(n.endAt<now) return 'ended'; if(n.startAt>now) return 'scheduled'; return 'active'; }
+function v206Fmt(ts){ const d=new Date(ts); return (d.getMonth()+1)+'.'+d.getDate(); }
+
+function v206SectionHTML(){
+  const s=v20Sess(); const c=v20MyChurch(); const churchId=c?c.id:'gsmch';
+  const scopes=v206CanScope(); const dists=v20MyDistricts();
+  const list=v206All().filter(v206Visible).sort((a,b)=>b.createdAt-a.createdAt);
+  const active=list.filter(n=>v206Status(n)==='active'), sched=list.filter(n=>v206Status(n)==='scheduled'), ended=list.filter(n=>v206Status(n)==='ended').slice(0,10);
+  const today=v206Dk(Date.now()), def=v206Dk(Date.now()+V206_DEFAULT_DAYS*86400000);
+  const row=n=>`<tr>
+      <td><span class="v206-sc ${n.scope}">${n.scope==='church'?'교회 전체':esc(n.district||'')}</span></td>
+      <td class="mono">${esc((n.date||'').slice(5).replace('-','.'))}</td>
+      <td>${esc(n.text)}</td>
+      <td class="mono" style="color:var(--ink-3)">${v206Fmt(n.startAt)}~${v206Fmt(n.endAt)}</td>
+      <td style="color:var(--ink-3)">${esc(n.by||'')}</td>
+      <td style="white-space:nowrap">${v206Status(n)!=='ended'?`<button class="btn btn-sm btn-ghost" onclick="v206End('${n.id}')">게시 종료</button> `:''}<button class="btn btn-sm btn-ghost" onclick="v206Del('${n.id}')">삭제</button></td>
+    </tr>`;
+  const table=arr=>arr.length?`<table class="v20-table"><tr><th>범위</th><th>행사일</th><th>내용</th><th>게시 기간</th><th>게시자</th><th></th></tr>${arr.map(row).join('')}</table>`:'<p class="hint">없음</p>';
+  /* 목장 안내 현황 */
+  const cells=_read(V206K.cellNotice,{})||{};
+  const cellRows=Object.keys(cells).map(k=>{ const n=cells[k]; const conf=Object.keys(n.confirmed||{}).length; const q=(n.qa||[]).filter(x=>!x.leader).length; const a=(n.qa||[]).filter(x=>x.leader).length;
+    return `<tr><td>${esc(k)}</td><td>${esc(n.by||'')}</td><td>${esc((n.text||'').slice(0,60))}${(n.text||'').length>60?'…':''}</td><td class="mono">${v206Fmt(n.expires)}까지${n.expires<Date.now()?' <span style="color:var(--coral-deep)">만료</span>':''}</td><td class="mono">${conf}명</td><td class="mono">질문 ${q} · 답변 ${a}</td></tr>`; }).join('');
+  return `
+    <div class="section-title">교회 · 교구 소식 <small style="font-weight:500;color:var(--ink-3);font-size:12px">앱 나눔탭 3번째 자리 카드 · 기간 한정</small></div>
+    <div class="v20-sec-note">게시 종료일이 지나면 앱에서 자동으로 사라지고 보관되지 않습니다 (기본 ${V206_DEFAULT_DAYS}일 · 최대 ${V206_MAX_DAYS}일 · 범위별 동시 ${V206_LIMIT_PER_SCOPE}건). ${s.role==='district'?'교구담당은 담당 교구 소식만 올릴 수 있습니다.':'교회 전체 소식은 교회 관리자, 교구 소식은 교구 관리자가 올립니다.'}</div>
+    <div class="card" style="padding:16px 18px">
+      <div style="display:grid;grid-template-columns:140px 160px 140px 1fr;gap:10px;align-items:end">
+        <div><label class="hint">범위</label><select class="select" id="v206-scope" onchange="document.getElementById('v206-dist').disabled=this.value!=='district'">${scopes.map(v=>'<option value="'+v+'">'+(v==='church'?'교회 전체':'교구')+'</option>').join('')}</select></div>
+        <div><label class="hint">교구</label><select class="select" id="v206-dist" ${scopes[0]==='church'?'disabled':''}>${dists.map(d=>'<option value="'+esc(d)+'">'+esc(d)+'</option>').join('')}</select></div>
+        <div><label class="hint">행사·마감일</label><input class="input" type="date" id="v206-date" value="${def}"/></div>
+        <div><label class="hint">내용 (한 줄)</label><input class="input" id="v206-text" maxlength="60" placeholder="예: 10월호 책자 구독 정보 수정 마감 (MY → 구독)"/></div>
+      </div>
+      <div style="display:grid;grid-template-columns:140px 160px 1fr;gap:10px;align-items:end;margin-top:10px">
+        <div><label class="hint">게시 시작</label><input class="input" type="date" id="v206-start" value="${today}"/></div>
+        <div><label class="hint">게시 종료</label><input class="input" type="date" id="v206-end" value="${def}"/></div>
+        <div><button class="btn btn-primary btn-sm" onclick="v206Add()">소식 게시</button></div>
+      </div>
+    </div>
+    <div class="section-title" style="font-size:14px">게시 중 <small style="font-weight:500;color:var(--ink-3);font-size:12px">${active.length}건</small></div>${table(active)}
+    ${sched.length?`<div class="section-title" style="font-size:14px">게시 예정 <small style="font-weight:500;color:var(--ink-3);font-size:12px">${sched.length}건</small></div>${table(sched)}`:''}
+    ${ended.length?`<div class="section-title" style="font-size:14px">종료됨 <small style="font-weight:500;color:var(--ink-3);font-size:12px">최근 ${ended.length}건 · 앱에는 보이지 않음</small></div>${table(ended)}`:''}
+
+    <div class="section-title">목장 안내(목자 말풍선) 현황 <small style="font-weight:500;color:var(--ink-3);font-size:12px">목자가 앱에서 게시 · 목장당 1건 · 확인률</small></div>
+    ${cellRows?`<table class="v20-table"><tr><th>목장</th><th>목자</th><th>안내</th><th>만료</th><th>확인</th><th>질문·답변</th></tr>${cellRows}</table>`:'<p class="hint">이 브라우저에 기록된 목장 안내가 없습니다 (데모 모드).</p>'}
+  `;
+}
+function v206Add(){
+  const s=v20Sess(); const c=v20MyChurch(); const churchId=c?c.id:'gsmch';
+  const scope=document.getElementById('v206-scope').value; const district=scope==='district'?document.getElementById('v206-dist').value:null;
+  const text=(document.getElementById('v206-text').value||'').trim(); const date=document.getElementById('v206-date').value;
+  const st=document.getElementById('v206-start').value, en=document.getElementById('v206-end').value;
+  if(!text) return toast('내용을 입력해 주세요');
+  if(!st||!en) return toast('게시 기간을 입력해 주세요');
+  const startAt=new Date(st+'T00:00:00').getTime(), endAt=new Date(en+'T23:59:59').getTime();
+  if(endAt<startAt) return toast('게시 종료일이 시작일보다 빠릅니다');
+  if((endAt-startAt)/86400000>V206_MAX_DAYS) return toast('게시 기간은 최대 '+V206_MAX_DAYS+'일입니다');
+  if(scope==='district' && s.role==='district' && !(s.districts||[]).includes(district)) return toast('담당 교구만 게시할 수 있습니다');
+  const list=v206All();
+  const overlap=list.filter(n=>n.churchId===churchId && n.scope===scope && (scope==='church'||n.district===district) && n.endAt>=startAt && n.startAt<=endAt).length;
+  if(overlap>=V206_LIMIT_PER_SCOPE) return toast('같은 기간에 이미 '+V206_LIMIT_PER_SCOPE+'건이 게시 중입니다 — 하나를 종료한 뒤 올려 주세요');
+  list.push({id:'n'+Date.now().toString(36), churchId, scope, district, date, text, startAt, endAt, createdAt:Date.now(), by:s.name});
+  v206Save(list); v20Log('소식 게시', (scope==='church'?'교회 전체':district)+' · '+text);
+  toast('소식을 게시했습니다 — 앱 나눔탭에 '+v206Fmt(startAt)+'~'+v206Fmt(endAt)+' 표시'); RENDERERS.share();
+}
+function v206End(id){ const list=v206All(); const n=list.find(x=>x.id===id); if(!n) return; n.endAt=Date.now()-1000; v206Save(list); v20Log('소식 종료', n.text); toast('게시를 종료했습니다'); RENDERERS.share(); }
+function v206Del(id){ const list=v206All(); const n=list.find(x=>x.id===id); if(!n) return; if(!confirm('이 소식을 삭제할까요?')) return; v206Save(list.filter(x=>x.id!==id)); v20Log('소식 삭제', n.text); toast('삭제했습니다'); RENDERERS.share(); }
+
+const _v206_share=RENDERERS.share;
+RENDERERS.share=function(){
+  _v206_share();
+  const v=document.getElementById('view-share'); if(!v) return;
+  const first=v.querySelector('.section-title');
+  if(first) first.insertAdjacentHTML('beforebegin', v206SectionHTML()); else v.insertAdjacentHTML('beforeend', v206SectionHTML());
+};
+/* 대시보드 — 게시 중 소식 수 */
+const _v206_dash=RENDERERS.dashboard;
+RENDERERS.dashboard=function(){
+  _v206_dash();
+  const v=document.getElementById('view-dashboard'); const grid=v&&v.querySelector('.stat-grid'); if(!grid) return;
+  const now=Date.now(); const cnt=v206All().filter(v206Visible).filter(n=>n.startAt<=now&&n.endAt>=now).length;
+  grid.insertAdjacentHTML('beforeend', `<div class="stat" style="cursor:pointer" onclick="go('share')"><div class="stat-num">${cnt}</div><div class="hint">게시 중인 교회·교구 소식</div></div>`);
+};
 
 (function(){ const n=NAV.find(x=>x.id==='subscription'); if(n){ n.name='책자 · 몰'; n.en='Shop'; } })();
 v20ApplyRole(); go(current);

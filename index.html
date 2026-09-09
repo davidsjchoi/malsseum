@@ -13691,6 +13691,8 @@ renderMypage = async function(){
 .v206-qa .in{ display:flex; gap:6px; margin-top:9px; }
 .v206-qa .in input{ flex:1; min-width:0; background:#fff; border:1px solid #EAD9A6; border-radius:10px; padding:7px 10px; font-size:0.75rem; color:#3B3323; font-family:inherit; }
 .v206-qa .in input::placeholder{ color:#B3A47A; }
+.v206-qa .in input:focus{ outline:none; border-color:#D9C58A; box-shadow:0 0 0 2px #F3E6BF; }
+.v206-bubble, .v206-qa .in input, .v206-qa .in button, .v206-ft .b{ -webkit-tap-highlight-color:transparent; }
 .v206-qa .in button{ background:#7A5A10; color:#FFF9E8; border:none; border-radius:10px; padding:7px 11px; font-size:0.72rem; font-weight:700; cursor:pointer; }
 .v206-qa .empty{ font-size:0.72rem; color:#B3A47A; margin-top:6px; }
 
@@ -13832,10 +13834,13 @@ function v206AddQa(){
   const ql=document.querySelector('#v206Bubble .v206-qa-list'); if(ql&&ql.lastElementChild) ql.lastElementChild.scrollIntoView({behavior:'smooth', block:'nearest'});
   if(typeof toast==='function') toast('목자에게 질문을 남겼어요');
 }
-/* 피드를 쓸어 올려 말풍선이 화면 위로 완전히 벗어나면, 보이지 않는 곳에서 접힌 상태로 바꿈 (접히는 장면 없음, 아래 글이 튀지 않게 스크롤 보정) */
+/* 피드를 쓸어 올려 말풍선이 화면 위로 완전히 벗어나면, 스크롤이 멈추고 손을 뗀 뒤에 보이지 않는 곳에서 접힌 상태로 바꿈.
+   관성 스크롤 도중에 높이·scrollTop을 건드리면 튀므로, 정지 후 한 프레임에 접힘+보정을 함께 처리 */
 (function(){
   const c=document.getElementById('viewContainer'); if(!c) return;
-  c.addEventListener('scroll', function(){
+  let timer=null, touching=false;
+  function settle(){
+    if(touching) return;
     if(!state.v206Open || state.tab!=='share') return;
     const el=document.getElementById('v206Bubble'); if(!el) return;
     const r=el.getBoundingClientRect(), cr=c.getBoundingClientRect();
@@ -13843,7 +13848,13 @@ function v206AddQa(){
       const before=el.offsetHeight; v206SetOpen(false);
       const d=before-el.offsetHeight; if(d>0) c.scrollTop-=d;
     }
-  }, {passive:true});
+  }
+  function arm(){ clearTimeout(timer); timer=setTimeout(settle, 160); }
+  c.addEventListener('scroll', arm, {passive:true});
+  if('onscrollend' in window) c.addEventListener('scrollend', ()=>{ clearTimeout(timer); settle(); }, {passive:true});
+  c.addEventListener('touchstart', ()=>{ touching=true; }, {passive:true});
+  c.addEventListener('touchend', ()=>{ touching=false; arm(); }, {passive:true});
+  c.addEventListener('touchcancel', ()=>{ touching=false; arm(); }, {passive:true});
 })();
 
 /* ── 소식 카드 HTML ── */

@@ -13663,8 +13663,17 @@ renderMypage = async function(){
 .v206-who .ttl{ background:#F3E6BF; color:#7A5A10; border-radius:5px; padding:1px 6px; font-size:0.6rem; }
 .v206-who .pin{ margin-left:auto; font-size:0.6rem; color:#A08A55; font-weight:600; white-space:nowrap; }
 .v206-tx{ font-size:0.8125rem; color:#3B3323; line-height:1.65; margin-top:5px; letter-spacing:-0.2px; white-space:pre-wrap; word-break:keep-all; }
-.v206-bw.mini .v206-tx{ display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden; white-space:normal; }
+.v206-tx{ max-height:40em; overflow:hidden; transition:max-height .42s cubic-bezier(.4,0,.2,1); }
+.v206-bw.mini .v206-tx{ max-height:1.65em; white-space:nowrap; text-overflow:ellipsis; }
 .v206-bw.mini .v206-bubble{ padding:8px 12px; }
+.v206-bw.mini .v206-ft{ display:none; }
+.v206-bubble{ transition:padding .3s ease; }
+.v206-x{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .42s cubic-bezier(.4,0,.2,1); }
+.v206-x.open{ grid-template-rows:1fr; }
+.v206-x-in{ overflow:hidden; min-height:0; }
+.v206-x .v206-qa{ opacity:0; transform:translateY(-4px); transition:opacity .3s ease .08s, transform .3s ease .08s; }
+.v206-x.open .v206-qa{ opacity:1; transform:none; }
+@media (prefers-reduced-motion: reduce){ .v206-x,.v206-tx,.v206-bubble,.v206-x .v206-qa{ transition:none; } }
 .v206-ft{ display:flex; align-items:center; gap:6px; margin-top:8px; font-size:0.65rem; color:#A08A55; }
 .v206-ft .b{ background:#fff; border:1px solid #EAD9A6; border-radius:99px; padding:3px 9px; font-weight:700; color:#7A5A10; cursor:pointer; }
 .v206-ft .b.on{ background:#7A5A10; border-color:#7A5A10; color:#FFF9E8; }
@@ -13756,57 +13765,86 @@ function v206ActiveNotices(){
     .sort((a,b)=>(a.date||'').localeCompare(b.date||''));
 }
 
-/* ── 말풍선 HTML (mini: 전체/친구 필터에서 한 줄) ── */
-function v206BubbleHTML(n, open, mini){
+/* ── 말풍선 HTML (mini: 전체/친구 필터에서 한 줄) — Q&A는 항상 렌더, 열림/닫힘은 클래스 전환(애니메이션) ── */
+function v206QaListHTML(n){
+  const q=n.qa||[];
+  return q.length ? q.map(c=>`<div class="c ${c.leader?'ans':''}"><div class="sp-av sm" style="background:${shareAvatarColor(c.name)}">${escapeHtml(c.name.charAt(0))}</div>
+          <div>${c.leader?'<span class="tag">목자</span>':''}<b>${escapeHtml(c.name)}</b>${escapeHtml(c.text)}<div class="t">${formatRelTime(c.time)}</div></div></div>`).join('')
+        : '<div class="empty">아직 질문이 없어요. 궁금한 점을 목자에게 남겨 보세요.</div>';
+}
+function v206FtHTML(n, open){
   const q=n.qa||[]; const conf=n.confirmed||{}; const me=v206MyUid(); const mine=!!conf[me];
   const faces=Object.keys(conf).slice(0,5).map(k=>'<i style="background:'+shareAvatarColor(conf[k]||k)+'"></i>').join('');
-  const qaHTML = open ? `
-      <div class="v206-qa" onclick="event.stopPropagation()">
-        ${q.length ? q.map(c=>`<div class="c ${c.leader?'ans':''}"><div class="sp-av sm" style="background:${shareAvatarColor(c.name)}">${escapeHtml(c.name.charAt(0))}</div>
-          <div>${c.leader?'<span class="tag">목자</span>':''}<b>${escapeHtml(c.name)}</b>${escapeHtml(c.text)}<div class="t">${formatRelTime(c.time)}</div></div></div>`).join('')
-          : '<div class="empty">아직 질문이 없어요. 궁금한 점을 목자에게 남겨 보세요.</div>'}
-        <div class="in"><input type="text" id="v206QaInput" placeholder="목자에게 질문하기" maxlength="200" onkeydown="if(event.key==='Enter')v206AddQa()"/><button onclick="v206AddQa()">남기기</button></div>
-      </div>` : '';
+  return `<span class="b v206-confirm ${mine?'on':''}" onclick="event.stopPropagation();v206ToggleConfirm()">${mine?'✓ ':''}확인했어요</span>
+          <span class="b v206-qbtn ${open?'on':''}" onclick="event.stopPropagation();v206ToggleBubble()">질문<span class="cnt">${q.length}</span></span>
+          <span class="seen">${faces}${Object.keys(conf).length?'&nbsp;'+Object.keys(conf).length+'명 확인':''}</span>`;
+}
+function v206BubbleHTML(n, open, mini){
   return `
     <div class="v206-bw ${mini&&!open?'mini':''}" id="v206Bubble">
-      <div class="sp-av ${mini&&!open?'sm':''}" style="background:${shareAvatarColor(n.by)}">${escapeHtml(n.by.charAt(0))}</div>
+      <div class="sp-av" style="background:${shareAvatarColor(n.by)}">${escapeHtml(n.by.charAt(0))}</div>
       <div class="v206-bubble" onclick="v206ToggleBubble()">
         <div class="v206-who">${escapeHtml(n.by)} <span class="ttl">목자</span><span class="pin">📌 ${v206ExpiryLabel(n.expires)}</span></div>
         <div class="v206-tx">${escapeHtml(n.text)}</div>
-        ${(mini&&!open)?'':`<div class="v206-ft">
-          <span class="b ${mine?'on':''}" onclick="event.stopPropagation();v206ToggleConfirm()">${mine?'✓ ':''}확인했어요</span>
-          <span class="b ${open?'on':''}" onclick="event.stopPropagation();v206ToggleBubble()">질문<span class="cnt">${q.length}</span></span>
-          <span class="seen">${faces}${Object.keys(conf).length?'&nbsp;'+Object.keys(conf).length+'명 확인':''}</span>
-        </div>`}
-        ${qaHTML}
+        <div class="v206-ft">${v206FtHTML(n, open)}</div>
+        <div class="v206-x ${open?'open':''}"><div class="v206-x-in">
+          <div class="v206-qa" onclick="event.stopPropagation()">
+            <div class="v206-qa-list">${v206QaListHTML(n)}</div>
+            <div class="in"><input type="text" id="v206QaInput" placeholder="목자에게 질문하기" maxlength="200" onkeydown="if(event.key==='Enter')v206AddQa()"/><button onclick="v206AddQa()">남기기</button></div>
+          </div>
+        </div></div>
       </div>
     </div>`;
 }
-function v206RerenderBubble(){
+/* 부분 갱신 (애니메이션 상태를 유지) */
+function v206RefreshBits(){
   const el=document.getElementById('v206Bubble'); const n=v206Notice(); if(!el||!n) return;
-  const mini=(state.shareFilter||'all')!=='cell';
-  el.outerHTML=v206BubbleHTML(n, !!state.v206Open, mini);
-  if(state.v206Open){ const c=document.getElementById('viewContainer'); state.v206OpenY=c?c.scrollTop:0; const inp=document.getElementById('v206QaInput'); if(inp) setTimeout(()=>inp.focus(),120); }
+  const ft=el.querySelector('.v206-ft'); if(ft) ft.innerHTML=v206FtHTML(n, !!state.v206Open);
+  const ql=el.querySelector('.v206-qa-list'); if(ql) ql.innerHTML=v206QaListHTML(n);
 }
-function v206ToggleBubble(){ state.v206Open=!state.v206Open; v206RerenderBubble(); }
+function v206SetOpen(open){
+  const el=document.getElementById('v206Bubble'); if(!el) return;
+  state.v206Open=!!open;
+  const x=el.querySelector('.v206-x'); if(x) x.classList.toggle('open', !!open);
+  const qb=el.querySelector('.v206-qbtn'); if(qb) qb.classList.toggle('on', !!open);
+  const mini=(state.shareFilter||'all')!=='cell';
+  el.classList.toggle('mini', mini && !open);
+  if(open){
+    const c=document.getElementById('viewContainer'); state.v206OpenY=c?c.scrollTop:0;
+    setTimeout(()=>{ try{ el.scrollIntoView({behavior:'smooth', block:'nearest'}); }catch(e){} const inp=document.getElementById('v206QaInput'); if(inp) inp.focus({preventScroll:true}); }, 440);
+  }
+}
+function v206ToggleBubble(){ v206SetOpen(!state.v206Open); }
 function v206ToggleConfirm(){
   const n=v206Notice(); if(!n) return; n.confirmed=n.confirmed||{}; const me=v206MyUid();
   if(n.confirmed[me]) delete n.confirmed[me]; else n.confirmed[me]=v206MyName();
-  v206SaveNotice(n); v206RerenderBubble();
+  v206SaveNotice(n); v206RefreshBits();
 }
 function v206AddQa(){
   const inp=document.getElementById('v206QaInput'); const t=inp?inp.value.trim():''; if(!t) return;
   const n=v206Notice(); if(!n) return; n.qa=n.qa||[];
   n.qa.push({id:'q'+Date.now(), uid:v206MyUid(), name:v206MyName(), text:t, time:Date.now()});
-  v206SaveNotice(n); v206RerenderBubble();
-  if(typeof showToast==='function') showToast('목자에게 질문을 남겼어요');
+  v206SaveNotice(n); v206RefreshBits(); if(inp) inp.value='';
+  const ql=document.querySelector('#v206Bubble .v206-qa-list'); if(ql&&ql.lastElementChild) ql.lastElementChild.scrollIntoView({behavior:'smooth', block:'nearest'});
+  if(typeof toast==='function') toast('목자에게 질문을 남겼어요');
 }
-/* 피드를 쓸어 올리면 말풍선은 기본 모양으로 */
+/* 피드를 쓸어 올려 말풍선이 화면 위로 빠져나가면 스르르 접힘 — 접히는 만큼 스크롤을 보정해 아래 글이 튀지 않게 */
 (function(){
   const c=document.getElementById('viewContainer'); if(!c) return;
+  let closing=false;
   c.addEventListener('scroll', function(){
-    if(!state.v206Open || state.tab!=='share') return;
-    if(Math.abs(c.scrollTop-(state.v206OpenY||0))>28){ state.v206Open=false; v206RerenderBubble(); }
+    if(!state.v206Open || state.tab!=='share' || closing) return;
+    const el=document.getElementById('v206Bubble'); if(!el) return;
+    const r=el.getBoundingClientRect(), cr=c.getBoundingClientRect();
+    if(r.top < cr.top - 24){
+      closing=true;
+      let prevH=el.offsetHeight; v206SetOpen(false);
+      const t0=performance.now();
+      (function step(){
+        const h=el.offsetHeight; const d=prevH-h; if(d>0) c.scrollTop-=d; prevH=h;
+        if(performance.now()-t0<520) requestAnimationFrame(step); else closing=false;
+      })();
+    }
   }, {passive:true});
 })();
 
